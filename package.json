@@ -37,17 +37,19 @@
     "asyncbox": "^1.0.0"
   },
   "scripts": {
-    "test": "$(npm bin)/gulp && $(npm bin)/mocha test/es5/specs.js"
+    "test": "$(npm bin)/gulp && $(npm bin)/mocha -t 15000 test/es5/specs.js"
   },
   "devDependencies": {
-    "gulp-traceur": "^0.14.1",
+    "es6-mapify": "^1.0.0",
     "gulp": "^3.8.10",
     "gulp-filter": "^1.0.2",
-    "mochawait": "^1.1.0",
+    "gulp-sourcemaps": "^1.2.8",
+    "gulp-traceur": "^0.14.1",
+    "lodash": "^2.4.1",
     "merge-stream": "^0.1.6",
     "mocha": "^2.0.1",
-    "should": "^4.1.0",
+    "mochawait": "^1.1.0",
     "rtts-assert": "0.0.7",
-    "gulp-sourcemaps": "^1.2.8"
+    "should": "^4.1.0"
   }
 }
