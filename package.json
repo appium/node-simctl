@@ -34,6 +34,7 @@
     "q": "^1.0.1",
     "source-map-support": "^0.2.8",
     "npmlog": "^0.1.1",
+    "rtts-assert": "0.0.7",
     "asyncbox": "^1.0.0"
   },
   "scripts": {
@@ -49,7 +50,6 @@
     "merge-stream": "^0.1.6",
     "mocha": "^2.0.1",
     "mochawait": "^1.1.0",
-    "rtts-assert": "0.0.7",
     "should": "^4.1.0"
   }
 }
