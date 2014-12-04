@@ -25,14 +25,16 @@
     "node"
   ],
   "simctl": "./lib/es5/simctl.js",
-  "bin": { },
+  "bin": {},
   "directories": {
     "lib": "./lib/es6"
   },
   "dependencies": {
     "traceur": "0.0.74",
     "q": "^1.0.1",
-    "source-map-support": "^0.2.8"
+    "source-map-support": "^0.2.8",
+    "npmlog": "^0.1.1",
+    "asyncbox": "^1.0.0"
   },
   "scripts": {
     "test": "$(npm bin)/gulp && $(npm bin)/mocha test/es5/specs.js"
