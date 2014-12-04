@@ -3,7 +3,7 @@ import sms from 'source-map-support';
 sms.install();
 import 'traceur/bin/traceur-runtime';
 import 'mochawait';
-import 'should';
+import should from 'should';
 import { mapify } from 'es6-mapify';
 import _ from 'lodash';
 import { createDevice, deleteDevice, eraseDevice, getDevices } from '../../lib/es5/simctl.js';
@@ -44,4 +44,16 @@ describe('simctl', () => {
     let sdkDevices = await getDevices(validSdks[0]);
     _.pluck(sdkDevices, 'name').should.not.containEql(randName);
   });
+
+  it('should return a nice error for invalid usage', async () => {
+    let err = null;
+    try {
+      await createDevice('foo', 'bar', 'baz');
+    } catch (e) {
+      err = e;
+    }
+    should.exist(err);
+    err.message.should.containEql('Invalid device type: bar');
+  });
+
 });
