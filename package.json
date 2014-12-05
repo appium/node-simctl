@@ -35,13 +35,13 @@
     "source-map-support": "^0.2.8",
     "npmlog": "^0.1.1",
     "rtts-assert": "0.0.7",
-    "asyncbox": "^1.0.0"
+    "es6-mapify": "^1.0.0",
+    "asyncbox": "^1.0.2"
   },
   "scripts": {
     "test": "$(npm bin)/gulp && $(npm bin)/mocha -t 15000 test/es5/specs.js"
   },
   "devDependencies": {
-    "es6-mapify": "^1.0.0",
     "gulp": "^3.8.10",
     "gulp-filter": "^1.0.2",
     "gulp-sourcemaps": "^1.2.8",

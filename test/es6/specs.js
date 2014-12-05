@@ -2,11 +2,12 @@
 import sms from 'source-map-support';
 sms.install();
 import 'traceur/bin/traceur-runtime';
+let regIt = it;
 import 'mochawait';
 import should from 'should';
 import { mapify } from 'es6-mapify';
 import _ from 'lodash';
-import { createDevice, deleteDevice, eraseDevice, getDevices } from '../../lib/es5/simctl.js';
+import { createDevice, deleteDevice, eraseDevice, getDevices, cb } from '../../lib/es5/simctl.js';
 
 describe('simctl', () => {
   let randNum = parseInt(Math.random() * 100, 10);
@@ -33,6 +34,14 @@ describe('simctl', () => {
     let sdkDevices = await getDevices(validSdks[0]);
     _.pluck(sdkDevices, 'name').should.containEql(randName);
     randDeviceUdid = sdkDevices.filter((d) => d.name === randName)[0].udid;
+  });
+
+  regIt('should get devices in callback mode', done => {
+    cb.getDevices(validSdks[0], (err, sdkDevices) => {
+      should.not.exist(err);
+      _.pluck(sdkDevices, 'name').should.containEql(randName);
+      done();
+    });
   });
 
   it('should erase devices', async () => {
