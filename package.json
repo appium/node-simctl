@@ -39,7 +39,7 @@
     "asyncbox": "^1.0.3"
   },
   "scripts": {
-    "test": "$(npm bin)/gulp && $(npm bin)/mocha -t 15000 test/es5/specs.js"
+    "test": "$(npm bin)/mocha -t 15000 test/es5/specs.js"
   },
   "devDependencies": {
     "clear": "0.0.1",
