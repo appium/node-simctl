@@ -1,5 +1,5 @@
 {
-  "name": "simctl",
+  "name": "node-simctl",
   "description": "Wrapper around Apple's simctl binary",
   "tags": [
     "apple",
