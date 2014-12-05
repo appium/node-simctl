@@ -68,7 +68,7 @@ gulp.task('watch', function () {
 });
 gulp.task('spawn-watch', ['clear-terminal'], function() {
  var spawnWatch = function() {
-    var proc = require('child_process').spawn('gulp', ['watch'], {stdio: 'inherit'});
+    var proc = require('child_process').spawn('./node_modules/.bin/gulp', ['watch'], {stdio: 'inherit'});
     proc.on('close', function (code) {
       spawnWatch()
     });
