@@ -47,6 +47,7 @@
     "gulp-filter": "^1.0.2",
     "gulp-sourcemaps": "^1.2.8",
     "gulp-traceur": "^0.14.1",
+    "gulp-util": "^3.0.1",
     "lodash": "^2.4.1",
     "merge-stream": "^0.1.6",
     "mocha": "^2.0.1",

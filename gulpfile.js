@@ -1,6 +1,7 @@
 "use strict";
 
 var gulp = require('gulp')
+  , gutil = require('gulp-util')
   , merge = require('merge-stream')
   , sourcemaps = require('gulp-sourcemaps')
   , traceur = require('gulp-traceur')
@@ -13,6 +14,12 @@ var argv   = require('yargs')
               .argv;
 
 var exitOnError = false;
+
+function handleError(err) {
+  var displayErr = gutil.colors.red(err);
+  gutil.log(displayErr);
+  if (exitOnError) process.exit(1);
+}
 
 var traceurOpts = {
   asyncFunctions: true,
@@ -29,6 +36,7 @@ var getTraceurStream = function (src, dest) {
               .pipe(sourcemaps.init())
               .pipe(traceur(traceurOpts))
               .pipe(sourcemaps.write())
+              .on('error', handleError)
               .pipe(gulp.dest(dest));
 };
 
