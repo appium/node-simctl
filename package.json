@@ -24,7 +24,7 @@
   "engines": [
     "node"
   ],
-  "simctl": "./lib/es5/simctl.js",
+  "main": "./lib/es5/simctl.js",
   "bin": {},
   "directories": {
     "lib": "./lib/es6"
