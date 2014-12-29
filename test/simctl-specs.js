@@ -1,13 +1,12 @@
-/* global it:true, describe:true*/
-import sms from 'source-map-support';
-sms.install();
-import 'traceur/bin/traceur-runtime';
-let regIt = it;
+// transpile:mocha
+
 import 'mochawait';
-import should from 'should';
-import { mapify } from 'es6-mapify';
+import chai from 'chai';
 import _ from 'lodash';
-import { createDevice, deleteDevice, eraseDevice, getDevices } from '../../lib/es5/simctl.js';
+import { mapify } from 'es6-mapify';
+import simctl from '../..';
+
+let should = chai.should();
 
 describe('simctl', () => {
   let randNum = parseInt(Math.random() * 100, 10);
@@ -16,7 +15,7 @@ describe('simctl', () => {
   let validSdks = [];
 
   it('should create a device', async () => {
-    let devices = await getDevices();
+    let devices = await simctl.getDevices();
     validSdks = _.keys(devices);
     if (!validSdks.length) {
       throw new Error("No valid SDKs");
@@ -27,34 +26,34 @@ describe('simctl', () => {
                         `already exists`);
       }
     }
-    await createDevice(randName, 'iPad Air', validSdks[0]);
+    await simctl.createDevice(randName, 'iPad Air', validSdks[0]);
   });
 
   it('should get devices', async () => {
-    let sdkDevices = await getDevices(validSdks[0]);
-    _.pluck(sdkDevices, 'name').should.containEql(randName);
+    let sdkDevices = await simctl.getDevices(validSdks[0]);
+    _.pluck(sdkDevices, 'name').should.include(randName);
     randDeviceUdid = sdkDevices.filter((d) => d.name === randName)[0].udid;
   });
 
   it('should erase devices', async () => {
-    await eraseDevice(randDeviceUdid);
+    await simctl.eraseDevice(randDeviceUdid);
   });
 
   it('should delete devices', async () => {
-    await deleteDevice(randDeviceUdid);
-    let sdkDevices = await getDevices(validSdks[0]);
-    _.pluck(sdkDevices, 'name').should.not.containEql(randName);
+    await simctl.deleteDevice(randDeviceUdid);
+    let sdkDevices = await simctl.getDevices(validSdks[0]);
+    _.pluck(sdkDevices, 'name').should.not.include(randName);
   });
 
   it('should return a nice error for invalid usage', async () => {
     let err = null;
     try {
-      await createDevice('foo', 'bar', 'baz');
+      await simctl.createDevice('foo', 'bar', 'baz');
     } catch (e) {
       err = e;
     }
     should.exist(err);
-    err.message.should.containEql('Invalid device type: bar');
+    err.message.should.include('Invalid device type: bar');
   });
 
 });
