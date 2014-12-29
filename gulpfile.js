@@ -1,89 +1,90 @@
 "use strict";
 
-var gulp = require('gulp')
-  , gutil = require('gulp-util')
-  , merge = require('merge-stream')
-  , sourcemaps = require('gulp-sourcemaps')
-  , traceur = require('gulp-traceur')
-  , clear = require('clear')
-  , Q = require('q')
-  , runSequence = Q.denodeify(require('run-sequence'));
+var gulp = require('gulp'),
+    merge = require('merge-stream'),
+    mocha = require('gulp-mocha'),
+    Q = require('q'),
+    spawnWatcher = require('appium-gulp-plugins').spawnWatcher.use(gulp),
+    Transpiler = require('appium-gulp-plugins').Transpiler,
+    runSequence = Q.denodeify(require('run-sequence')),
+    jshint = require('gulp-jshint'),
+    jscs = require('gulp-jscs'),
+    vinylPaths = require('vinyl-paths'),
+    del = require('del');
 
-var argv   = require('yargs')
-              .count('prod')
-              .argv;
+var argv = require('yargs')
+            .count('prod')
+            .argv;
 
-var exitOnError = false;
-
-function handleError(err) {
-  var displayErr = gutil.colors.red(err);
-  gutil.log(displayErr);
-  if (exitOnError) process.exit(1);
-}
-
-var traceurOpts = {
-  asyncFunctions: true,
-  blockBinding: true,
-  modules: 'commonjs',
-  annotations: true,
-  arrayComprehension: true,
-  sourceMaps: true,
-  types: true
-};
-
-var getTraceurStream = function (src, dest) {
-  return gulp.src(src)
-              .pipe(sourcemaps.init())
-              .pipe(traceur(traceurOpts))
-              .pipe(sourcemaps.write())
-              .on('error', handleError)
-              .pipe(gulp.dest(dest));
-};
-
-var transpile = function () {
-  var lib = getTraceurStream('lib/es6/**/*.js', 'lib/es5');
-  var test = getTraceurStream('test/es6/**/*.js', 'test/es5');
-  return merge(lib, test);
-};
+gulp.task('clean', function () {
+  return gulp.src('build', {read: false})
+    .pipe(vinylPaths(del));
+});
 
 gulp.task('transpile', function () {
+  var transpiler = new Transpiler();
   if (!argv.prod) {
-    traceurOpts.typeAssertions = true;
-    traceurOpts.typeAssertionModule = 'rtts-assert';
+    transpiler.traceurOpts.typeAssertions = true;
+    transpiler.traceurOpts.typeAssertionModule = 'rtts-assert';
   }
-  transpile();
+
+  var index = gulp.src('index.js')
+    .pipe(transpiler.stream())
+    .on('error', spawnWatcher.handleError)
+    .pipe(gulp.dest('build'));
+
+  var lib = gulp.src('lib/**/*.js')
+    .pipe(transpiler.stream())
+    .on('error', spawnWatcher.handleError)
+    .pipe(gulp.dest('build/lib'));
+
+  var test = gulp.src('test/**/*.js')
+    .pipe(transpiler.stream())
+    .on('error', spawnWatcher.handleError)
+    .pipe(gulp.dest('build/test'));
+
+  return merge(index, lib, test);
 });
 
-gulp.task('kill-gulp', function() {
-  process.exit(0);
+gulp.task('jscs', function () {
+  return gulp
+   .src(['gulpfile.js'])
+   .pipe(jscs())
+   .on('error', spawnWatcher.handleError);
 });
 
-gulp.task('clear-terminal', function() {
-  clear();
-  return Q.delay(100);
-})
-
-// gulp error handling is not very well geared toward watch
-// so we have to do that to be safe.
-// that should not be needed in gulp 4.0
-gulp.task('watch-build', function() {
-  return runSequence('clear-terminal', ['transpile']);
+gulp.task('jshint', function () {
+  return gulp
+   .src(['*.js', 'lib/**/*.js', 'test/**/*.js'])
+   .pipe(jshint())
+   .pipe(jshint.reporter('jshint-stylish'))
+   .pipe(jshint.reporter('fail'))
+   .on('error', spawnWatcher.handleError);
 });
-gulp.task('watch', function () {
-  exitOnError = true;
-  gulp.watch(['lib/es6/**/*.js', 'test/es6/**/*.js'], ['watch-build']);
-  gulp.watch('gulpfile.js', ['clear-terminal','kill-gulp']);
-});
-gulp.task('spawn-watch', ['clear-terminal'], function() {
- var spawnWatch = function() {
-    var proc = require('child_process').spawn('./node_modules/.bin/gulp', ['watch'], {stdio: 'inherit'});
-    proc.on('close', function (code) {
-      spawnWatch()
-    });
-  }
-  spawnWatch();
-})
 
-// default target is watch
-gulp.task('default', ['spawn-watch']);
+gulp.task('lint',['jshint','jscs']);
+
+gulp.task('test', ['transpile'],  function () {
+  process.env.SKIP_TRACEUR_RUNTIME = true;
+  return gulp
+   .src('build/test/**/*-specs.js', {read: false})
+   .pipe(mocha({reporter: 'nyan'}))
+   .on('error', spawnWatcher.handleError);
+});
+
+process.env.APPIUM_NOTIF_BUILD_NAME = 'node-simctl';
+
+spawnWatcher.configure('watch', ['index.js', 'lib/**/*.js','test/**/*.js'], function () {
+  return runSequence('clean', 'lint', 'transpile', 'test');
+});
+
+gulp.task('prepublish', function () {
+    return runSequence('clean', 'transpile');
+});
+
+gulp.task('once', function () {
+  return runSequence('clean','lint', 'transpile','test');
+});
+
+gulp.task('default', ['watch']);
 
