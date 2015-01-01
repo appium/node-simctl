@@ -13,7 +13,7 @@ var gulp = require('gulp'),
     del = require('del');
 
 var argv = require('yargs')
-            .count('prod')
+            .count('rttsAssert')
             .argv;
 
 gulp.task('clean', function () {
@@ -22,11 +22,8 @@ gulp.task('clean', function () {
 });
 
 gulp.task('transpile', function () {
-  var transpiler = new Transpiler();
-  if (!argv.prod) {
-    transpiler.traceurOpts.typeAssertions = true;
-    transpiler.traceurOpts.typeAssertionModule = 'rtts-assert';
-  }
+  var transpiler = new Transpiler(
+    argv.rttsAssert ? {'rtts-assert': true} : null);
 
   var index = gulp.src('index.js')
     .pipe(transpiler.stream())
@@ -66,6 +63,7 @@ gulp.task('lint',['jshint','jscs']);
 
 gulp.task('test', ['transpile'],  function () {
   process.env.SKIP_TRACEUR_RUNTIME = true;
+  if (argv.rttsAssert) process.env.RTTS_ASSERT = true;
   return gulp
    .src('build/test/**/*-specs.js', {read: false})
    .pipe(mocha({reporter: 'nyan'}))

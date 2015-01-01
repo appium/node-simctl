@@ -21,3 +21,11 @@ npm run watch
 ```
 npm test
 ```
+
+## Experiment with rtts-assert
+
+```
+gulp watch --rttsAssert
+gulp once --rttsAssert
+```
+

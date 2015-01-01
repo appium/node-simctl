@@ -2,10 +2,12 @@
 
 import 'mochawait';
 import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
 import { mapify } from 'es6-mapify';
 import simctl from '../..';
 
+chai.use(chaiAsPromised);
 let should = chai.should();
 
 describe('simctl', () => {
@@ -56,4 +58,13 @@ describe('simctl', () => {
     err.message.should.include('Invalid device type: bar');
   });
 
+  if (process.env.RTTS_ASSERT) {
+    it('should detect type assertion error', () => {
+      return simctl.getDevices(123).should.be.rejectedWith(/Invalid arguments given!/);
+    });
+  } else {
+    it('should not detect type assertion error', () => {
+      return simctl.getDevices(123).should.be.rejectedWith(/not in list of simctl sdks/);
+    });
+  }
 });
