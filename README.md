@@ -1,10 +1,31 @@
 node-simctl
-===========
+===================
 
 ES6/7 Node wrapper around Apple's simctl binary.
+
+See `test/simctl-specs.js` for examples of usage.
+
+## Install
 
 ```
 npm install node-simctl
 ```
+## Watch
 
-See `test/es6/specs.js` for examples of usage.
+```
+npm run watch
+```
+
+## Test
+
+```
+npm test
+```
+
+## Experiment with rtts-assert
+
+```
+gulp watch --rttsAssert
+gulp once --rttsAssert
+```
+
