@@ -46,13 +46,7 @@ var transpile = function () {
   return merge(lib, test);
 };
 
-gulp.task('transpile', function () {
-  if (!argv.prod) {
-    traceurOpts.typeAssertions = true;
-    traceurOpts.typeAssertionModule = 'rtts-assert';
-  }
-  transpile();
-});
+gulp.task('transpile', transpile);
 
 gulp.task('kill-gulp', function() {
   process.exit(0);
@@ -86,4 +80,3 @@ gulp.task('spawn-watch', ['clear-terminal'], function() {
 
 // default target is watch
 gulp.task('default', ['spawn-watch']);
-

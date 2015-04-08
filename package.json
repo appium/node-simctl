@@ -34,7 +34,6 @@
     "q": "^1.0.1",
     "source-map-support": "^0.2.8",
     "npmlog": "^0.1.1",
-    "rtts-assert": "0.0.7",
     "es6-mapify": "^1.0.0",
     "asyncbox": "^1.0.3"
   },
@@ -43,7 +42,7 @@
   },
   "devDependencies": {
     "clear": "0.0.1",
-    "gulp": "^3.8.10",
+    "gulp": "^3.8.11",
     "gulp-filter": "^1.0.2",
     "gulp-sourcemaps": "^1.2.8",
     "gulp-traceur": "^0.14.1",
