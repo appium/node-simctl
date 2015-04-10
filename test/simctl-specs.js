@@ -1,13 +1,11 @@
 /* global it:true, describe:true*/
-import sms from 'source-map-support';
-sms.install();
-import 'traceur/bin/traceur-runtime';
-let regIt = it;
+// transpile:mocha
+
 import 'mochawait';
 import should from 'should';
 import { mapify } from 'es6-mapify';
 import _ from 'lodash';
-import { createDevice, deleteDevice, eraseDevice, getDevices } from '../../lib/es5/simctl.js';
+import { createDevice, deleteDevice, eraseDevice, getDevices } from '../lib/simctl.js';
 
 describe('simctl', () => {
   let randNum = parseInt(Math.random() * 100, 10);
