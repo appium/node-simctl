@@ -26,6 +26,8 @@ createDevice(name, deviceType, runtime)
 - deviceType - `"iPhone 6"` or `"iPad Air"`, see more possibilities from the output of `getDevices`
 - runtime - iOS sdk version. eg `"8.3"`
 
+returns: Udid of the created simulator.
+
 ### getDevices
 getDevices()
 
