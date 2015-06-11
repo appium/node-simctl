@@ -30,6 +30,7 @@
     "lib": "./lib"
   },
   "dependencies": {
+    "appium-logger": "^1.1.3",
     "asyncbox": "^2.0.2",
     "babel-runtime": "5.5.5",
     "es6-mapify": "^1.0.0",
