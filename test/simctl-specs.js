@@ -25,7 +25,10 @@ describe('simctl', () => {
                         `already exists`);
       }
     }
-    await createDevice(randName, 'iPad Air', validSdks[0]);
+    let udid = await createDevice(randName, 'iPad Air', validSdks[0]);
+
+    (typeof udid).should.equal('string');
+    udid.length.should.equal(36);
   });
 
   it('should get devices', async () => {
