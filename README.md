@@ -14,6 +14,7 @@ Exported methods:
 - installApp
 - removeApp
 - launch
+- shutdown
 - createDevice
 - deleteDevice
 - eraseDevice
@@ -33,7 +34,7 @@ getDevices()
 
 output looks like:
 ```
-{ 
+{
   '7.1': [
    { name: 'iPhone 4s',
      udid: 'C09B34E5-7DCB-442E-B79C-AB6BC0357417',
