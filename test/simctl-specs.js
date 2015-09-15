@@ -17,7 +17,7 @@ describe('simctl', () => {
     let devices = await getDevices();
     validSdks = _.keys(devices);
     if (!validSdks.length) {
-      throw new Error("No valid SDKs");
+      throw new Error('No valid SDKs');
     }
 
     // need to find a random name that does not already exist
