@@ -1,39 +1,52 @@
 /* global it:true, describe:true*/
 // transpile:mocha
 
-import 'mochawait';
-import should from 'should';
-import { mapify } from 'es6-mapify';
+import chai from 'chai';
 import _ from 'lodash';
 import { createDevice, deleteDevice, eraseDevice, getDevices } from '../lib/simctl.js';
 
+
+const should = chai.should();
+
 describe('simctl', () => {
-  let randNum = parseInt(Math.random() * 100, 10);
-  let randName = `device${randNum}`;
+  let randName;
   let randDeviceUdid = null;
   let validSdks = [];
 
-  it('should create a device', async () => {
+  before(async () => {
     let devices = await getDevices();
     validSdks = _.keys(devices);
     if (!validSdks.length) {
       throw new Error("No valid SDKs");
     }
-    for (let list of mapify(devices).values()) {
-      if (_.contains(_.pluck(list, 'name'), randName)) {
-        throw new Error(`Couldn't run test because device ${randName} ` +
-                        `already exists`);
-      }
-    }
-    let udid = await createDevice(randName, 'iPad Air', validSdks[0]);
 
-    udid.should.be.an.instanceof(String);
+    // need to find a random name that does not already exist
+    // give it 5 tries
+    for (let i = 0; i < 5; i++) {
+      let randNum = parseInt(Math.random() * 100, 10);
+      randName = `device${randNum}`;
+
+      let nameFound = false;
+      for (let list of _.values(devices)) {
+        if (_.contains(_.pluck(list, 'name'), randName)) {
+          // need to find another random name
+          nameFound = true;
+          break;
+        }
+      }
+      if (!nameFound) break;
+    }
+  });
+
+  it('should create a device', async () => {
+    let udid = await createDevice(randName, 'iPhone 5s', _.last(validSdks));
+    (typeof udid).should.equal('string');
     udid.length.should.equal(36);
   });
 
   it('should get devices', async () => {
-    let sdkDevices = await getDevices(validSdks[0]);
-    _.pluck(sdkDevices, 'name').should.containEql(randName);
+    let sdkDevices = await getDevices(_.last(validSdks));
+    _.pluck(sdkDevices, 'name').should.include(randName);
     randDeviceUdid = sdkDevices.filter((d) => d.name === randName)[0].udid;
   });
 
@@ -43,8 +56,8 @@ describe('simctl', () => {
 
   it('should delete devices', async () => {
     await deleteDevice(randDeviceUdid);
-    let sdkDevices = await getDevices(validSdks[0]);
-    _.pluck(sdkDevices, 'name').should.not.containEql(randName);
+    let sdkDevices = await getDevices(_.last(validSdks));
+    _.pluck(sdkDevices, 'name').should.not.include(randName);
   });
 
   it('should return a nice error for invalid usage', async () => {
@@ -55,7 +68,7 @@ describe('simctl', () => {
       err = e;
     }
     should.exist(err);
-    err.message.should.containEql('Invalid device type: bar');
+    err.message.should.include('Invalid device type: bar');
   });
 
 });

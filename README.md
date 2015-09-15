@@ -1,14 +1,16 @@
-node-simctl
-===========
+## node-simctl
 
-ES6/7 Node wrapper around Apple's simctl binary.
+ES6/7 Node wrapper around Apple's `simctl` binary, the "Command line utility to control the iOS Simulator". `simctl` is run as a sub-command of [xcrun](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/xcrun.1.html)
+
+### Installation
+
+Install through [npm](https://www.npmjs.com/package/node-simctl).
 
 ```
 npm install node-simctl
 ```
 
-Api
-===
+### Api
 
 Exported methods:
 - installApp
