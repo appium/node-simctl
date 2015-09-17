@@ -154,6 +154,10 @@ returns: `udid` of the created simulator.
   }
   ```
 
+`spawn(udid, executablePath, env)`
+
+ - spawns a process on the simulator specified by `udid` with given environment variable in `env`
+
 
 ### Usage
 
