@@ -154,6 +154,15 @@ returns: `udid` of the created simulator.
   }
   ```
 
+`spawn(udid, executablePath, env)`
+
+ - spawns a process on the simulator specified by `udid` with given environment variable in `env`
+
+`spawnSubProcess(udid, executablePath, env)`
+
+ - spawns a process on the simulator specified by `udid` with given environment variable in `env`
+ - returns a (SubProcess)[https://github.com/appium/node-teen_process#teen_processsubprocess] object.
+
 
 ### Usage
 
