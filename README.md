@@ -39,6 +39,10 @@ Exported methods:
 - `udid` - the unique identifier of the simulator on which to launch the app
 - `bundleId` - the bundle identifier of the application (e.g., `com.corp.app`)
 
+`openUrl(udid, url)`
+
+- `udid` - the unique identifier of the simulator on which to open the url (in safari)
+- `url`- the url to navigate to
 
 `shutdown(udid)`
 

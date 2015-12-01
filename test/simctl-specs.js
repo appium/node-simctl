@@ -71,4 +71,13 @@ describe('simctl', () => {
     err.message.should.include('Invalid device type: bar');
   });
 
+  it('should create a device and be able to see it in devices list right away', async () => {
+    let sdk = _.last(validSdks);
+    let numSimsBefore = (await getDevices())[sdk].length;
+    let udid = await createDevice('node-simctl test', 'iPhone 5s', sdk);
+    let numSimsAfter = (await getDevices())[sdk].length;
+    numSimsAfter.should.equal(numSimsBefore + 1);
+    deleteDevice(udid);
+  });
+
 });
