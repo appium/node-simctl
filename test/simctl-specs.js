@@ -28,7 +28,7 @@ describe('simctl', () => {
 
       let nameFound = false;
       for (let list of _.values(devices)) {
-        if (_.contains(_.pluck(list, 'name'), randName)) {
+        if (_.includes(_.map(list, 'name'), randName)) {
           // need to find another random name
           nameFound = true;
           break;
@@ -46,7 +46,7 @@ describe('simctl', () => {
 
   it('should get devices', async () => {
     let sdkDevices = await getDevices(_.last(validSdks));
-    _.pluck(sdkDevices, 'name').should.include(randName);
+    _.map(sdkDevices, 'name').should.include(randName);
     randDeviceUdid = sdkDevices.filter((d) => d.name === randName)[0].udid;
   });
 
@@ -57,7 +57,7 @@ describe('simctl', () => {
   it('should delete devices', async () => {
     await deleteDevice(randDeviceUdid);
     let sdkDevices = await getDevices(_.last(validSdks));
-    _.pluck(sdkDevices, 'name').should.not.include(randName);
+    _.map(sdkDevices, 'name').should.not.include(randName);
   });
 
   it('should return a nice error for invalid usage', async () => {
