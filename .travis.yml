@@ -1,8 +1,15 @@
 language:
   - objective-c
-osx_image: mavericks
-
-before_install:
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode7.3
+    - os: osx
+      osx_image: xcode7.2
+    - os: osx
+      osx_image: xcode7.1
+    - os: osx
+      osx_image: xcode7
 
 install:
   - rm -rf ~/.nvm
@@ -14,7 +21,7 @@ install:
   - npm install -g gulp
 
 script:
-  - gulp test
+  - _FORCE_LOGS=1 gulp test
 
 after_success:
     - gulp coveralls
