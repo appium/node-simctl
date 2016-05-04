@@ -8,7 +8,8 @@ import { createDevice, deleteDevice, eraseDevice, getDevices } from '../lib/simc
 
 const should = chai.should();
 
-describe('simctl', () => {
+describe('simctl', function () {
+  this.timeout(20000); // enough time to allow the functions to themselves time out
   let randName;
   let randDeviceUdid = null;
   let validSdks = [];
