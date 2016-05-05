@@ -9,7 +9,7 @@ import { createDevice, deleteDevice, eraseDevice, getDevices } from '../lib/simc
 const should = chai.should();
 
 describe('simctl', function () {
-  this.timeout(20000); // enough time to allow the functions to themselves time out
+  this.timeout(40000); // enough time to allow the functions to themselves time out
   let randName;
   let randDeviceUdid = null;
   let validSdks = [];
@@ -52,7 +52,7 @@ describe('simctl', function () {
   });
 
   it('should erase devices', async () => {
-    await eraseDevice(randDeviceUdid);
+    await eraseDevice(randDeviceUdid, 16000);
   });
 
   it('should delete devices', async () => {
