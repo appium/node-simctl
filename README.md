@@ -8,7 +8,16 @@
 [![Build Status](https://travis-ci.org/appium/node-simctl.svg?branch=master)](https://travis-ci.org/appium/node-simctl)
 [![Coverage Status](https://coveralls.io/repos/appium/node-simctl/badge.svg?branch=master)](https://coveralls.io/r/appium/node-simctl?branch=master)
 
-ES6/7 Node wrapper around Apple's `simctl` binary, the "Command line utility to control the iOS Simulator". `simctl` is run as a sub-command of [xcrun](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/xcrun.1.html)
+ES6/7 Node wrapper around Facebooks `fbsimctl` library for managing iOS simulators. 
+
+Ensure you have the `fbsimctl` command installed with:
+
+````
+    # Get the Facebook Tap.
+    brew tap facebook/fb
+    # Install fbsimctl from master
+    brew install fbsimctl --HEAD
+````
 
 ### Installation
 
