@@ -3,15 +3,11 @@ language:
 matrix:
   include:
     - os: osx
-      osx_image: xcode7.3
-    - os: osx
-      osx_image: xcode7.2
-    - os: osx
-      osx_image: xcode7.1
-    - os: osx
-      osx_image: xcode7
+      osx_image: xcode8
 
 install:
+  - brew tap facebook/fb
+  - brew install fbsimctl --HEAD
   - rm -rf ~/.nvm
   - git clone https://github.com/creationix/nvm.git ~/.nvm
   - source ~/.nvm/nvm.sh
