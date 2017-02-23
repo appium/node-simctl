@@ -25,7 +25,7 @@
     "lib": "./lib"
   },
   "dependencies": {
-    "appium-logger": "^2.1.0",
+    "appium-support": "^2.4.0",
     "asyncbox": "^2.3.1",
     "babel-runtime": "=5.8.24",
     "lodash": "^4.2.1",
