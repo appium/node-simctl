@@ -83,10 +83,10 @@ describe('simctl', function () {
 
   it('should create a device with compatible properties', async () => {
     let sdk = _.last(validSdks);
-    let devices = (await getDevices())[sdk]
-    let firstDevice = devices[0]
-    let expectedList = ['name', 'sdk', 'state', 'udid']
-    Object.keys(firstDevice).sort().should.eql(expectedList)
+    let devices = (await getDevices())[sdk];
+    let firstDevice = devices[0];
+    let expectedList = ['name', 'sdk', 'state', 'udid'];
+    Object.keys(firstDevice).sort().should.eql(expectedList);
   });
 
 });

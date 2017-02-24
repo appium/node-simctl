@@ -1,0 +1,9 @@
+{
+  "extends": "appium",
+  "plugins": [
+    "flowtype"
+  ],
+  "rules": {
+    "flowtype/define-flow-type": 1
+  }
+}
