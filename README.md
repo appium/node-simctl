@@ -167,6 +167,9 @@ returns: `udid` of the created simulator.
  - spawns a process on the simulator specified by `udid` with given environment variable in `env`
  - returns a (SubProcess)[https://github.com/appium/node-teen_process#teen_processsubprocess] object.
 
+`getScreenshot(udid)`
+
+- returns a base64 png screenshot of device specified by `udid`
 
 ### Usage
 
