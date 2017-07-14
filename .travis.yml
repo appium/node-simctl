@@ -27,7 +27,7 @@ install:
   - npm install -g gulp
 
 script:
-  - _FORCE_LOGS=1 gulp test
+  - gulp eslint && _FORCE_LOGS=1 gulp test
 
 after_success:
     - gulp coveralls
