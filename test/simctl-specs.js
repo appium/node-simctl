@@ -5,6 +5,7 @@ import chai from 'chai';
 import _ from 'lodash';
 import { createDevice, deleteDevice, eraseDevice, getDevices, setPasteboard, getPasteboard,
          bootDevice, launch, shutdown } from '../lib/simctl.js';
+import xcode from 'appium-xcode';
 
 const should = chai.should();
 
@@ -92,6 +93,11 @@ describe('simctl', function () {
   });
 
   it('should set and get the content of Simulator pasteboard', async function () {
+    const {major, minor} = await xcode.getVersion(true);
+    if (major < 8 || (major === 8 && minor < 1)) {
+      return this.skip();
+    }
+
     const sdk = _.last(validSdks);
     const udid = await createDevice('pbtest', DEVICE_NAME, sdk);
     const pbContent = 'blablabla';
