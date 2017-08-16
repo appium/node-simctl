@@ -41,29 +41,29 @@ describe('simctl', function () {
     }
   });
 
-  it('should create a device', async () => {
+  it('should create a device', async function () {
     let udid = await createDevice(randName, DEVICE_NAME, _.last(validSdks));
     (typeof udid).should.equal('string');
     udid.length.should.equal(36);
   });
 
-  it('should get devices', async () => {
+  it('should get devices', async function () {
     let sdkDevices = await getDevices(_.last(validSdks));
     _.map(sdkDevices, 'name').should.include(randName);
     randDeviceUdid = sdkDevices.filter((d) => d.name === randName)[0].udid;
   });
 
-  it('should erase devices', async () => {
+  it('should erase devices', async function () {
     await eraseDevice(randDeviceUdid, 16000);
   });
 
-  it('should delete devices', async () => {
+  it('should delete devices', async function () {
     await deleteDevice(randDeviceUdid);
     let sdkDevices = await getDevices(_.last(validSdks));
     _.map(sdkDevices, 'name').should.not.include(randName);
   });
 
-  it('should return a nice error for invalid usage', async () => {
+  it('should return a nice error for invalid usage', async function () {
     let err = null;
     try {
       await createDevice('foo', 'bar', 'baz');
@@ -74,7 +74,7 @@ describe('simctl', function () {
     err.message.should.include('Invalid device type: bar');
   });
 
-  it('should create a device and be able to see it in devices list right away', async () => {
+  it('should create a device and be able to see it in devices list right away', async function () {
     let sdk = _.last(validSdks);
     let numSimsBefore = (await getDevices())[sdk].length;
     let udid = await createDevice('node-simctl test', DEVICE_NAME, sdk);
@@ -83,7 +83,7 @@ describe('simctl', function () {
     deleteDevice(udid);
   });
 
-  it('should create a device with compatible properties', async () => {
+  it('should create a device with compatible properties', async function () {
     let sdk = _.last(validSdks);
     let devices = (await getDevices())[sdk];
     let firstDevice = devices[0];
@@ -91,7 +91,7 @@ describe('simctl', function () {
     Object.keys(firstDevice).sort().should.eql(expectedList);
   });
 
-  it('should set and get the content of Simulator pasteboard', async () => {
+  it('should set and get the content of Simulator pasteboard', async function () {
     const sdk = _.last(validSdks);
     const udid = await createDevice('pbtest', DEVICE_NAME, sdk);
     const pbContent = 'blablabla';
