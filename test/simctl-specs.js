@@ -3,13 +3,15 @@
 
 import chai from 'chai';
 import _ from 'lodash';
-import { createDevice, deleteDevice, eraseDevice, getDevices } from '../lib/simctl.js';
-
+import { createDevice, deleteDevice, eraseDevice, getDevices, setPasteboard, getPasteboard,
+         bootDevice, launch, shutdown } from '../lib/simctl.js';
 
 const should = chai.should();
 
 describe('simctl', function () {
-  this.timeout(40000); // enough time to allow the functions to themselves time out
+  const DEVICE_NAME = 'iPhone 6';
+  const MOCHA_TIMEOUT = 200000;
+  this.timeout(DEVICE_NAME); // enough time to allow the functions to themselves time out
   let randName;
   let randDeviceUdid = null;
   let validSdks = [];
@@ -40,7 +42,7 @@ describe('simctl', function () {
   });
 
   it('should create a device', async () => {
-    let udid = await createDevice(randName, 'iPhone 5s', _.last(validSdks));
+    let udid = await createDevice(randName, DEVICE_NAME, _.last(validSdks));
     (typeof udid).should.equal('string');
     udid.length.should.equal(36);
   });
@@ -75,7 +77,7 @@ describe('simctl', function () {
   it('should create a device and be able to see it in devices list right away', async () => {
     let sdk = _.last(validSdks);
     let numSimsBefore = (await getDevices())[sdk].length;
-    let udid = await createDevice('node-simctl test', 'iPhone 5s', sdk);
+    let udid = await createDevice('node-simctl test', DEVICE_NAME, sdk);
     let numSimsAfter = (await getDevices())[sdk].length;
     numSimsAfter.should.equal(numSimsBefore + 1);
     deleteDevice(udid);
@@ -87,6 +89,25 @@ describe('simctl', function () {
     let firstDevice = devices[0];
     let expectedList = ['name', 'sdk', 'state', 'udid'];
     Object.keys(firstDevice).sort().should.eql(expectedList);
+  });
+
+  it('should set and get the content of Simulator pasteboard', async () => {
+    const sdk = _.last(validSdks);
+    const udid = await createDevice('pbtest', DEVICE_NAME, sdk);
+    const pbContent = 'blablabla';
+    const encoding = 'ascii';
+    try {
+      await bootDevice(udid);
+      // Wait for boot to complete
+      await launch(udid, 'com.apple.springboard', MOCHA_TIMEOUT);
+      await setPasteboard(udid, pbContent, encoding);
+      (await getPasteboard(udid, encoding)).should.eql(pbContent);
+    } finally {
+      try {
+        await shutdown(udid);
+      } catch (ign) {}
+      await deleteDevice(udid);
+    }
   });
 
 });
