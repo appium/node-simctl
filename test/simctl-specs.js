@@ -39,7 +39,7 @@ describe('simctl', function () {
           break;
         }
       }
-      if (!nameFound) break;
+      if (!nameFound) break; // eslint-disable-line curly
     }
   });
 
