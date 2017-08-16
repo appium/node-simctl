@@ -12,7 +12,8 @@ const should = chai.should();
 describe('simctl', function () {
   const DEVICE_NAME = 'iPhone 6';
   const MOCHA_TIMEOUT = 200000;
-  this.timeout(DEVICE_NAME); // enough time to allow the functions to themselves time out
+  this.timeout(MOCHA_TIMEOUT);
+
   let randName;
   let randDeviceUdid = null;
   let validSdks = [];
