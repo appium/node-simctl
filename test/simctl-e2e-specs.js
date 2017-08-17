@@ -94,28 +94,39 @@ describe('simctl', function () {
     Object.keys(firstDevice).sort().should.eql(expectedList);
   });
 
-  it('should set and get the content of Simulator pasteboard', async function () {
-    const {major, minor} = await xcode.getVersion(true);
-    if (major < 8 || (major === 8 && minor < 1)) {
-      return this.skip();
-    }
+  describe('pasteboard', function () {
+    let udid;
 
-    const sdk = _.last(validSdks);
-    const udid = await createDevice('pbtest', DEVICE_NAME, sdk);
-    const pbContent = 'blablabla';
-    const encoding = 'ascii';
-    try {
+    before(async function () {
+      const {major, minor} = await xcode.getVersion(true);
+      if (major < 8 || (major === 8 && minor < 1)) {
+        return this.skip();
+      }
+
+      const sdk = _.last(validSdks);
+      udid = await createDevice('pbtest', DEVICE_NAME, sdk);
+
       await bootDevice(udid);
       // Wait for boot to complete
       await launch(udid, 'com.apple.springboard', MOCHA_TIMEOUT);
-      await setPasteboard(udid, pbContent, encoding);
-      (await getPasteboard(udid, encoding)).should.eql(pbContent);
-    } finally {
+    });
+    after(async function () {
       try {
         await shutdown(udid);
       } catch (ign) {}
       await deleteDevice(udid);
-    }
-  });
+    });
 
+    it('should set and get the content of Simulator pasteboard', async function () {
+      if (process.env.TRAVIS) {
+        this.retries(3);
+      }
+
+      const pbContent = 'blablabla';
+      const encoding = 'ascii';
+
+      await setPasteboard(udid, pbContent, encoding);
+      (await getPasteboard(udid, encoding)).should.eql(pbContent);
+    });
+  });
 });
