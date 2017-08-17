@@ -19,6 +19,7 @@ matrix:
     - osx_image: xcode9
       node_js: "6"
 before_script:
+  - xcodebuild -version
   - xcrun simctl list
   - xcrun simctl list runtimes
 script:
