@@ -95,6 +95,10 @@ describe('simctl', function () {
   });
 
   describe('pasteboard', function () {
+    if (process.env.TRAVIS) {
+      this.retries(3);
+    }
+
     let udid;
 
     before(async function () {
@@ -111,17 +115,15 @@ describe('simctl', function () {
       await launch(udid, 'com.apple.springboard', MOCHA_TIMEOUT);
     });
     after(async function () {
-      try {
-        await shutdown(udid);
-      } catch (ign) {}
-      await deleteDevice(udid);
+      if (udid) {
+        try {
+          await shutdown(udid);
+        } catch (ign) {}
+        await deleteDevice(udid);
+      }
     });
 
     it('should set and get the content of Simulator pasteboard', async function () {
-      if (process.env.TRAVIS) {
-        this.retries(3);
-      }
-
       const pbContent = 'blablabla';
       const encoding = 'ascii';
 
