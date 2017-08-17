@@ -24,6 +24,7 @@ describe('simctl', function () {
     if (!validSdks.length) {
       throw new Error('No valid SDKs');
     }
+    console.log(`Found valid SDKs: ${validSdks.join(', ')}`); // eslint-disable-line no-console
 
     // need to find a random name that does not already exist
     // give it 5 tries
