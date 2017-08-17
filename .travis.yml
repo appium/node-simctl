@@ -18,6 +18,9 @@ matrix:
       node_js: "7"
     - osx_image: xcode9
       node_js: "6"
+before_script:
+  - xcrun simctl list
+  - xcrun simctl list runtimes
 script:
   - _FORCE_LOGS=1 npm run test && npm run e2e-test
 after_success:
