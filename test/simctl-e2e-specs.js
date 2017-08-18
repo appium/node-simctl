@@ -6,6 +6,8 @@ import _ from 'lodash';
 import { createDevice, deleteDevice, eraseDevice, getDevices, setPasteboard, getPasteboard,
          bootDevice, launch, shutdown } from '../lib/simctl.js';
 import xcode from 'appium-xcode';
+import B from 'bluebird';
+
 
 const should = chai.should();
 
@@ -113,6 +115,9 @@ describe('simctl', function () {
       await bootDevice(udid);
       // Wait for boot to complete
       await launch(udid, 'com.apple.springboard', MOCHA_TIMEOUT);
+
+      // pause a moment or everything is messed up
+      await B.delay(5000);
     });
     after(async function () {
       if (udid) {
