@@ -3,3 +3,4 @@ node_modules/
 *.un~
 _vimrc_local.vim
 *.swp
+coverage
