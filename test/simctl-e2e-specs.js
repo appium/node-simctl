@@ -4,9 +4,10 @@
 import chai from 'chai';
 import _ from 'lodash';
 import { createDevice, deleteDevice, eraseDevice, getDevices, setPasteboard, getPasteboard,
-         bootDevice, launch, shutdown } from '../lib/simctl.js';
+         bootDevice, launch, shutdown, addMedia } from '../lib/simctl.js';
 import xcode from 'appium-xcode';
 import B from 'bluebird';
+import { fs, tempDir } from 'appium-support';
 
 
 const should = chai.should();
@@ -96,12 +97,13 @@ describe('simctl', function () {
     Object.keys(firstDevice).sort().should.eql(expectedList);
   });
 
-  describe('pasteboard', function () {
+  describe('on running Simulator', function () {
     if (process.env.TRAVIS) {
       this.retries(3);
     }
 
-    let udid;
+    const BASE64_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+    let udid, picturePath;
 
     before(async function () {
       const {major, minor} = await xcode.getVersion(true);
@@ -110,7 +112,7 @@ describe('simctl', function () {
       }
 
       const sdk = _.last(validSdks);
-      udid = await createDevice('pbtest', DEVICE_NAME, sdk);
+      udid = await createDevice('runningSimTest', DEVICE_NAME, sdk);
 
       await bootDevice(udid);
       // Wait for boot to complete
@@ -118,6 +120,9 @@ describe('simctl', function () {
 
       // pause a moment or everything is messed up
       await B.delay(5000);
+
+      picturePath = await tempDir.path({prefix: 'pixel', suffix: '.png'});
+      await fs.writeFile(picturePath, new Buffer(BASE64_PNG, 'base64').toString('binary'), 'binary');
     });
     after(async function () {
       if (udid) {
@@ -126,14 +131,22 @@ describe('simctl', function () {
         } catch (ign) {}
         await deleteDevice(udid);
       }
+
+      if (await fs.exists(picturePath)) {
+        await fs.unlink(picturePath);
+      }
     });
 
-    it('should set and get the content of Simulator pasteboard', async function () {
+    it('should set and get the content of the pasteboard', async function () {
       const pbContent = 'blablabla';
       const encoding = 'ascii';
 
       await setPasteboard(udid, pbContent, encoding);
       (await getPasteboard(udid, encoding)).should.eql(pbContent);
+    });
+
+    it('should add media files', async function () {
+      (await addMedia(udid, picturePath)).code.should.eql(0);
     });
   });
 });
