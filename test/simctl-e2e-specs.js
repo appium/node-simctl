@@ -139,7 +139,7 @@ describe('simctl', function () {
 
     it('should add media', async function () {
       const base64Png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
-      const picturePath = await tempDir.path({prefix: `pixel-${randDeviceUdid}`, suffix: '.png'});
+      const picturePath = await tempDir.path({prefix: 'pixel', suffix: '.png'});
       await fs.writeFile(picturePath, new Buffer(base64Png, 'base64').toString('binary'), 'binary');
       try {
         (await addMedia(udid, picturePath)).code.should.be.eql(0);
