@@ -4,9 +4,10 @@
 import chai from 'chai';
 import _ from 'lodash';
 import { createDevice, deleteDevice, eraseDevice, getDevices, setPasteboard, getPasteboard,
-         bootDevice, launch, shutdown } from '../lib/simctl.js';
+         bootDevice, launch, shutdown, addMedia } from '../lib/simctl.js';
 import xcode from 'appium-xcode';
 import B from 'bluebird';
+import { fs, tempDir } from 'appium-support';
 
 
 const should = chai.should();
@@ -96,7 +97,7 @@ describe('simctl', function () {
     Object.keys(firstDevice).sort().should.eql(expectedList);
   });
 
-  describe('pasteboard', function () {
+  describe('on running Simulator', function () {
     if (process.env.TRAVIS) {
       this.retries(3);
     }
@@ -110,7 +111,7 @@ describe('simctl', function () {
       }
 
       const sdk = _.last(validSdks);
-      udid = await createDevice('pbtest', DEVICE_NAME, sdk);
+      udid = await createDevice('runningSimTest', DEVICE_NAME, sdk);
 
       await bootDevice(udid);
       // Wait for boot to complete
@@ -134,6 +135,17 @@ describe('simctl', function () {
 
       await setPasteboard(udid, pbContent, encoding);
       (await getPasteboard(udid, encoding)).should.eql(pbContent);
+    });
+
+    it('should add media', async function () {
+      const base64Png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+      const picturePath = await tempDir.path({prefix: `pixel-${randDeviceUdid}`, suffix: '.png'});
+      await fs.writeFile(picturePath, new Buffer(base64Png, 'base64').toString('binary'), 'binary');
+      try {
+        (await addMedia(udid, picturePath)).code.should.be.eql(0);
+      } finally {
+        await fs.unlink(picturePath);
+      }
     });
   });
 });
