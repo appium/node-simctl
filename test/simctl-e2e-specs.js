@@ -102,7 +102,8 @@ describe('simctl', function () {
       this.retries(3);
     }
 
-    let udid;
+    const BASE64_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+    let udid, picturePath;
 
     before(async function () {
       const {major, minor} = await xcode.getVersion(true);
@@ -119,6 +120,9 @@ describe('simctl', function () {
 
       // pause a moment or everything is messed up
       await B.delay(5000);
+
+      picturePath = await tempDir.path({prefix: 'pixel', suffix: '.png'});
+      await fs.writeFile(picturePath, new Buffer(BASE64_PNG, 'base64').toString('binary'), 'binary');
     });
     after(async function () {
       if (udid) {
@@ -127,9 +131,13 @@ describe('simctl', function () {
         } catch (ign) {}
         await deleteDevice(udid);
       }
+
+      if (await fs.exists(picturePath)) {
+        await fs.unlink(picturePath);
+      }
     });
 
-    it('should set and get the content of Simulator pasteboard', async function () {
+    it('should set and get the content of the pasteboard', async function () {
       const pbContent = 'blablabla';
       const encoding = 'ascii';
 
@@ -137,15 +145,8 @@ describe('simctl', function () {
       (await getPasteboard(udid, encoding)).should.eql(pbContent);
     });
 
-    it('should add media', async function () {
-      const base64Png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
-      const picturePath = await tempDir.path({prefix: 'pixel', suffix: '.png'});
-      await fs.writeFile(picturePath, new Buffer(base64Png, 'base64').toString('binary'), 'binary');
-      try {
-        (await addMedia(udid, picturePath)).code.should.be.eql(0);
-      } finally {
-        await fs.unlink(picturePath);
-      }
+    it('should add media files', async function () {
+      (await addMedia(udid, picturePath)).code.should.eql(0);
     });
   });
 });
