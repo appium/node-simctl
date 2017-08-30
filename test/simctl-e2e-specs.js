@@ -4,7 +4,7 @@
 import chai from 'chai';
 import _ from 'lodash';
 import { createDevice, deleteDevice, eraseDevice, getDevices, setPasteboard, getPasteboard,
-         bootDevice, launch, shutdown, addMedia } from '../lib/simctl.js';
+         bootDevice, launch, shutdown, addMedia, appInfo } from '../lib/simctl.js';
 import xcode from 'appium-xcode';
 import B from 'bluebird';
 import { fs, tempDir } from 'appium-support';
@@ -147,6 +147,10 @@ describe('simctl', function () {
 
     it('should add media files', async function () {
       (await addMedia(udid, picturePath)).code.should.eql(0);
+    });
+
+    it('should extract applications information', async function () {
+      (await appInfo(udid, 'com.apple.springboard')).should.include('ApplicationType');
     });
   });
 });
