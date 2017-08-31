@@ -134,6 +134,9 @@ describe('simctl', function () {
     describe('pasteboard', function () {
       let pbRetries = 0;
       before(async function () {
+        if (major < 8 || (major === 8 && minor < 1)) {
+          return this.skip();
+        }
         if (major === 9) {
           // TODO: recheck when full Xcode 9 comes out to see if pasteboard works better
           pbRetries = 200;
@@ -155,6 +158,9 @@ describe('simctl', function () {
       const BASE64_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
       let picturePath;
       before(async function () {
+        if (major < 8 || (major === 8 && minor < 1)) {
+          return this.skip();
+        }
         picturePath = await tempDir.path({prefix: 'pixel', suffix: '.png'});
         await fs.writeFile(picturePath, new Buffer(BASE64_PNG, 'base64').toString('binary'), 'binary');
       });
