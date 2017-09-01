@@ -8,6 +8,7 @@ import { createDevice, deleteDevice, eraseDevice, getDevices, setPasteboard, get
 import xcode from 'appium-xcode';
 import B from 'bluebird';
 import { fs, tempDir } from 'appium-support';
+import { retryInterval } from 'asyncbox';
 
 
 const should = chai.should();
@@ -102,11 +103,11 @@ describe('simctl', function () {
       this.retries(3);
     }
 
-    const BASE64_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
-    let udid, picturePath;
+    let udid;
+    let major, minor;
 
     before(async function () {
-      const {major, minor} = await xcode.getVersion(true);
+      ({major, minor} = await xcode.getVersion(true));
       if (major < 8 || (major === 8 && minor < 1)) {
         return this.skip();
       }
@@ -120,9 +121,6 @@ describe('simctl', function () {
 
       // pause a moment or everything is messed up
       await B.delay(5000);
-
-      picturePath = await tempDir.path({prefix: 'pixel', suffix: '.png'});
-      await fs.writeFile(picturePath, new Buffer(BASE64_PNG, 'base64').toString('binary'), 'binary');
     });
     after(async function () {
       if (udid) {
@@ -131,22 +129,49 @@ describe('simctl', function () {
         } catch (ign) {}
         await deleteDevice(udid);
       }
-
-      if (await fs.exists(picturePath)) {
-        await fs.unlink(picturePath);
-      }
     });
 
-    it('should set and get the content of the pasteboard', async function () {
-      const pbContent = 'blablabla';
-      const encoding = 'ascii';
+    describe('pasteboard', function () {
+      let pbRetries = 0;
+      before(async function () {
+        if (major < 8 || (major === 8 && minor < 1)) {
+          return this.skip();
+        }
+        if (major === 9) {
+          // TODO: recheck when full Xcode 9 comes out to see if pasteboard works better
+          pbRetries = 200;
+          this.timeout(200 * 1000 * 2);
+        }
+      });
+      it('should set and get the content of the pasteboard', async function () {
+        const pbContent = 'blablabla';
+        const encoding = 'ascii';
 
-      await setPasteboard(udid, pbContent, encoding);
-      (await getPasteboard(udid, encoding)).should.eql(pbContent);
+        await setPasteboard(udid, pbContent, encoding);
+        await retryInterval(pbRetries, 1000, async () => {
+          (await getPasteboard(udid, encoding)).should.eql(pbContent);
+        });
+      });
     });
 
-    it('should add media files', async function () {
-      (await addMedia(udid, picturePath)).code.should.eql(0);
+    describe('add media', function () {
+      const BASE64_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+      let picturePath;
+      before(async function () {
+        if (major < 8 || (major === 8 && minor < 1)) {
+          return this.skip();
+        }
+        picturePath = await tempDir.path({prefix: 'pixel', suffix: '.png'});
+        await fs.writeFile(picturePath, new Buffer(BASE64_PNG, 'base64').toString('binary'), 'binary');
+      });
+      after(async function () {
+        if (await fs.exists(picturePath)) {
+          await fs.unlink(picturePath);
+        }
+      });
+      it('should add media files', async function () {
+        (await addMedia(udid, picturePath)).code.should.eql(0);
+      });
     });
 
     it('should extract applications information', async function () {
