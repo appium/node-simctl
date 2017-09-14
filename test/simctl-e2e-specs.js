@@ -138,6 +138,9 @@ describe('simctl', function () {
           return this.skip();
         }
         if (major === 9) {
+          if (process.env.TRAVIS) {
+            return this.skip();
+          }
           // TODO: recheck when full Xcode 9 comes out to see if pasteboard works better
           pbRetries = 200;
           this.timeout(200 * 1000 * 2);
