@@ -22,7 +22,7 @@ describe('simctl', function () {
   let randDeviceUdid = null;
   let validSdks = [];
 
-  before(async () => {
+  before(async function () {
     let devices = await getDevices();
     validSdks = _.keys(devices).sort((a, b) => a - b);
     if (!validSdks.length) {
