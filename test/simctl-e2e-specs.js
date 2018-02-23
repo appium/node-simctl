@@ -2,6 +2,7 @@
 // transpile:mocha
 
 import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
 import { createDevice, deleteDevice, eraseDevice, getDevices, setPasteboard, getPasteboard,
          bootDevice, launch, shutdown, addMedia, appInfo } from '../lib/simctl.js';
@@ -12,6 +13,7 @@ import { retryInterval } from 'asyncbox';
 
 
 const should = chai.should();
+chai.use(chaiAsPromised);
 
 describe('simctl', function () {
   const DEVICE_NAME = 'iPhone 6';
@@ -87,7 +89,7 @@ describe('simctl', function () {
     let udid = await createDevice('node-simctl test', DEVICE_NAME, sdk);
     let numSimsAfter = (await getDevices())[sdk].length;
     numSimsAfter.should.equal(numSimsBefore + 1);
-    deleteDevice(udid);
+    await deleteDevice(udid);
   });
 
   it('should create a device with compatible properties', async function () {
@@ -96,6 +98,13 @@ describe('simctl', function () {
     let firstDevice = devices[0];
     let expectedList = ['name', 'sdk', 'state', 'udid'];
     Object.keys(firstDevice).sort().should.eql(expectedList);
+  });
+
+  it('should not fail to shutdown a shutdown simulator', async function () {
+    let sdk = _.last(validSdks);
+    let udid = await createDevice('node-simctl test', DEVICE_NAME, sdk);
+    await shutdown(udid).should.eventually.not.be.rejected;
+    await deleteDevice(udid);
   });
 
   describe('on running Simulator', function () {
