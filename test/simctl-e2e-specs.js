@@ -174,7 +174,7 @@ describe('simctl', function () {
           return this.skip();
         }
         picturePath = await tempDir.path({prefix: 'pixel', suffix: '.png'});
-        await fs.writeFile(picturePath, new Buffer(BASE64_PNG, 'base64').toString('binary'), 'binary');
+        await fs.writeFile(picturePath, Buffer.from(BASE64_PNG, 'base64').toString('binary'), 'binary');
       });
       after(async function () {
         if (await fs.exists(picturePath)) {
