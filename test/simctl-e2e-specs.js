@@ -4,8 +4,9 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
-import { createDevice, deleteDevice, eraseDevice, getDevices, setPasteboard, getPasteboard,
-         bootDevice, launch, shutdown, addMedia, appInfo } from '../lib/simctl.js';
+import { createDevice, deleteDevice, eraseDevice, getDevices, setPasteboard,
+         getPasteboard, bootDevice, launch, shutdown, addMedia, appInfo,
+         getDeviceTypes } from '../lib/simctl.js';
 import xcode from 'appium-xcode';
 import B from 'bluebird';
 import { fs, tempDir } from 'appium-support';
@@ -188,6 +189,16 @@ describe('simctl', function () {
 
     it('should extract applications information', async function () {
       (await appInfo(udid, 'com.apple.springboard')).should.include('ApplicationType');
+    });
+
+    describe('getDeviceTypes', function () {
+      it('should get device types', async function () {
+        const deviceTypes = await getDeviceTypes();
+        deviceTypes.should.have.length;
+        deviceTypes.length.should.be.above(0);
+        // at least one type, no matter the version of Xcode, should be an iPhone
+        deviceTypes.filter((el) => el.includes('iPhone')).length.should.be.above(1);
+      });
     });
   });
 });

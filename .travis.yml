@@ -14,9 +14,13 @@ matrix:
       node_js: "8"
     - osx_image: xcode8.3
       node_js: "6"
-    - osx_image: xcode9
+    - osx_image: xcode9.4
       node_js: "8"
-    - osx_image: xcode9
+    - osx_image: xcode9.4
+      node_js: "6"
+    - osx_image: xcode10
+      node_js: "8"
+    - osx_image: xcode10
       node_js: "6"
 script:
   - _FORCE_LOGS=1 npm run test && npm run e2e-test
