@@ -143,7 +143,7 @@ describe('simctl', function () {
 
     describe('pasteboard', function () {
       let pbRetries = 0;
-      before(async function () {
+      before(function () {
         if (major < 8 || (major === 8 && minor < 1)) {
           return this.skip();
         }
