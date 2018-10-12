@@ -45,6 +45,12 @@ Exported methods:
 - `udid` - the unique identifier of the simulator on which to open the url (in safari)
 - `url`- the url to navigate to
 
+
+`bootDevice(udid)`
+
+- `udid` - the unique identifier of the simulator to be booted
+
+
 `shutdown(udid)`
 
 - `udid` - the unique identifier of the simulator to be stopped
