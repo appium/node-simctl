@@ -5,10 +5,9 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
 import { createDevice, deleteDevice, eraseDevice, getDevices, setPasteboard,
-         getPasteboard, bootDevice, launch, shutdown, addMedia, appInfo,
-         getDeviceTypes } from '../lib/simctl.js';
+         getPasteboard, bootDevice, shutdown, addMedia, appInfo,
+         getDeviceTypes, startBootMonitor } from '../lib/simctl.js';
 import xcode from 'appium-xcode';
-import B from 'bluebird';
 import { fs, tempDir } from 'appium-support';
 import { retryInterval } from 'asyncbox';
 
@@ -126,11 +125,7 @@ describe('simctl', function () {
       udid = await createDevice('runningSimTest', DEVICE_NAME, sdk);
 
       await bootDevice(udid);
-      // Wait for boot to complete
-      await launch(udid, 'com.apple.springboard', MOCHA_TIMEOUT);
-
-      // pause a moment or everything is messed up
-      await B.delay(5000);
+      await startBootMonitor(udid, {timeout: MOCHA_TIMEOUT});
     });
     after(async function () {
       if (udid) {
@@ -139,6 +134,21 @@ describe('simctl', function () {
         } catch (ign) {}
         await deleteDevice(udid);
       }
+    });
+
+    describe('startBootMonitor', function () {
+      it('should be fulfilled if the simulator is already booted', async function () {
+        if (major < 8 || (major === 8 && minor < 1)) {
+          return this.skip();
+        }
+        await startBootMonitor(udid).should.eventually.be.fulfilled;
+      });
+      it('should fail to monitor booting of non-existing simulator', async function () {
+        if (major < 8 || (major === 8 && minor < 1)) {
+          return this.skip();
+        }
+        await startBootMonitor('blabla', {timeout: 1000}).should.eventually.be.rejected;
+      });
     });
 
     describe('pasteboard', function () {
