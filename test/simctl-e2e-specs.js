@@ -138,9 +138,15 @@ describe('simctl', function () {
 
     describe('startBootMonitor', function () {
       it('should be fulfilled if the simulator is already booted', async function () {
+        if (major < 8 || (major === 8 && minor < 1)) {
+          return this.skip();
+        }
         await startBootMonitor(udid).should.eventually.be.fulfilled;
       });
       it('should fail to monitor booting of non-existing simulator', async function () {
+        if (major < 8 || (major === 8 && minor < 1)) {
+          return this.skip();
+        }
         await startBootMonitor('blabla', {timeout: 1000}).should.eventually.be.rejected;
       });
     });
