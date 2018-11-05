@@ -136,7 +136,7 @@ describe('simctl', function () {
       }
     });
 
-    describe('startBootMonitor', async function () {
+    describe('startBootMonitor', function () {
       it('should be fulfilled if the simulator is already booted', async function () {
         await startBootMonitor(udid).should.eventually.be.fulfilled;
       });
