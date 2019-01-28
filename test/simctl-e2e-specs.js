@@ -21,16 +21,17 @@ describe('simctl', function () {
   this.timeout(MOCHA_TIMEOUT);
 
   let randName;
-  let randDeviceUdid = null;
   let validSdks = [];
+  let sdk;
 
   before(async function () {
-    let devices = await getDevices();
+    const devices = await getDevices();
     validSdks = _.keys(devices).sort((a, b) => a - b);
     if (!validSdks.length) {
       throw new Error('No valid SDKs');
     }
     console.log(`Found valid SDKs: ${validSdks.join(', ')}`); // eslint-disable-line no-console
+    sdk = _.last(validSdks);
 
     // need to find a random name that does not already exist
     // give it 5 tries
@@ -50,26 +51,67 @@ describe('simctl', function () {
     }
   });
 
-  it('should create a device', async function () {
-    let udid = await createDevice(randName, DEVICE_NAME, _.last(validSdks));
-    (typeof udid).should.equal('string');
-    udid.length.should.equal(36);
+  it('should retrieve a device with compatible properties', async function () {
+    const devices = (await getDevices())[sdk];
+    const firstDevice = devices[0];
+    const expectedList = ['name', 'sdk', 'state', 'udid'];
+    firstDevice.should.have.any.keys(...expectedList);
   });
 
-  it('should get devices', async function () {
-    let sdkDevices = await getDevices(_.last(validSdks));
-    _.map(sdkDevices, 'name').should.include(randName);
-    randDeviceUdid = sdkDevices.filter((d) => d.name === randName)[0].udid;
+  describe('createDevice', function () {
+    let udid;
+    after(async function () {
+      if (udid) {
+        await deleteDevice(udid, 16000);
+      }
+    });
+
+    it('should create a device', async function () {
+      udid = await createDevice(randName, DEVICE_NAME, sdk);
+      (typeof udid).should.equal('string');
+      udid.length.should.equal(36);
+    });
+
+    it('should create a device and be able to see it in devices list right away', async function () {
+      const numSimsBefore = (await getDevices())[sdk].length;
+      udid = await createDevice('node-simctl test', DEVICE_NAME, sdk);
+      const numSimsAfter = (await getDevices())[sdk].length;
+      numSimsAfter.should.equal(numSimsBefore + 1);
+    });
   });
 
-  it('should erase devices', async function () {
-    await eraseDevice(randDeviceUdid, 16000);
-  });
+  describe('device manipulation', function () {
+    let udid;
+    const name = 'node-simctl test';
+    beforeEach(async function () {
+      udid = await createDevice('node-simctl test', DEVICE_NAME, sdk);
+    });
+    afterEach(async function () {
+      if (udid) {
+        await deleteDevice(udid, 16000);
+      }
+    });
+    it('should get devices', async function () {
+      const sdkDevices = await getDevices(sdk);
+      _.map(sdkDevices, 'name').should.include(name);
+    });
 
-  it('should delete devices', async function () {
-    await deleteDevice(randDeviceUdid);
-    let sdkDevices = await getDevices(_.last(validSdks));
-    _.map(sdkDevices, 'name').should.not.include(randName);
+    it('should erase devices', async function () {
+      await eraseDevice(udid, 16000);
+    });
+
+    it('should delete devices', async function () {
+      await deleteDevice(udid);
+      const sdkDevices = await getDevices(sdk);
+      _.map(sdkDevices, 'name').should.not.include(udid);
+
+      // so we do not delete again
+      udid = null;
+    });
+
+    it('should not fail to shutdown a shutdown simulator', async function () {
+      await shutdown(udid).should.eventually.not.be.rejected;
+    });
   });
 
   it('should return a nice error for invalid usage', async function () {
@@ -81,30 +123,6 @@ describe('simctl', function () {
     }
     should.exist(err);
     err.message.should.include('Invalid device type: bar');
-  });
-
-  it('should create a device and be able to see it in devices list right away', async function () {
-    let sdk = _.last(validSdks);
-    let numSimsBefore = (await getDevices())[sdk].length;
-    let udid = await createDevice('node-simctl test', DEVICE_NAME, sdk);
-    let numSimsAfter = (await getDevices())[sdk].length;
-    numSimsAfter.should.equal(numSimsBefore + 1);
-    await deleteDevice(udid);
-  });
-
-  it('should create a device with compatible properties', async function () {
-    let sdk = _.last(validSdks);
-    let devices = (await getDevices())[sdk];
-    let firstDevice = devices[0];
-    let expectedList = ['name', 'sdk', 'state', 'udid'];
-    Object.keys(firstDevice).sort().should.eql(expectedList);
-  });
-
-  it('should not fail to shutdown a shutdown simulator', async function () {
-    let sdk = _.last(validSdks);
-    let udid = await createDevice('node-simctl test', DEVICE_NAME, sdk);
-    await shutdown(udid).should.eventually.not.be.rejected;
-    await deleteDevice(udid);
   });
 
   describe('on running Simulator', function () {
