@@ -26,7 +26,9 @@ describe('simctl', function () {
 
   before(async function () {
     const devices = await getDevices();
-    validSdks = _.keys(devices).sort((a, b) => a - b);
+    validSdks = _.keys(devices)
+      .filter((key) => !_.isEmpty(devices[key]))
+      .sort((a, b) => a - b);
     if (!validSdks.length) {
       throw new Error('No valid SDKs');
     }
