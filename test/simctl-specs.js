@@ -3,7 +3,7 @@ import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 import * as TeenProcess from 'teen_process';
 import _ from 'lodash';
-import { getDevices } from '../lib/simctl';
+import { getDevices, createDevice } from '../lib/simctl';
 
 
 const devicePayloads = [
@@ -29,8 +29,9 @@ chai.should();
 chai.use(chaiAsPromised);
 
 describe('simctl', function () {
+  const execStub = sinon.stub(TeenProcess, 'exec');
+
   describe('getDevices', function () {
-    const execStub = sinon.stub(TeenProcess, 'exec');
     afterEach(function () {
       execStub.resetHistory();
     });
@@ -114,5 +115,72 @@ describe('simctl', function () {
         });
       });
     }
+  });
+
+  describe('#createDevice', function () {
+    const devicesPayload = devicePayloads[0][0];
+    afterEach(function () {
+      execStub.resetHistory();
+    });
+    after(function () {
+      execStub.reset();
+    });
+
+    it('should create iOS simulator by default', async function () {
+      execStub.onFirstCall().returns({stdout: 'com.apple.CoreSimulator.SimRuntime.iOS-12-1', stderr: ''})
+              .onSecondCall().returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
+              .onThirdCall().returns(devicesPayload);
+
+      const devices = await createDevice(
+        'name',
+        'iPhone 6 Plus',
+        '12.1',
+        20000
+      );
+      execStub.secondCall.args[1].should.eql([
+        'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1'
+      ]);
+      devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
+    });
+
+    it('should create tvOS simulator', async function () {
+      execStub.onFirstCall().returns({stdout: 'com.apple.CoreSimulator.SimRuntime.tvOS-12-1', stderr: ''})
+              .onSecondCall().returns({stdout: 'FA628127-1D5C-45C3-9918-A47BF7E2AE14', stderr: ''})
+              .onThirdCall().returns(devicesPayload);
+
+      const devices = await createDevice(
+        'name',
+        'Apple TV',
+        '12.1',
+        20000,
+        { platform: 'tvOS' }
+      );
+      execStub.secondCall.args[1].should.eql([
+        'simctl', 'create', 'name', 'Apple TV', 'com.apple.CoreSimulator.SimRuntime.tvOS-12-1'
+      ]);
+      devices.should.eql('FA628127-1D5C-45C3-9918-A47BF7E2AE14');
+    });
+
+    it('should create iOS simulator by default with old format', async function () {
+      execStub.onFirstCall().returns({stdout: 'com.apple.CoreSimulator.SimRuntime.iOS-12-1', stderr: ''})
+              .onSecondCall().throws('Incompatible device')
+              .onThirdCall().returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
+              .onCall(3).returns(devicesPayload);
+
+      const devices = await createDevice(
+        'name',
+        'iPhone 6 Plus',
+        '12.1',
+        20000
+      );
+      execStub.secondCall.args[1].should.eql([
+        'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1'
+      ]);
+      execStub.thirdCall.args[1].should.eql([
+        'simctl', 'create', 'name', 'iPhone 6 Plus', '12.1'
+      ]);
+      devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
+    });
+
   });
 });
