@@ -139,7 +139,7 @@ describe('simctl', function () {
         'name',
         'iPhone 6 Plus',
         '12.1',
-        20000
+        { timeout: 20000 }
       );
       execStub.secondCall.args[1].should.eql([
         'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1'
@@ -157,8 +157,7 @@ describe('simctl', function () {
         'name',
         'Apple TV',
         '12.1',
-        20000,
-        { platform: 'tvOS' }
+        { timeout: 20000, platform: 'tvOS' }
       );
       execStub.secondCall.args[1].should.eql([
         'simctl', 'create', 'name', 'Apple TV', 'com.apple.CoreSimulator.SimRuntime.tvOS-12-1'
@@ -176,7 +175,7 @@ describe('simctl', function () {
         'name',
         'iPhone 6 Plus',
         '12.1',
-        20000
+        { timeout: 20000 }
       );
       execStub.secondCall.args[1].should.eql([
         'simctl', 'create', 'name', 'iPhone 6 Plus', '12.1'
