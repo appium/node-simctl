@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import * as TeenProcess from 'teen_process';
 import _ from 'lodash';
 import { getDevices, createDevice } from '../lib/simctl';
-
+import * as xcode from 'appium-xcode';
 
 const devicePayloads = [
   [
@@ -119,17 +119,21 @@ describe('simctl', function () {
 
   describe('#createDevice', function () {
     const devicesPayload = devicePayloads[0][0];
+    const getCLTVersionStub = sinon.stub(xcode, 'getCommandLineToolsVersion');
     afterEach(function () {
       execStub.resetHistory();
+      getCLTVersionStub.resetHistory();
     });
     after(function () {
       execStub.reset();
+      getCLTVersionStub.reset();
     });
 
     it('should create iOS simulator by default', async function () {
       execStub.onFirstCall().returns({stdout: 'com.apple.CoreSimulator.SimRuntime.iOS-12-1', stderr: ''})
               .onSecondCall().returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
               .onThirdCall().returns(devicesPayload);
+      getCLTVersionStub.returns('10.2.0.0.1.1552586384');
 
       const devices = await createDevice(
         'name',
@@ -147,6 +151,7 @@ describe('simctl', function () {
       execStub.onFirstCall().returns({stdout: 'com.apple.CoreSimulator.SimRuntime.tvOS-12-1', stderr: ''})
               .onSecondCall().returns({stdout: 'FA628127-1D5C-45C3-9918-A47BF7E2AE14', stderr: ''})
               .onThirdCall().returns(devicesPayload);
+      getCLTVersionStub.returns('10.2.0.0.1.1552586384');
 
       const devices = await createDevice(
         'name',
@@ -162,10 +167,10 @@ describe('simctl', function () {
     });
 
     it('should create iOS simulator by default with old format', async function () {
-      execStub.onFirstCall().returns({stdout: 'com.apple.CoreSimulator.SimRuntime.iOS-12-1', stderr: ''})
-              .onSecondCall().throws('Incompatible device')
-              .onThirdCall().returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
+      execStub.onFirstCall().returns({stdout: '12.1', stderr: ''})
+              .onSecondCall().returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
               .onCall(3).returns(devicesPayload);
+      getCLTVersionStub.returns('10.1.0.0.1.1552586384');
 
       const devices = await createDevice(
         'name',
@@ -174,9 +179,6 @@ describe('simctl', function () {
         20000
       );
       execStub.secondCall.args[1].should.eql([
-        'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1'
-      ]);
-      execStub.thirdCall.args[1].should.eql([
         'simctl', 'create', 'name', 'iPhone 6 Plus', '12.1'
       ]);
       devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
