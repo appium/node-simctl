@@ -130,7 +130,7 @@ describe('simctl', function () {
     });
 
     it('should create iOS simulator by default', async function () {
-      execStub.onFirstCall().returns({stdout: 'com.apple.CoreSimulator.SimRuntime.iOS-12-1', stderr: ''})
+      execStub.onFirstCall().returns({stdout: 'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1', stderr: ''})
               .onSecondCall().returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
               .onThirdCall().returns(devicesPayload);
       getCLTVersionStub.returns('10.2.0.0.1.1552586384');
@@ -138,11 +138,11 @@ describe('simctl', function () {
       const devices = await createDevice(
         'name',
         'iPhone 6 Plus',
-        '12.1',
+        '12.1.1',
         { timeout: 20000 }
       );
       execStub.secondCall.args[1].should.eql([
-        'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1'
+        'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1'
       ]);
       devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
     });
