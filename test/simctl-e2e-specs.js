@@ -16,7 +16,7 @@ const should = chai.should();
 chai.use(chaiAsPromised);
 
 describe('simctl', function () {
-  const DEVICE_NAME = 'iPhone 6';
+  const DEVICE_NAME = process.env.DEVICE_NAME || 'iPhone 6';
   const MOCHA_TIMEOUT = 200000;
   this.timeout(MOCHA_TIMEOUT);
 
