@@ -6,7 +6,7 @@
     "ios",
     "simctl"
   ],
-  "version": "4.0.2",
+  "version": "5.0.0",
   "author": "https://github.com/appium",
   "license": "Apache-2.0",
   "repository": {
