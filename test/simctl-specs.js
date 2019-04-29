@@ -119,22 +119,22 @@ describe('simctl', function () {
 
   describe('#createDevice', function () {
     const devicesPayload = devicePayloads[0][0];
-    const getCLTVersionStub = sinon.stub(xcode, 'getCommandLineToolsVersion');
+    const getClangVersionStub = sinon.stub(xcode, 'getClangVersion');
     const getXcodeVersionStub = sinon.stub(xcode, 'getVersion');
     afterEach(function () {
       execStub.resetHistory();
-      getCLTVersionStub.resetHistory();
+      getClangVersionStub.resetHistory();
     });
     after(function () {
       execStub.reset();
-      getCLTVersionStub.reset();
+      getClangVersionStub.reset();
     });
 
     it('should create iOS simulator by default', async function () {
       execStub.onFirstCall().returns({stdout: 'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1', stderr: ''})
               .onSecondCall().returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
               .onThirdCall().returns(devicesPayload);
-      getCLTVersionStub.returns('10.2.0.0.1.1552586384');
+      getClangVersionStub.returns('1001.0.46.3');
 
       const devices = await createDevice(
         'name',
@@ -152,7 +152,7 @@ describe('simctl', function () {
       execStub.onFirstCall().returns({stdout: 'com.apple.CoreSimulator.SimRuntime.tvOS-12-1', stderr: ''})
               .onSecondCall().returns({stdout: 'FA628127-1D5C-45C3-9918-A47BF7E2AE14', stderr: ''})
               .onThirdCall().returns(devicesPayload);
-      getCLTVersionStub.returns('10.2.0.0.1.1552586384');
+      getClangVersionStub.returns('1001.0.46.4');
 
       const devices = await createDevice(
         'name',
@@ -170,7 +170,7 @@ describe('simctl', function () {
       execStub.onFirstCall().returns({stdout: '12.1', stderr: ''})
               .onSecondCall().returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
               .onCall(3).returns(devicesPayload);
-      getCLTVersionStub.returns('10.1.0.0.1.1552586384');
+      getClangVersionStub.returns('1000.11.45.5');
       getXcodeVersionStub.returns('10.1');
 
       const devices = await createDevice(
@@ -189,7 +189,7 @@ describe('simctl', function () {
       execStub.onFirstCall().returns({stdout: '12.1', stderr: ''})
               .onSecondCall().returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
               .onCall(2).returns(devicesPayload);
-      getCLTVersionStub.returns('10.1.0.0.1.1552586384');
+      getClangVersionStub.returns('1000.11.45.5');
       getXcodeVersionStub.returns('10.1');
 
       const devices = await createDevice(
