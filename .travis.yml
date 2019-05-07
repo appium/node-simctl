@@ -1,5 +1,6 @@
 sudo: required
 language: node_js
+node_js: "10"
 os: osx
 env:
   global:
@@ -7,27 +8,13 @@ env:
 matrix:
   include:
     - osx_image: xcode7.3
-      node_js: "8"
-    - osx_image: xcode7.3
-      node_js: "10"
     - osx_image: xcode9.4
-      node_js: "8"
-    - osx_image: xcode9.4
-      node_js: "10"
     - osx_image: xcode10
-      node_js: "8"
-    - osx_image: xcode10
-      node_js: "10"
     - osx_image: xcode10.1
-      node_js: "8"
-    - osx_image: xcode10.1
-      node_js: "10"
     - osx_image: xcode10.2
-      node_js: "8"
       env:
         - DEVICE_NAME="iPhone X"
     - osx_image: xcode10.2
-      node_js: "10"
       env:
         - DEVICE_NAME="iPhone X"
 script:
