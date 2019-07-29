@@ -159,6 +159,11 @@ returns: `udid` of the created simulator.
   }
   ```
 
+
+`getSimctlList`
+
+- returns an object representing the output of ```xcrun simctl list -j```
+
 `spawn(udid, executablePath, env)`
 
  - spawns a process on the simulator specified by `udid` with given environment variable in `env`
