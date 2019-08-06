@@ -241,7 +241,6 @@ describe('simctl', function () {
         // at least one type, no matter the version of Xcode, should be an iPhone
         fullList.devicetypes.filter((el) => el.includes('iPhone')).length.should.be.above(1);
         // at least one runtime should be iOS
-        fullList.runtimes.filter((el) => el.includes('yakisoba')).length.should.be.above(1);
         fullList.runtimes.filter((el) => el.includes('iOS')).length.should.be.above(1);
       });
     });
