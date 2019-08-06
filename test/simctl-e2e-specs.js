@@ -237,11 +237,11 @@ describe('simctl', function () {
         fullList.should.have.property('runtimes');
         fullList.should.have.property('devices');
         fullList.should.have.property('pairs');
-        fullList.devicetypes.length.should.be.above(200);
+        fullList.devicetypes.length.should.be.above(1);
         // at least one type, no matter the version of Xcode, should be an iPhone
-        fullList.devicetypes.filter((el) => el.includes('iPhone')).length.should.be.above(1);
+        fullList.devicetypes.filter((el) => el.identifier.includes('iPhone')).length.should.be.above(0);
         // at least one runtime should be iOS
-        fullList.runtimes.filter((el) => el.includes('iOS')).length.should.be.above(1);
+        fullList.runtimes.filter((el) => el.identifier.includes('iOS')).length.should.be.above(0);
       });
     });
   });
