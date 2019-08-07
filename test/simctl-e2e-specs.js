@@ -6,7 +6,7 @@ import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
 import { createDevice, deleteDevice, eraseDevice, getDevices, setPasteboard,
          getPasteboard, bootDevice, shutdown, addMedia, appInfo,
-         getDeviceTypes, startBootMonitor } from '../lib/simctl.js';
+         getDeviceTypes, startBootMonitor, getSimctlList } from '../lib/simctl.js';
 import xcode from 'appium-xcode';
 import { fs, tempDir } from 'appium-support';
 import { retryInterval } from 'asyncbox';
@@ -228,6 +228,20 @@ describe('simctl', function () {
         deviceTypes.length.should.be.above(0);
         // at least one type, no matter the version of Xcode, should be an iPhone
         deviceTypes.filter((el) => el.includes('iPhone')).length.should.be.above(1);
+      });
+    });
+    describe('getSimctlList', function () {
+      it('should get everything from xcrun simctl list', async function () {
+        const fullList = await getSimctlList();
+        fullList.should.have.property('devicetypes');
+        fullList.should.have.property('runtimes');
+        fullList.should.have.property('devices');
+        fullList.should.have.property('pairs');
+        fullList.devicetypes.length.should.be.above(1);
+        // at least one type, no matter the version of Xcode, should be an iPhone
+        fullList.devicetypes.filter((el) => el.identifier.includes('iPhone')).length.should.be.above(0);
+        // at least one runtime should be iOS
+        fullList.runtimes.filter((el) => el.identifier.includes('iOS')).length.should.be.above(0);
       });
     });
   });
