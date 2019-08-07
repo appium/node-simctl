@@ -17,6 +17,9 @@ matrix:
     - osx_image: xcode10.2
       env:
         - DEVICE_NAME="iPhone X"
+    - osx_image: xcode11
+      env:
+        - DEVICE_NAME="iPhone X"
 script:
   - xcrun simctl list devices
   - npm run test && _FORCE_LOGS=1 npm run e2e-test
