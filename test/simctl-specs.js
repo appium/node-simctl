@@ -9,18 +9,18 @@ import * as xcode from 'appium-xcode';
 const devicePayloads = [
   [
     {
-      stdout: JSON.stringify(require('../../test/fixtures/devices.json')), // eslint-disable-line no-unresolved
+      stdout: JSON.stringify(require('../../test/fixtures/devices.json')), // eslint-disable-line import/no-unresolved
     },
     {
-      stdout: JSON.stringify(require('../../test/fixtures/devices-with-unavailable.json')), // eslint-disable-line no-unresolved
+      stdout: JSON.stringify(require('../../test/fixtures/devices-with-unavailable.json')), // eslint-disable-line import/no-unresolved
     },
   ],
   [
     {
-      stdout: JSON.stringify(require('../../test/fixtures/devices-simple.json')), // eslint-disable-line no-unresolved
+      stdout: JSON.stringify(require('../../test/fixtures/devices-simple.json')), // eslint-disable-line import/no-unresolved
     },
     {
-      stdout: JSON.stringify(require('../../test/fixtures/devices-with-unavailable-simple.json')), // eslint-disable-line no-unresolved
+      stdout: JSON.stringify(require('../../test/fixtures/devices-with-unavailable-simple.json')), // eslint-disable-line import/no-unresolved
     },
   ],
 ];

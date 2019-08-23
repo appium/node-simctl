@@ -1,5 +1,6 @@
 {
     "rules": {
-        "func-names": 0
+        "func-names": 0,
+        "no-redeclare": 0
     }
 }

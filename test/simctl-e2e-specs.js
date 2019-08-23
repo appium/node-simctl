@@ -108,7 +108,7 @@ describe('simctl', function () {
       _.map(sdkDevices, 'name').should.not.include(udid);
 
       // so we do not delete again
-      udid = null;
+      udid = null; // eslint-disable-line require-atomic-updates
     });
 
     it('should not fail to shutdown a shutdown simulator', async function () {
