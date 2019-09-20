@@ -149,6 +149,49 @@ describe('simctl', function () {
       devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
+    it('should create iOS simulator by default and use xcrun simctl "json" parsing', async function () {
+      const runtimesJson = `{
+        "runtimes" : [
+          {
+            "buildversion" : "15B87",
+            "availability" : "(available)",
+            "name" : "iOS 12.1.1",
+            "identifier" : "com.apple.CoreSimulator.SimRuntime.iOS-12-1-1",
+            "version" : "12.1.1"
+          },
+          {
+            "buildversion" : "15J580",
+            "availability" : "(available)",
+            "name" : "tvOS 11.1",
+            "identifier" : "com.apple.CoreSimulator.SimRuntime.tvOS-11-1",
+            "version" : "11.1"
+          },
+          {
+            "buildversion" : "15R844",
+            "availability" : "(available)",
+            "name" : "watchOS 4.1",
+            "identifier" : "com.apple.CoreSimulator.SimRuntime.watchOS-4-1",
+            "version" : "4.1"
+          }
+        ]
+      }`;
+      execStub.onCall(0).returns({stdout: runtimesJson})
+        .onCall(1).returns({stdout: 'FA628127-1D5C-45C3-9918-A47BF7E2AE14', stderr: ''})
+        .onCall(2).returns(devicesPayload);
+      getClangVersionStub.returns('1.1.1.1');
+
+      const devices = await createDevice(
+        'name',
+        'iPhone 6 Plus',
+        '12.1.1',
+        { timeout: 20000 }
+      );
+      execStub.getCall(1).args[1].should.eql([
+        'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1'
+      ]);
+      devices.should.eql('FA628127-1D5C-45C3-9918-A47BF7E2AE14');
+    });
+
     it('should create tvOS simulator', async function () {
       execStub.onCall(0).returns({stdout: 'invalid json'})
               .onCall(1).returns({stdout: 'com.apple.CoreSimulator.SimRuntime.tvOS-12-1', stderr: ''})
