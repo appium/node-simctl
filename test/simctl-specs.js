@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import * as TeenProcess from 'teen_process';
 import _ from 'lodash';
 import { getDevices, createDevice } from '../lib/simctl';
-import * as xcode from 'appium-xcode';
+
 
 const devicePayloads = [
   [
@@ -119,23 +119,18 @@ describe('simctl', function () {
 
   describe('#createDevice', function () {
     const devicesPayload = devicePayloads[0][0];
-    const getClangVersionStub = sinon.stub(xcode, 'getClangVersion');
-    const getXcodeVersionStub = sinon.stub(xcode, 'getVersion');
     afterEach(function () {
       execStub.resetHistory();
-      getClangVersionStub.resetHistory();
     });
     after(function () {
       execStub.reset();
-      getClangVersionStub.reset();
     });
 
-    it('should create iOS simulator by default', async function () {
+    it('should create iOS simulator', async function () {
       execStub.onCall(0).returns({stdout: 'not json'})
-              .onCall(1).returns({stdout: 'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1', stderr: ''})
+              .onCall(1).returns({stdout: '12.1.1', stderr: ''})
               .onCall(2).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
               .onCall(3).returns(devicesPayload);
-      getClangVersionStub.returns('1001.0.46.3');
 
       const devices = await createDevice(
         'name',
@@ -144,12 +139,12 @@ describe('simctl', function () {
         { timeout: 20000 }
       );
       execStub.getCall(2).args[1].should.eql([
-        'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1'
+        'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1'
       ]);
       devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
-    it('should create iOS simulator by default and use xcrun simctl "json" parsing', async function () {
+    it('should create iOS simulator and use xcrun simctl "json" parsing', async function () {
       const runtimesJson = `{
         "runtimes" : [
           {
@@ -178,7 +173,6 @@ describe('simctl', function () {
       execStub.onCall(0).returns({stdout: runtimesJson})
         .onCall(1).returns({stdout: 'FA628127-1D5C-45C3-9918-A47BF7E2AE14', stderr: ''})
         .onCall(2).returns(devicesPayload);
-      getClangVersionStub.returns('1.1.1.1');
 
       const devices = await createDevice(
         'name',
@@ -197,7 +191,6 @@ describe('simctl', function () {
               .onCall(1).returns({stdout: 'com.apple.CoreSimulator.SimRuntime.tvOS-12-1', stderr: ''})
               .onCall(2).returns({stdout: 'FA628127-1D5C-45C3-9918-A47BF7E2AE14', stderr: ''})
               .onCall(3).returns(devicesPayload);
-      getClangVersionStub.returns('1001.0.46.4');
 
       const devices = await createDevice(
         'name',
@@ -211,13 +204,12 @@ describe('simctl', function () {
       devices.should.eql('FA628127-1D5C-45C3-9918-A47BF7E2AE14');
     });
 
-    it('should create iOS simulator by default with lower command line tool but newer xcode version', async function () {
+    it('should create iOS simulator with old runtime format', async function () {
       execStub.onCall(0).returns({stdout: 'invalid json'})
               .onCall(1).returns({stdout: '12.1', stderr: ''})
-              .onCall(2).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
-              .onCall(3).returns(devicesPayload);
-      getClangVersionStub.returns('1000.11.45.5');
-      getXcodeVersionStub.returns('10.1');
+              .onCall(2).throws('Invalid runtime: com.apple.CoreSimulator.SimRuntime.iOS-12-1')
+              .onCall(3).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
+              .onCall(4).returns(devicesPayload);
 
       const devices = await createDevice(
         'name',
@@ -225,19 +217,18 @@ describe('simctl', function () {
         '12.1',
         { timeout: 20000 }
       );
-      execStub.getCall(2).args[1].should.eql([
+      execStub.getCall(3).args[1].should.eql([
         'simctl', 'create', 'name', 'iPhone 6 Plus', '12.1'
       ]);
       devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
-    it('should create iOS simulator by default with old format', async function () {
+    it('should create iOS simulator with old runtime format and three-part platform version', async function () {
       execStub.onCall(0).returns({stdout: 'invalid json'})
-              .onCall(1).returns({stdout: '12.1', stderr: ''})
-              .onCall(2).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
-              .onCall(3).returns(devicesPayload);
-      getClangVersionStub.returns('1000.11.45.5');
-      getXcodeVersionStub.returns('10.1');
+              .onCall(1).returns({stdout: '12.1.1', stderr: ''})
+              .onCall(2).throws('Invalid runtime: com.apple.CoreSimulator.SimRuntime.iOS-12-1')
+              .onCall(3).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
+              .onCall(4).returns(devicesPayload);
 
       const devices = await createDevice(
         'name',
@@ -245,11 +236,29 @@ describe('simctl', function () {
         '12.1',
         { timeout: 20000 }
       );
-      execStub.getCall(2).args[1].should.eql([
+      execStub.getCall(3).args[1].should.eql([
         'simctl', 'create', 'name', 'iPhone 6 Plus', '12.1'
       ]);
       devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
+    it('should create iOS simulator with three-part platform version and three-part runtime', async function () {
+      execStub.onCall(0).returns({stdout: 'invalid json'})
+              .onCall(1).returns({stdout: '12.1.1', stderr: ''})
+              .onCall(2).throws('Invalid runtime: com.apple.CoreSimulator.SimRuntime.iOS-12-1')
+              .onCall(3).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
+              .onCall(4).returns(devicesPayload);
+
+      const devices = await createDevice(
+        'name',
+        'iPhone 6 Plus',
+        '12.1.1',
+        { timeout: 20000 }
+      );
+      execStub.getCall(3).args[1].should.eql([
+        'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1'
+      ]);
+      devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
+    });
   });
 });

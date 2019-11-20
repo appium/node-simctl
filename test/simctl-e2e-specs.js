@@ -124,7 +124,7 @@ describe('simctl', function () {
       err = e;
     }
     should.exist(err);
-    err.message.should.include('Invalid device type: bar');
+    err.message.should.include(`Unable to parse runtime id 'baz'`);
   });
 
   describe('on running Simulator', function () {
