@@ -124,7 +124,7 @@ describe('simctl', function () {
       err = e;
     }
     should.exist(err);
-    err.message.should.include(`Unable to parse runtime id 'baz'`);
+    err.message.should.include(`Unable to parse version 'baz'`);
   });
 
   describe('on running Simulator', function () {
