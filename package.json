@@ -48,7 +48,7 @@
     "mocha": "mocha",
     "coverage": "gulp coveralls",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
-    "lint": "gulp eslint",
+    "lint": "gulp lint",
     "lint:fix": "gulp eslint --fix"
   },
   "pre-commit": [
