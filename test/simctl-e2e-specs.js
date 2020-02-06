@@ -114,7 +114,7 @@ describe('simctl', function () {
     });
 
     it('should not fail to shutdown a shutdown simulator', async function () {
-      await simctl.shutdown().should.eventually.not.be.rejected;
+      await simctl.shutdownDevice().should.eventually.not.be.rejected;
     });
   });
 
@@ -151,7 +151,7 @@ describe('simctl', function () {
     after(async function () {
       if (simctl.udid) {
         try {
-          await simctl.shutdown();
+          await simctl.shutdownDevice();
         } catch (ign) {}
         await simctl.deleteDevice();
         simctl.udid = null;
