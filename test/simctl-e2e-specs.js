@@ -77,7 +77,7 @@ describe('simctl', function () {
     it('should create a device and be able to see it in devices list right away', async function () {
       const numSimsBefore = (await simctl.getDevices())[sdk].length;
       simctl.udid = await simctl.createDevice('node-simctl test', DEVICE_NAME, sdk);
-      const numSimsAfter = (await simctl.udid.getDevices())[sdk].length;
+      const numSimsAfter = (await simctl.getDevices())[sdk].length;
       numSimsAfter.should.equal(numSimsBefore + 1);
     });
   });
