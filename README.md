@@ -143,10 +143,13 @@ _None_
 #### bootstatus (Undocumented)
  - startBootMonitor
 
+Methods marked with the star (`*`) character *do not* require the `udid` property to be set
+on the `Simctl` instance upon their invokation. All other methods will *throw an error* if the `udid`
+property is unset while they are being invoked.
 
 All public methods are supplied with docstrings that describe their arguments and returned values.
 
-The class constructor supports the following options:
+The `Simctl` class constructor supports the following options:
 
 - `xcrun` (Object): The xcrun properties. Currently only one property
 is supported, which is `path` and it by default contains `null`, which enforces
@@ -154,11 +157,11 @@ the instance to automatically detect the full path to `xcrun` tool and to throw
 an exception if it cannot be detected. If the path is set upon instance creation
 then it is going to be used by `exec` and no autodetection will happen.
 - `execTimeout` (number[600000]): The maximum number of miulliseconds
-to wait for single synchronous xcrun command.
-- `logErrors` (boolean[true]): Whether to wire xcrun error messages
-into debug log before throwing them.
+to wait for a single synchronous xcrun command.
+- `logErrors` (boolean[true]): Whether to write xcrun error messages
+into the debug log before throwing them as errors.
 - `udid` (string[null]): The unique identifier of the current device, which is
-going to be implictly passed to all methods, which require it. It can either be set
+going to be implictly passed to all methods, which require it (see above). It can either be set
 upon instance creation if it is already known or later when/if needed via the corresponding
 setter.
 
