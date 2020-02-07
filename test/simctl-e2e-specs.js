@@ -4,9 +4,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
-import { createDevice, deleteDevice, eraseDevice, getDevices, setPasteboard,
-         getPasteboard, bootDevice, shutdown, addMedia, appInfo,
-         getDeviceTypes, startBootMonitor, getSimctlList } from '../lib/simctl.js';
+import Simctl from '../lib/simctl.js';
 import xcode from 'appium-xcode';
 import { fs, tempDir } from 'appium-support';
 import { retryInterval } from 'asyncbox';
@@ -23,9 +21,11 @@ describe('simctl', function () {
   let randName;
   let validSdks = [];
   let sdk;
+  let simctl;
 
   before(async function () {
-    const devices = await getDevices();
+    simctl = new Simctl();
+    const devices = await simctl.getDevices();
     validSdks = _.keys(devices)
       .filter((key) => !_.isEmpty(devices[key]))
       .sort((a, b) => a - b);
@@ -54,72 +54,74 @@ describe('simctl', function () {
   });
 
   it('should retrieve a device with compatible properties', async function () {
-    const devices = (await getDevices())[sdk];
+    const devices = (await simctl.getDevices())[sdk];
     const firstDevice = devices[0];
     const expectedList = ['name', 'sdk', 'state', 'udid'];
     firstDevice.should.have.any.keys(...expectedList);
   });
 
   describe('createDevice', function () {
-    let udid;
     after(async function () {
-      if (udid) {
-        await deleteDevice(udid, 16000);
+      if (simctl.udid) {
+        await simctl.deleteDevice(16000);
+        simctl.udid = null;
       }
     });
 
     it('should create a device', async function () {
-      udid = await createDevice(randName, DEVICE_NAME, sdk);
-      (typeof udid).should.equal('string');
-      udid.length.should.equal(36);
+      simctl.udid = await simctl.createDevice(randName, DEVICE_NAME, sdk);
+      (typeof simctl.udid).should.equal('string');
+      simctl.udid.length.should.equal(36);
     });
 
     it('should create a device and be able to see it in devices list right away', async function () {
-      const numSimsBefore = (await getDevices())[sdk].length;
-      udid = await createDevice('node-simctl test', DEVICE_NAME, sdk);
-      const numSimsAfter = (await getDevices())[sdk].length;
+      const numSimsBefore = (await simctl.getDevices())[sdk].length;
+      simctl.udid = await simctl.createDevice('node-simctl test', DEVICE_NAME, sdk);
+      const numSimsAfter = (await simctl.getDevices())[sdk].length;
       numSimsAfter.should.equal(numSimsBefore + 1);
     });
   });
 
   describe('device manipulation', function () {
-    let udid;
+    let simctl;
     const name = 'node-simctl test';
     beforeEach(async function () {
-      udid = await createDevice('node-simctl test', DEVICE_NAME, sdk);
+      simctl = new Simctl();
+      simctl.udid = await simctl.createDevice('node-simctl test', DEVICE_NAME, sdk);
     });
     afterEach(async function () {
-      if (udid) {
-        await deleteDevice(udid, 16000);
+      if (simctl.udid) {
+        await simctl.deleteDevice(simctl.udid, 16000);
+        simctl.udid = null;
       }
     });
     it('should get devices', async function () {
-      const sdkDevices = await getDevices(sdk);
+      const sdkDevices = await simctl.getDevices(sdk);
       _.map(sdkDevices, 'name').should.include(name);
     });
 
     it('should erase devices', async function () {
-      await eraseDevice(udid, 16000);
+      await simctl.eraseDevice(16000);
     });
 
     it('should delete devices', async function () {
-      await deleteDevice(udid);
-      const sdkDevices = await getDevices(sdk);
-      _.map(sdkDevices, 'name').should.not.include(udid);
+      await simctl.deleteDevice();
+      const sdkDevices = await simctl.getDevices(sdk);
+      _.map(sdkDevices, 'name').should.not.include(simctl.udid);
 
       // so we do not delete again
-      udid = null; // eslint-disable-line require-atomic-updates
+      simctl.udid = null;
     });
 
     it('should not fail to shutdown a shutdown simulator', async function () {
-      await shutdown(udid).should.eventually.not.be.rejected;
+      await simctl.shutdownDevice().should.eventually.not.be.rejected;
     });
   });
 
   it('should return a nice error for invalid usage', async function () {
     let err = null;
     try {
-      await createDevice('foo', 'bar', 'baz');
+      await simctl.createDevice('foo', 'bar', 'baz');
     } catch (e) {
       err = e;
     }
@@ -132,7 +134,6 @@ describe('simctl', function () {
       this.retries(3);
     }
 
-    let udid;
     let major, minor;
 
     before(async function () {
@@ -142,17 +143,18 @@ describe('simctl', function () {
       }
 
       const sdk = process.env.IOS_SDK || _.last(validSdks);
-      udid = await createDevice('runningSimTest', DEVICE_NAME, sdk);
+      simctl.udid = await simctl.createDevice('runningSimTest', DEVICE_NAME, sdk);
 
-      await bootDevice(udid);
-      await startBootMonitor(udid, {timeout: MOCHA_TIMEOUT});
+      await simctl.bootDevice();
+      await simctl.startBootMonitor({timeout: MOCHA_TIMEOUT});
     });
     after(async function () {
-      if (udid) {
+      if (simctl.udid) {
         try {
-          await shutdown(udid);
+          await simctl.shutdownDevice();
         } catch (ign) {}
-        await deleteDevice(udid);
+        await simctl.deleteDevice();
+        simctl.udid = null;
       }
     });
 
@@ -161,13 +163,19 @@ describe('simctl', function () {
         if (major < 8 || (major === 8 && minor < 1)) {
           return this.skip();
         }
-        await startBootMonitor(udid).should.eventually.be.fulfilled;
+        await simctl.startBootMonitor().should.eventually.be.fulfilled;
       });
       it('should fail to monitor booting of non-existing simulator', async function () {
         if (major < 8 || (major === 8 && minor < 1)) {
           return this.skip();
         }
-        await startBootMonitor('blabla', {timeout: 1000}).should.eventually.be.rejected;
+        const udid = simctl.udid;
+        try {
+          simctl.udid = 'blabla';
+          await simctl.startBootMonitor({timeout: 1000}).should.eventually.be.rejected;
+        } finally {
+          simctl.udid = udid;
+        }
       });
     });
 
@@ -190,9 +198,9 @@ describe('simctl', function () {
         const pbContent = 'blablabla';
         const encoding = 'ascii';
 
-        await setPasteboard(udid, pbContent, encoding);
+        await simctl.setPasteboard(pbContent, encoding);
         await retryInterval(pbRetries, 1000, async () => {
-          (await getPasteboard(udid, encoding)).should.eql(pbContent);
+          (await simctl.getPasteboard(encoding)).should.eql(pbContent);
         });
       });
     });
@@ -213,26 +221,26 @@ describe('simctl', function () {
         }
       });
       it('should add media files', async function () {
-        (await addMedia(udid, picturePath)).code.should.eql(0);
+        (await simctl.addMedia(picturePath)).code.should.eql(0);
       });
     });
 
     it('should extract applications information', async function () {
-      (await appInfo(udid, 'com.apple.springboard')).should.include('ApplicationType');
+      (await simctl.appInfo('com.apple.springboard')).should.include('ApplicationType');
     });
 
     describe('getDeviceTypes', function () {
       it('should get device types', async function () {
-        const deviceTypes = await getDeviceTypes();
+        const deviceTypes = await simctl.getDeviceTypes();
         deviceTypes.should.have.length;
         deviceTypes.length.should.be.above(0);
         // at least one type, no matter the version of Xcode, should be an iPhone
         deviceTypes.filter((el) => el.includes('iPhone')).length.should.be.above(1);
       });
     });
-    describe('getSimctlList', function () {
+    describe('list', function () {
       it('should get everything from xcrun simctl list', async function () {
-        const fullList = await getSimctlList();
+        const fullList = await simctl.list();
         fullList.should.have.property('devicetypes');
         fullList.should.have.property('runtimes');
         fullList.should.have.property('devices');

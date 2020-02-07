@@ -3,7 +3,7 @@ import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 import * as TeenProcess from 'teen_process';
 import _ from 'lodash';
-import { getDevices, createDevice } from '../lib/simctl';
+import Simctl from '../lib/simctl';
 
 
 const devicePayloads = [
@@ -32,6 +32,15 @@ describe('simctl', function () {
   const execStub = sinon.stub(TeenProcess, 'exec');
 
   describe('getDevices', function () {
+    let simctl;
+
+    beforeEach(function () {
+      simctl = new Simctl({
+        xcrun: {
+          path: 'xcrun',
+        }
+      });
+    });
     afterEach(function () {
       execStub.resetHistory();
     });
@@ -45,7 +54,7 @@ describe('simctl', function () {
           it('should get all the devices in the JSON', async function () {
             execStub.returns(devicesPayload);
 
-            const devices = await getDevices();
+            const devices = await simctl.getDevices();
             _.keys(devices).length.should.eql(2);
 
             devices['12.1'].length.should.eql(10);
@@ -54,7 +63,7 @@ describe('simctl', function () {
           it('should ignore unavailable devices', async function () {
             execStub.returns(devicesWithUnavailablePayload);
 
-            const devices = await getDevices();
+            const devices = await simctl.getDevices();
             _.keys(devices).length.should.eql(4);
 
             devices['12.1'].length.should.eql(10);
@@ -67,7 +76,7 @@ describe('simctl', function () {
           it('should get all the devices in the JSON', async function () {
             execStub.returns(devicesPayload);
 
-            const devices = await getDevices(null, 'tvOS');
+            const devices = await simctl.getDevices(null, 'tvOS');
             _.keys(devices).length.should.eql(1);
 
             devices['12.1'].length.should.eql(3);
@@ -75,7 +84,7 @@ describe('simctl', function () {
           it('should ignore unavailable devices', async function () {
             execStub.returns(devicesWithUnavailablePayload);
 
-            const devices = await getDevices(null, 'tvOS');
+            const devices = await simctl.getDevices(null, 'tvOS');
             _.keys(devices).length.should.eql(2);
 
             devices['12.1'].length.should.eql(3);
@@ -89,13 +98,13 @@ describe('simctl', function () {
           it('should get all the devices in the JSON', async function () {
             execStub.returns(devicesPayload);
 
-            const devices = await getDevices('12.1');
+            const devices = await simctl.getDevices('12.1');
             _.keys(devices).length.should.eql(10);
           });
           it('should ignore unavailable devices', async function () {
             execStub.returns(devicesWithUnavailablePayload);
 
-            const devices = await getDevices('12.1');
+            const devices = await simctl.getDevices('12.1');
             _.keys(devices).length.should.eql(10);
           });
         });
@@ -103,13 +112,13 @@ describe('simctl', function () {
           it('should get all the devices in the JSON', async function () {
             execStub.returns(devicesPayload);
 
-            const devices = await getDevices('5.1', 'watchOS');
+            const devices = await simctl.getDevices('5.1', 'watchOS');
             _.keys(devices).length.should.eql(6);
           });
           it('should ignore unavailable devices', async function () {
             execStub.returns(devicesWithUnavailablePayload);
 
-            const devices = await getDevices('5.1', 'watchOS');
+            const devices = await simctl.getDevices('5.1', 'watchOS');
             _.keys(devices).length.should.eql(6);
           });
         });
@@ -119,6 +128,15 @@ describe('simctl', function () {
 
   describe('#createDevice', function () {
     const devicesPayload = devicePayloads[0][0];
+    let simctl;
+
+    beforeEach(function () {
+      simctl = new Simctl({
+        xcrun: {
+          path: 'xcrun',
+        }
+      });
+    });
     afterEach(function () {
       execStub.resetHistory();
     });
@@ -132,7 +150,7 @@ describe('simctl', function () {
               .onCall(2).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
               .onCall(3).returns(devicesPayload);
 
-      const devices = await createDevice(
+      const devices = await simctl.createDevice(
         'name',
         'iPhone 6 Plus',
         '12.1.1',
@@ -174,7 +192,7 @@ describe('simctl', function () {
         .onCall(1).returns({stdout: 'FA628127-1D5C-45C3-9918-A47BF7E2AE14', stderr: ''})
         .onCall(2).returns(devicesPayload);
 
-      const devices = await createDevice(
+      const devices = await simctl.createDevice(
         'name',
         'iPhone 6 Plus',
         '12.1.1',
@@ -192,7 +210,7 @@ describe('simctl', function () {
               .onCall(2).returns({stdout: 'FA628127-1D5C-45C3-9918-A47BF7E2AE14', stderr: ''})
               .onCall(3).returns(devicesPayload);
 
-      const devices = await createDevice(
+      const devices = await simctl.createDevice(
         'name',
         'Apple TV',
         '12.1',
@@ -211,7 +229,7 @@ describe('simctl', function () {
               .onCall(3).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
               .onCall(4).returns(devicesPayload);
 
-      const devices = await createDevice(
+      const devices = await simctl.createDevice(
         'name',
         'iPhone 6 Plus',
         '12.1',
@@ -230,7 +248,7 @@ describe('simctl', function () {
               .onCall(3).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
               .onCall(4).returns(devicesPayload);
 
-      const devices = await createDevice(
+      const devices = await simctl.createDevice(
         'name',
         'iPhone 6 Plus',
         '12.1',
@@ -249,7 +267,7 @@ describe('simctl', function () {
               .onCall(3).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
               .onCall(4).returns(devicesPayload);
 
-      const devices = await createDevice(
+      const devices = await simctl.createDevice(
         'name',
         'iPhone 6 Plus',
         '12.1.1',

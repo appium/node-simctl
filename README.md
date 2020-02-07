@@ -19,164 +19,182 @@ Install through [npm](https://www.npmjs.com/package/node-simctl).
 npm install node-simctl
 ```
 
-### Api
+### API
 
-Exported methods:
+The module exports single class `Simctl`. This class contains methods
+which wrap the following simctl subcommands:
 
-`installApp(udid, appPath)`
+#### create (Create a new device)
+ - createDevice `*`
 
-- `udid` - the unique identifier of the simulator to which to install the application
-- `appPath` - the path to the application to be installed
+#### clone (Clone an existing device)
+_None_
+
+#### upgrade (Upgrade a device to a newer runtime)
+_None_
+
+#### delete (Delete specified devices, unavailable devices, or all devices)
+ - deleteDevice
+
+#### pair (Create a new watch and phone pair)
+_None_
+
+#### unpair (Unpair a watch and phone pair)
+_None_
+
+#### pair_activate (Set a given pair as active)
+_None_
+
+#### erase (Erase a device's contents and settings)
+ - eraseDevice
+
+#### boot (Boot a device)
+ - bootDevice
+
+#### shutdown (Shutdown a device)
+ - shutdownDevice
+
+#### rename (Rename a device)
+_None_
+
+#### getenv (Print an environment variable from a running device)
+_None_
+
+#### openurl (Open a URL in a device)
+ - openUrl
+
+#### addmedia (Add photos, live photos, videos, or contacts to the library of a device)
+ - addMedia
+
+#### install (Install an app on a device)
+ - installApp
+
+#### uninstall (Uninstall an app from a device)
+ - uninstallApp
+
+#### get_app_container (Print the path of the installed app's container)
+ - getAppContainer
+
+#### launch (Launch an application by identifier on a device)
+ - launchApp
+
+#### terminate (Terminate an application by identifier on a device)
+ - terminateApp
+
+#### spawn (Spawn a process by executing a given executable on a device)
+ - spawnProcess
+ - spawnSubProcess
+
+#### list (List available devices, device types, runtimes, or device pairs)
+ - getDevicesByParsing `*`
+ - getDevices `*`
+ - getRuntimeForPlatformVersionViaJson `*`
+ - getRuntimeForPlatformVersion `*`
+ - getDeviceTypes `*`
+ - list `*`
+
+#### icloud_sync (Trigger iCloud sync on a device)
+_None_
+
+#### pbsync (Sync the pasteboard content from one pasteboard to another)
+_None_
+
+#### pbcopy (Copy standard input onto the device pasteboard)
+ - setPasteboard
+
+#### pbpaste (Print the contents of the device's pasteboard to standard output)
+ - getPasteboard
+
+#### help (Prints the usage for a given subcommand)
+_None_
+
+#### io (Set up a device IO operation)
+ - getScreeenshot
+
+#### diagnose (Collect diagnostic information and logs)
+_None_
+
+#### logverbose (enable or disable verbose logging for a device)
+_None_
+
+#### status_bar (Set or clear status bar overrides)
+_None_
+
+#### ui (Get or Set UI options)
+ - getAppearance
+ - setAppearance
+
+#### push (Send a simulated push notification)
+ - pushNotification
+
+#### privacy (Grant, revoke, or reset privacy and permissions)
+ - grantPermission
+ - revokePermission
+ - resetPermission
+
+#### keychain (Manipulate a device's keychain)
+ - addRootCertificate
+ - addCertificate
+ - resetKeychain
+
+#### appinfo (Undocumented)
+ - appInfo
+
+#### bootstatus (Undocumented)
+ - startBootMonitor
+
+Methods marked with the star (`*`) character *do not* require the `udid` property to be set
+on the `Simctl` instance upon their invocation. All other methods will *throw an error* if the `udid`
+property is unset while they are being invoked.
+
+All public methods are supplied with docstrings that describe their arguments and returned values.
+
+The `Simctl` class constructor supports the following options:
+
+- `xcrun` (Object): The xcrun properties. Currently only one property
+is supported, which is `path` and it by default contains `null`, which enforces
+the instance to automatically detect the full path to `xcrun` tool and to throw
+an exception if it cannot be detected. If the path is set upon instance creation
+then it is going to be used by `exec` and no autodetection will happen.
+- `execTimeout` (number[600000]): The maximum number of milliseconds
+to wait for a single synchronous xcrun command.
+- `logErrors` (boolean[true]): Whether to write xcrun error messages
+into the debug log before throwing them as errors.
+- `udid` (string[null]): The unique identifier of the current device, which is
+going to be implicitly passed to all methods, which require it (see above). It can either be set
+upon instance creation if it is already known or later when/if needed via the corresponding
+setter.
 
 
-`removeApp(udid, bundleId)`
+### Advanced Usage
 
-- `udid` - the unique identifier of the simulator from which to remove the application
-- `bundleId` - the bundle identifier of the application (e.g., `com.corp.app`)
+Any simctl subcommand could be called via `exec` method, which accepts the subcommand itself
+as the first argument and the set of options, which may contain additional command args,
+environment variables, encoding, etc. For example:
 
+```js
+import Simctl from 'node-simctl';
 
-`launch(udid, bundleId)`
-
-- `udid` - the unique identifier of the simulator on which to launch the app
-- `bundleId` - the bundle identifier of the application (e.g., `com.corp.app`)
-
-`openUrl(udid, url)`
-
-- `udid` - the unique identifier of the simulator on which to open the url (in safari)
-- `url`- the url to navigate to
-
-`shutdown(udid)`
-
-- `udid` - the unique identifier of the simulator to be stopped
-
-
-`createDevice(name, deviceType, runtime)`
-
-- `name` - any name you choose for this simulator
-- `deviceType` - e.g., `"iPhone 6"` or `"iPad Air"`, see more possibilities from the output of `getDevices`
-- `runtime` - iOS sdk version. eg `"8.3"`
-
-returns: `udid` of the created simulator.
-
-
-`deleteDevice(udid)`
-
-- `udid` - the unique identifier of the simulator to be deleted
-
-
-`eraseDevice(udid)`
-
-- `udid` - the unique identifier of the simulator to be erased
-
-
-`getDevices()`
-
-  output looks like:
-
-  ```shell
-  {
-    '7.1': [
-     { name: 'iPhone 4s',
-       udid: 'C09B34E5-7DCB-442E-B79C-AB6BC0357417',
-       state: 'Shutdown' },
-     { name: 'iPhone 5',
-       udid: 'B236B73C-8EFA-4284-AC1F-2A45F3286E4C',
-       state: 'Shutdown' },
-     { name: 'iPhone 5s',
-       udid: '8E248C90-0F79-46AD-9CAA-8DF3B6E3FBA6',
-       state: 'Shutdown' },
-     { name: 'iPad 2',
-       udid: 'B4179FA5-B9C4-4F79-BDDF-314ED66B889C',
-       state: 'Shutdown' },
-     { name: 'iPad Retina',
-       udid: '707AC76E-319C-4215-BAF7-5D6D3B3BA4D2',
-       state: 'Shutdown' },
-     { name: 'iPad Air',
-       udid: 'FA5C971D-4E05-4AA3-B48B-C9619C7453BE',
-       state: 'Shutdown' } ],
-    '8.1': [
-     { name: 'iPhone 4s',
-       udid: '0829568F-7479-4ADE-9E51-B208DC99C107',
-       state: 'Shutdown' },
-     { name: 'iPhone 5',
-       udid: 'B5048708-566E-45D5-9885-C878EF7D6D13',
-       state: 'Shutdown' },
-     { name: 'iPhone 5s',
-       udid: '2F7678F2-FD52-497F-9383-41D3BB401FBD',
-       state: 'Shutdown' },
-     { name: 'iPhone 6 Plus',
-       udid: '013D6994-B4E6-4548-AD77-C0D7C6C6D245',
-       state: 'Shutdown' },
-     { name: 'iPhone 6',
-       udid: '1CA836DA-2A2D-428A-846D-C378E0C39B09',
-       state: 'Shutdown' },
-     { name: 'iPad 2',
-       udid: '47D8FF29-4E76-4E7B-A412-FCE9C3B8A9AC',
-       state: 'Shutdown' },
-     { name: 'iPad Retina',
-       udid: '82071785-2C47-4AF2-BD27-1FAF2B12DF32',
-       state: 'Shutdown' },
-     { name: 'iPad Air',
-       udid: '342872EB-7559-4D42-B601-0FCF816B2E78',
-       state: 'Shutdown' },
-     { name: 'Resizable iPhone',
-       udid: 'E46EFA59-E2B4-4FF9-B290-B61F3CFECC65',
-       state: 'Shutdown' },
-     { name: 'Resizable iPad',
-       udid: '6DAB91C9-CCD1-4C17-9124-D765E2F0567A',
-       state: 'Shutdown' } ],
-    '8.3': [
-     { name: 'iPhone 4s',
-       udid: '3D1A8D2A-615A-4C1E-A73C-91E92D6637FF',
-       state: 'Shutdown' },
-     { name: 'iPhone 5',
-       udid: '813AAB6A-32C8-4859-A5CF-F3355C244F54',
-       state: 'Shutdown' },
-     { name: 'iPhone 5s',
-       udid: '9D3A405E-65D6-4743-85DA-E644DA9A8373',
-       state: 'Shutdown' },
-     { name: 'iPhone 6 Plus',
-       udid: 'D94E4CD7-D412-4198-BCD4-26799672975E',
-       state: 'Shutdown' },
-     { name: 'iPhone 6',
-       udid: '26EAADAE-1CD5-42F9-9A4C-50554CDF0910',
-       state: 'Shutdown' },
-     { name: 'iPad 2',
-       udid: 'C8E68217-82E6-42A8-8326-9824CA2E7C7C',
-       state: 'Shutdown' },
-     { name: 'iPad Retina',
-       udid: '8F4A3349-3ABF-4597-953A-285C5C0FFD00',
-       state: 'Shutdown' },
-     { name: 'iPad Air',
-       udid: '7DEA409E-159A-4730-B1C6-7C18279F72B8',
-       state: 'Shutdown' },
-     { name: 'Resizable iPhone',
-       udid: 'F33783B2-9EE9-4A99-866E-E126ADBAD410',
-       state: 'Shutdown' },
-     { name: 'Resizable iPad',
-       udid: 'DFBC2970-9455-4FD9-BB62-9E4AE5AA6954',
-       state: 'Shutdown' } ]
-  }
-  ```
-
-
-`getSimctlList`
-
-- returns an object representing the output of ```xcrun simctl list -j```
-
-`spawn(udid, executablePath, env)`
-
- - spawns a process on the simulator specified by `udid` with given environment variable in `env`
-
-`spawnSubProcess(udid, executablePath, env)`
-
- - spawns a process on the simulator specified by `udid` with given environment variable in `env`
- - returns a (SubProcess)[https://github.com/appium/node-teen_process#teen_processsubprocess] object.
-
-`getScreenshot(udid)`
-
-- returns a base64 png screenshot of device specified by `udid`
-
-### Usage
+const simctl = new Simctl();
+const name = 'My Device Name';
+simctl.udid = await simctl.createDevice(name, 'iPhone X', '13.3');
+await simctl.bootDevice();
+await simctl.startBootMonitor({timeout: 120000});
+await simctl.exec('pbsync');
+console.log(`Pasteboard content: ${await simctl.getPasteboard()}`);
+const {stdout} = await simctl.exec('status_bar', {
+  args: [simctl.udid, 'list']
+});
+console.log(output);
+simctl.udid = void(await simctl.deleteDevice());
+```
 
 See [specs](test/simctl-specs.js) for examples of usage.
+
+
+### Running Multiple Simulator SDKs On a Single Computer
+
+It is possible to run multiple simulators using different Xcode SDKs on a single machine.
+Simply set a proper value to `DEVELOPER_DIR` environment variable for each process.
+
+Read this [MacOps article](https://macops.ca/developer-binaries-on-os-x-xcode-select-and-xcrun/) for more details.
