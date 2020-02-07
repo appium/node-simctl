@@ -238,9 +238,9 @@ describe('simctl', function () {
         deviceTypes.filter((el) => el.includes('iPhone')).length.should.be.above(1);
       });
     });
-    describe('getSimctlList', function () {
+    describe('list', function () {
       it('should get everything from xcrun simctl list', async function () {
-        const fullList = await simctl.getSimctlList();
+        const fullList = await simctl.list();
         fullList.should.have.property('devicetypes');
         fullList.should.have.property('runtimes');
         fullList.should.have.property('devices');
