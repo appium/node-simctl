@@ -25,7 +25,7 @@ The module exports single class `Simctl`. This class contains methods
 which wrap the following simctl subcommands:
 
 #### create (Create a new device)
- - createDevice
+ - createDevice `*`
 
 #### clone (Clone an existing device)
 _None_
@@ -86,12 +86,12 @@ _None_
  - spawnSubProcess
 
 #### list (List available devices, device types, runtimes, or device pairs)
- - getDevicesByParsing
- - getDevices
- - getRuntimeForPlatformVersionViaJson
- - getRuntimeForPlatformVersion
- - getDeviceTypes
- - list
+ - getDevicesByParsing `*`
+ - getDevices `*`
+ - getRuntimeForPlatformVersionViaJson `*`
+ - getRuntimeForPlatformVersion `*`
+ - getDeviceTypes `*`
+ - list `*`
 
 #### icloud_sync (Trigger iCloud sync on a device)
 _None_
@@ -109,7 +109,7 @@ _None_
 _None_
 
 #### io (Set up a device IO operation)
-_None_
+ - getScreeenshot
 
 #### diagnose (Collect diagnostic information and logs)
 _None_
@@ -136,6 +136,13 @@ _None_
  - addRootCertificate
  - addCertificate
  - resetKeychain
+
+#### appinfo (Undocumented)
+ - appInfo
+
+#### bootstatus (Undocumented)
+ - startBootMonitor
+
 
 All public methods are supplied with docstrings that describe their arguments and returned values.
 
