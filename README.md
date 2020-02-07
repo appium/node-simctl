@@ -33,7 +33,7 @@ _None_
 #### upgrade (Upgrade a device to a newer runtime)
 _None_
 
-#### celete (Delete spcified devices, unavailable devices, or all devices)
+#### delete (Delete specified devices, unavailable devices, or all devices)
  - deleteDevice
 
 #### pair (Create a new watch and phone pair)
@@ -144,7 +144,7 @@ _None_
  - startBootMonitor
 
 Methods marked with the star (`*`) character *do not* require the `udid` property to be set
-on the `Simctl` instance upon their invokation. All other methods will *throw an error* if the `udid`
+on the `Simctl` instance upon their invocation. All other methods will *throw an error* if the `udid`
 property is unset while they are being invoked.
 
 All public methods are supplied with docstrings that describe their arguments and returned values.
@@ -156,12 +156,12 @@ is supported, which is `path` and it by default contains `null`, which enforces
 the instance to automatically detect the full path to `xcrun` tool and to throw
 an exception if it cannot be detected. If the path is set upon instance creation
 then it is going to be used by `exec` and no autodetection will happen.
-- `execTimeout` (number[600000]): The maximum number of miulliseconds
+- `execTimeout` (number[600000]): The maximum number of milliseconds
 to wait for a single synchronous xcrun command.
 - `logErrors` (boolean[true]): Whether to write xcrun error messages
 into the debug log before throwing them as errors.
 - `udid` (string[null]): The unique identifier of the current device, which is
-going to be implictly passed to all methods, which require it (see above). It can either be set
+going to be implicitly passed to all methods, which require it (see above). It can either be set
 upon instance creation if it is already known or later when/if needed via the corresponding
 setter.
 
@@ -169,7 +169,7 @@ setter.
 ### Advanced Usage
 
 Any simctl subcommand could be called via `exec` method, which accepts the subcommand itself
-as the first aegument and the set of options, which may contain addtional command args,
+as the first argument and the set of options, which may contain additional command args,
 environment variables, encoding, etc. For example:
 
 ```js
