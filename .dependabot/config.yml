@@ -1,0 +1,9 @@
+version: 1
+update_configs:
+  - package_manager: "javascript"
+    directory: "/"
+    update_schedule: "live"
+  - package_manager: "javascript"
+    directory: "/"
+    target_branch: "v5"
+    update_schedule: "live"
