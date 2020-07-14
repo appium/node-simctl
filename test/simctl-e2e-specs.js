@@ -6,12 +6,19 @@ import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
 import Simctl from '../lib/simctl.js';
 import xcode from 'appium-xcode';
-import { fs, tempDir } from 'appium-support';
 import { retryInterval } from 'asyncbox';
-
+import rimraf from 'rimraf';
+import { v4 as uuidV4 } from 'uuid';
+import path from 'path';
+import os from 'os';
+import fs from 'fs';
+import B from 'bluebird';
 
 const should = chai.should();
 chai.use(chaiAsPromised);
+const rimrafAsync = B.promisify(rimraf);
+const writeFileAsync = B.promisify(fs.writeFile);
+
 
 describe('simctl', function () {
   const DEVICE_NAME = process.env.DEVICE_NAME || 'iPhone X';
@@ -212,12 +219,12 @@ describe('simctl', function () {
         if (major < 8 || (major === 8 && minor < 1)) {
           return this.skip();
         }
-        picturePath = await tempDir.path({prefix: 'pixel', suffix: '.png'});
-        await fs.writeFile(picturePath, Buffer.from(BASE64_PNG, 'base64').toString('binary'), 'binary');
+        picturePath = path.join(os.tmpdir(), `${uuidV4()}.png`);
+        await writeFileAsync(picturePath, Buffer.from(BASE64_PNG, 'base64').toString('binary'), 'binary');
       });
       after(async function () {
-        if (await fs.exists(picturePath)) {
-          await fs.unlink(picturePath);
+        if (picturePath) {
+          await rimrafAsync(picturePath);
         }
       });
       it('should add media files', async function () {
