@@ -57,7 +57,7 @@ _None_
 _None_
 
 #### getenv (Print an environment variable from a running device)
-_None_
+- getEnv
 
 #### openurl (Open a URL in a device)
  - openUrl
