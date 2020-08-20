@@ -236,6 +236,17 @@ describe('simctl', function () {
       (await simctl.appInfo('com.apple.springboard')).should.include('ApplicationType');
     });
 
+    describe('getEnv', function () {
+      it('should get env variable value', async function () {
+        const udid = await simctl.getEnv('SIMULATOR_UDID');
+        udid.length.should.be.above(0);
+      });
+      it('should return null if no var is found', async function () {
+        const udid = await simctl.getEnv('SIMULATOR_UDD');
+        _.isNull(udid).should.be.true;
+      });
+    });
+
     describe('getDeviceTypes', function () {
       it('should get device types', async function () {
         const deviceTypes = await simctl.getDeviceTypes();
