@@ -59,7 +59,7 @@
     "test"
   ],
   "devDependencies": {
-    "appium-gulp-plugins": "^5.0.0",
+    "appium-gulp-plugins": "^5.4.0",
     "appium-xcode": "^3.8.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",

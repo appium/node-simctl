@@ -6,7 +6,6 @@
 [![devDependency Status](https://david-dm.org/appium/node-simctl/dev-status.svg)](https://david-dm.org/appium/node-simctl#info=devDependencies)
 
 [![Build Status](https://travis-ci.org/appium/node-simctl.svg?branch=master)](https://travis-ci.org/appium/node-simctl)
-[![Coverage Status](https://coveralls.io/repos/appium/node-simctl/badge.svg?branch=master)](https://coveralls.io/r/appium/node-simctl?branch=master)
 
 ES6/7 Node wrapper around Apple's `simctl` binary, the "Command line utility to control the iOS Simulator". `simctl` is run as a sub-command of [xcrun](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/xcrun.1.html)
 
