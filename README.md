@@ -162,6 +162,10 @@ into the debug log before throwing them as errors.
 going to be implicitly passed to all methods, which require it (see above). It can either be set
 upon instance creation if it is already known or later when/if needed via the corresponding
 setter.
+- `devicesSetPath` (string[null]): Full path to the set of devices that you want to manage.
+By default this path usually equals to ~/Library/Developer/CoreSimulator/Devices. This option
+has a getter and a setter which allows to switch between multiple device sets during the Simctl
+instance life cycle.
 
 
 ### Advanced Usage
