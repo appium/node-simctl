@@ -9,10 +9,3 @@ updates:
   commit-message:
     prefix: "chore"
     include: "scope"
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "11:00"
-  open-pull-requests-limit: 10
-  target-branch: v5
