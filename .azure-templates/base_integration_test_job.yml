@@ -1,8 +1,7 @@
 parameters:
     name: ''
-    iosVersion: ''
     xcodeVersion: ''
-    iosDeviceName: ''
+    deviceName: ''
     vmImage: ''
 
 
@@ -11,8 +10,7 @@ jobs:
     pool:
       vmImage: ${{ parameters.vmImage }}
     variables:
-      MOBILE_OS_VERSION: ${{ parameters.iosVersion }}
-      MOBILE_DEVICE_NAME: ${{ parameters.iosDeviceName }}
+      DEVICE_NAME: ${{ parameters.deviceName }}
       XCODE_VERSION: ${{ parameters.xcodeVersion }}
       _FORCE_LOGS: 1
     steps:

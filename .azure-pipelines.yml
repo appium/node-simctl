@@ -10,25 +10,20 @@ parameters:
 - name: testJobs
   type: object
   default:
-  - iosVersion: 12
-    xcodeVersion: 10
-    iosDeviceName: iPhone 6
+  - xcodeVersion: 10
+    deviceName: iPhone 6
     vmImage: macOS-10.14
-  - iosVersion: 12.4
-    xcodeVersion: 10.3
-    iosDeviceName: iPhone X
+  - xcodeVersion: 10.3
+    deviceName: iPhone X
     vmImage: macOS-10.14
-  - iosVersion: 13.2
-    xcodeVersion: 11.2
-    iosDeviceName: iPhone 11
+  - xcodeVersion: 11.2
+    deviceName: iPhone 11
     vmImage: macOS-10.15
-  - iosVersion: 13.7
-    xcodeVersion: 11.7
-    iosDeviceName: iPhone 11
+  - xcodeVersion: 11.7
+    deviceName: iPhone 11
     vmImage: macOS-10.15
-  - iosVersion: 14
-    xcodeVersion: 12
-    iosDeviceName: iPhone 11
+  - xcodeVersion: 12
+    deviceName: iPhone 11
     vmImage: macOS-10.15
 
 
@@ -48,7 +43,6 @@ stages:
     - template: ./.azure-templates/base_integration_test_job.yml
       parameters:
         name: Xcode_${{ replace(job.xcodeVersion, '.', '_') }}_iOS_${{ replace(job.iosVersion, '.', '_') }}
-        iosVersion: ${{ job.iosVersion }}
         xcodeVersion: ${{ job.xcodeVersion }}
-        iosDeviceName: ${{ job.iosDeviceName }}
+        deviceName: ${{ job.deviceName }}
         vmImage: ${{ job.vmImage }}
