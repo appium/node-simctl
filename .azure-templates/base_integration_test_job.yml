@@ -1,0 +1,27 @@
+parameters:
+    name: ''
+    xcodeVersion: ''
+    deviceName: ''
+    vmImage: ''
+
+
+jobs:
+  - job: ${{ parameters.name }}
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+    variables:
+      DEVICE_NAME: ${{ parameters.deviceName }}
+      XCODE_VERSION: ${{ parameters.xcodeVersion }}
+      _FORCE_LOGS: 1
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: "$(DEFAULT_NODE_VERSION)"
+    - script: |
+        sudo xcode-select --switch "/Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer"
+      displayName: Prepare Env
+    - script: xcrun simctl list
+      displayName: List Simulators
+    - script: npm install
+      displayName: Install Package From NPM
+    - script: npm run e2e-test

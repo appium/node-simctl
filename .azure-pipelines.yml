@@ -1,0 +1,45 @@
+variables:
+  DEFAULT_NODE_VERSION: "12.x"
+
+
+pool:
+  vmImage: "macOS-10.15"
+
+
+parameters:
+- name: testJobs
+  type: object
+  default:
+  - xcodeVersion: 10.3
+    deviceName: iPhone X
+    vmImage: macOS-10.14
+  - xcodeVersion: 11.2
+    deviceName: iPhone 11
+    vmImage: macOS-10.15
+  - xcodeVersion: 11.7
+    deviceName: iPhone 11
+    vmImage: macOS-10.15
+  - xcodeVersion: 12
+    deviceName: iPhone 11
+    vmImage: macOS-10.15
+
+
+stages:
+- stage: Unit_Test
+  jobs:
+  - ${{ each job in parameters.testJobs }}:
+    - template: ./.azure-templates/base_unit_test_job.yml
+      parameters:
+        name: Xcode_${{ replace(job.xcodeVersion, '.', '_') }}_iOS_${{ replace(job.iosVersion, '.', '_') }}
+        xcodeVersion: ${{ job.xcodeVersion }}
+        vmImage: ${{ job.vmImage }}
+
+- stage: Integration_Test
+  jobs:
+  - ${{ each job in parameters.testJobs }}:
+    - template: ./.azure-templates/base_integration_test_job.yml
+      parameters:
+        name: Xcode_${{ replace(job.xcodeVersion, '.', '_') }}_iOS_${{ replace(job.iosVersion, '.', '_') }}
+        xcodeVersion: ${{ job.xcodeVersion }}
+        deviceName: ${{ job.deviceName }}
+        vmImage: ${{ job.vmImage }}
