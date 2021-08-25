@@ -1,10 +1,10 @@
 import chai from 'chai';
+import pq from 'proxyquire';
 import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 import * as TeenProcess from 'teen_process';
 import _ from 'lodash';
-import Simctl from '../lib/simctl';
-
+const proxyquire = pq.noCallThru();
 
 const devicePayloads = [
   [
@@ -30,16 +30,20 @@ chai.use(chaiAsPromised);
 
 describe('simctl', function () {
   const execStub = sinon.stub(TeenProcess, 'exec');
+  function stubSimctl (xcrun = {}) {
+    const xcrunPath = process.env.XCRUN_BINARY || xcrun.path;
+    const { Simctl } = proxyquire('../lib/simctl', {
+      'which': sinon.stub().withArgs(xcrunPath).resolves(xcrunPath)
+    });
+
+    return new Simctl({ xcrun });
+  }
 
   describe('getDevices', function () {
     let simctl;
 
     beforeEach(function () {
-      simctl = new Simctl({
-        xcrun: {
-          path: 'xcrun',
-        }
-      });
+      simctl = stubSimctl({ path: 'xcrun' });
     });
     afterEach(function () {
       execStub.resetHistory();
@@ -131,20 +135,19 @@ describe('simctl', function () {
     let simctl;
 
     beforeEach(function () {
-      simctl = new Simctl({
-        xcrun: {
-          path: 'xcrun',
-        }
-      });
+      simctl = stubSimctl({ path: 'xcrun' });
     });
     afterEach(function () {
       execStub.resetHistory();
+      delete process.env.XCRUN_BINARY;
     });
     after(function () {
       execStub.reset();
     });
 
-    it('should create iOS simulator', async function () {
+    it('should create iOS simulator using xcrun path from env', async function () {
+      process.env.XCRUN_BINARY = 'some/path';
+      simctl = stubSimctl({ path: undefined });
       execStub.onCall(0).returns({stdout: 'not json'})
               .onCall(1).returns({stdout: '12.1.1', stderr: ''})
               .onCall(2).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
@@ -159,6 +162,28 @@ describe('simctl', function () {
       execStub.getCall(2).args[1].should.eql([
         'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1'
       ]);
+      execStub.getCall(0).args[0].should.eql('some/path');
+      devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
+    });
+
+    it('should create iOS simulator using xcrun path from passed opts', async function () {
+      process.env.XCRUN_BINARY = 'some/path';
+      simctl = stubSimctl({ path: 'other/path' });
+      execStub.onCall(0).returns({stdout: 'not json'})
+              .onCall(1).returns({stdout: '12.1.1', stderr: ''})
+              .onCall(2).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
+              .onCall(3).returns(devicesPayload);
+
+      const devices = await simctl.createDevice(
+        'name',
+        'iPhone 6 Plus',
+        '12.1.1',
+        { timeout: 20000 }
+      );
+      execStub.getCall(2).args[1].should.eql([
+        'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1'
+      ]);
+      execStub.getCall(0).args[0].should.eql('other/path');
       devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
