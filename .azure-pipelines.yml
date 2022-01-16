@@ -10,9 +10,6 @@ parameters:
 - name: testJobs
   type: object
   default:
-  - xcodeVersion: 10.3
-    deviceName: iPhone X
-    vmImage: macOS-10.14
   - xcodeVersion: 11.2
     deviceName: iPhone 11
     vmImage: macOS-10.15
