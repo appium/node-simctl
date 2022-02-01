@@ -19,12 +19,13 @@
   "engines": [
     "node"
   ],
-  "main": "./build/lib/simctl.js",
+  "main": "./build/index.js",
   "bin": {},
   "directories": {
     "lib": "./lib"
   },
   "files": [
+    "index.js",
     "lib",
     "build/lib"
   ],
@@ -36,7 +37,7 @@
     "npmlog": "^6.0.0",
     "rimraf": "^3.0.0",
     "semver": "^7.0.0",
-    "source-map-support": "^0.5.5",
+    "source-map-support": "^0.x",
     "teen_process": "^1.5.1",
     "uuid": "^8.0.0",
     "which": "^2.0.0"
@@ -59,8 +60,9 @@
     "test"
   ],
   "devDependencies": {
-    "appium-gulp-plugins": "^5.4.0",
-    "appium-xcode": "^3.8.0",
+    "@appium/gulp-plugins": "^6.0.0",
+    "@appium/eslint-config-appium": "^5.0.0",
+    "appium-xcode": "^4.0.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "eslint-config-appium": "^4.2.0",
