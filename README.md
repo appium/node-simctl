@@ -2,10 +2,8 @@
 
 [![NPM version](http://img.shields.io/npm/v/node-simctl.svg)](https://npmjs.org/package/node-simctl)
 [![Downloads](http://img.shields.io/npm/dm/node-simctl.svg)](https://npmjs.org/package/node-simctl)
-[![Dependency Status](https://david-dm.org/appium/node-simctl.svg)](https://david-dm.org/appium/node-simctl)
-[![devDependency Status](https://david-dm.org/appium/node-simctl/dev-status.svg)](https://david-dm.org/appium/node-simctl#info=devDependencies)
 
-[![Build Status](https://travis-ci.org/appium/node-simctl.svg?branch=master)](https://travis-ci.org/appium/node-simctl)
+[![Release](https://github.com/appium/node-simctl/actions/workflows/publish.js.yml/badge.svg?branch=master)](https://github.com/appium/node-simctl/actions/workflows/publish.js.yml) [![Build Status](https://travis-ci.org/appium/node-simctl.svg?branch=master)](https://travis-ci.org/appium/node-simctl)
 
 ES6/7 Node wrapper around Apple's `simctl` binary, the "Command line utility to control the iOS Simulator". `simctl` is run as a sub-command of [xcrun](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/xcrun.1.html)
 
