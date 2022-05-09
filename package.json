@@ -73,6 +73,6 @@
     "pre-commit": "^1.1.3",
     "proxyquire": "^2.1.3",
     "semantic-release": "^19.0.2",
-    "sinon": "^13.0.0"
+    "sinon": "^14.0.0"
   }
 }
