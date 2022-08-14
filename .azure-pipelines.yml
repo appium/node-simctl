@@ -1,25 +1,28 @@
 variables:
-  DEFAULT_NODE_VERSION: "12.x"
+  DEFAULT_NODE_VERSION: "16.x"
+  DEFAULT_VM_IMAGE: "macOS-11"
 
 
 pool:
-  vmImage: "macOS-10.15"
+  vmImage: "$(DEFAULT_VM_IMAGE)"
 
 
 parameters:
 - name: testJobs
   type: object
   default:
-  - xcodeVersion: 11.2
-    deviceName: iPhone 11
-    vmImage: macOS-10.15
-  - xcodeVersion: 11.7
-    deviceName: iPhone 11
-    vmImage: macOS-10.15
-  - xcodeVersion: 12
-    deviceName: iPhone 11
-    vmImage: macOS-10.15
-
+  - iosVersion: 13.7
+    xcodeVersion: 11.7
+    iosDeviceName: iPhone 11
+    vmImage: "$(DEFAULT_VM_IMAGE)"
+  - iosVersion: 14.4
+    xcodeVersion: 12.4
+    iosDeviceName: iPhone X
+    vmImage: "$(DEFAULT_VM_IMAGE)"
+  - iosVersion: 15.2
+    xcodeVersion: 13.2
+    iosDeviceName: iPhone X
+    vmImage: "$(DEFAULT_VM_IMAGE)"
 
 stages:
 - stage: Unit_Test
