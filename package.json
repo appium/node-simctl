@@ -18,7 +18,7 @@
   },
   "engines": {
     "node": ">=14",
-    "npm": ">=6"
+    "npm": ">=8"
   },
   "main": "./build/index.js",
   "bin": {},
@@ -46,15 +46,14 @@
   },
   "scripts": {
     "build": "rm -rf build/lib/* && babel --out-dir=build/lib lib",
-    "build-test": "rm -rf build/test/* && babel --out-dir=build/test test --copy-files",
     "dev": "npm run build -- --watch",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "precommit-lint": "lint-staged",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
     "prepare": "npm run build",
-    "test": "npm run build && npm run build-test && mocha --exit --timeout 1m \"./build/test/unit/**/*-specs.js\"",
-    "e2e-test": "npm run build && npm run build-test && mocha --exit --timeout 5m \"./build/test/e2e/**/*-specs.js\""
+    "test": "npm run build && mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\"",
+    "e2e-test": "npm run build && mocha --exit --timeout 5m \"./test/e2e/**/*-specs.js\""
   },
   "pre-commit": [
     "precommit-msg",
