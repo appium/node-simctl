@@ -9,18 +9,18 @@ const proxyquire = pq.noCallThru();
 const devicePayloads = [
   [
     {
-      stdout: JSON.stringify(require('../../test/fixtures/devices.json')), // eslint-disable-line import/no-unresolved
+      stdout: JSON.stringify(require(`${__dirname}/fixtures/devices.json`)),
     },
     {
-      stdout: JSON.stringify(require('../../test/fixtures/devices-with-unavailable.json')), // eslint-disable-line import/no-unresolved
+      stdout: JSON.stringify(require(`${__dirname}/fixtures/devices-with-unavailable.json`)),
     },
   ],
   [
     {
-      stdout: JSON.stringify(require('../../test/fixtures/devices-simple.json')), // eslint-disable-line import/no-unresolved
+      stdout: JSON.stringify(require(`${__dirname}/fixtures/devices-simple.json`)),
     },
     {
-      stdout: JSON.stringify(require('../../test/fixtures/devices-with-unavailable-simple.json')), // eslint-disable-line import/no-unresolved
+      stdout: JSON.stringify(require(`${__dirname}/fixtures/devices-with-unavailable-simple.json`)),
     },
   ],
 ];
@@ -32,7 +32,7 @@ describe('simctl', function () {
   const execStub = sinon.stub(TeenProcess, 'exec');
   function stubSimctl (xcrun = {}) {
     const xcrunPath = process.env.XCRUN_BINARY || xcrun.path;
-    const { Simctl } = proxyquire('../lib/simctl', {
+    const { Simctl } = proxyquire('../../lib/simctl', {
       'which': sinon.stub().withArgs(xcrunPath).resolves(xcrunPath)
     });
 

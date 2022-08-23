@@ -4,7 +4,7 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
-import Simctl from '../lib/simctl.js';
+import Simctl from '../../lib/simctl.js';
 import xcode from 'appium-xcode';
 import { retryInterval } from 'asyncbox';
 import rimraf from 'rimraf';
