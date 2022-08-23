@@ -52,8 +52,8 @@
     "precommit-lint": "lint-staged",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
     "prepare": "npm run build",
-    "test": "npm run build && mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\"",
-    "e2e-test": "npm run build && mocha --exit --timeout 5m \"./test/e2e/**/*-specs.js\""
+    "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\"",
+    "e2e-test": "mocha --exit --timeout 5m \"./test/e2e/**/*-specs.js\""
   },
   "pre-commit": [
     "precommit-msg",
