@@ -45,7 +45,7 @@
     "which": "^2.0.0"
   },
   "scripts": {
-    "build": "rm -rf build/lib/* && babel --out-dir=build/lib lib",
+    "build": "rm -rf build && babel --out-dir=build/lib lib && babel --out-dir=build index.js",
     "dev": "npm run build -- --watch",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
