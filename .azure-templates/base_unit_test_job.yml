@@ -22,4 +22,7 @@ jobs:
       displayName: List Simulators
     - script: npm install
       displayName: Install Package From NPM
+    - script: npm run lint
+      displayName: Lint
     - script: npm run test
+      displayName: Unit Test
