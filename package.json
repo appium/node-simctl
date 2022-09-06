@@ -41,7 +41,7 @@
     "semver": "^7.0.0",
     "source-map-support": "^0.x",
     "teen_process": "^2.0.0",
-    "uuid": "^8.0.0",
+    "uuid": "^9.0.0",
     "which": "^2.0.0"
   },
   "scripts": {
