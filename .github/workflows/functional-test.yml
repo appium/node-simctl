@@ -1,11 +1,10 @@
-name: End-to-end Tests
+name: Functional Tests
 
 on: [pull_request]
 
 
 jobs:
-
-  e2e_test:
+  test:
     strategy:
       matrix:
         include:
