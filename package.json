@@ -42,7 +42,7 @@
     "source-map-support": "^0.x",
     "teen_process": "^2.0.0",
     "uuid": "^9.0.0",
-    "which": "^2.0.0"
+    "which": "^3.0.0"
   },
   "scripts": {
     "build": "rm -rf build && babel --out-dir=build/lib lib && babel --out-dir=build index.js",
