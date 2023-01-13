@@ -80,7 +80,7 @@
     "@babel/register": "^7.18.9",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
-    "appium-xcode": "^4.0.0",
+    "appium-xcode": "^5.0.0",
     "babel-plugin-source-map-support": "^2.2.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
