@@ -1,3 +1,10 @@
+## [7.1.10](https://github.com/appium/node-simctl/compare/v7.1.9...v7.1.10) (2023-01-13)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump appium-xcode from 4.0.5 to 5.0.0 ([#173](https://github.com/appium/node-simctl/issues/173)) ([474fcd4](https://github.com/appium/node-simctl/commit/474fcd4a4c799edccd434793a8b002977bc05fd9))
+
 ## [7.1.9](https://github.com/appium/node-simctl/compare/v7.1.8...v7.1.9) (2023-01-13)
 
 
