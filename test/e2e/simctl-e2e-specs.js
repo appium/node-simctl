@@ -281,7 +281,7 @@ describe('simctl', function () {
     });
 
     describe('pushNotification', function() {
-      it('should not throw an error when sending a push notification', function () {
+      it('should not throw an error when sending a push notification', async function () {
         const payload = {
           'Simulator Target Bundle': 'com.apple.Preferences',
           'aps': {
@@ -291,7 +291,7 @@ describe('simctl', function () {
           }
         };
 
-        expect(async () => (await simctl.pushNotification(payload))).to.not.throw();
+        await simctl.pushNotification(payload).should.be.fulfilled;
       });
     });
   });
