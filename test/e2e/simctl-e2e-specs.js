@@ -13,6 +13,7 @@ import path from 'path';
 import os from 'os';
 import fs from 'fs/promises';
 
+const expect = chai.expect;
 const should = chai.should();
 chai.use(chaiAsPromised);
 
@@ -253,6 +254,7 @@ describe('simctl', function () {
         deviceTypes.filter((el) => el.includes('iPhone')).length.should.be.above(1);
       });
     });
+
     describe('list', function () {
       it('should get everything from xcrun simctl list', async function () {
         const fullList = await simctl.list();
@@ -265,6 +267,31 @@ describe('simctl', function () {
         fullList.devicetypes.filter((el) => el.identifier.includes('iPhone')).length.should.be.above(0);
         // at least one runtime should be iOS
         fullList.runtimes.filter((el) => el.identifier.includes('iOS')).length.should.be.above(0);
+      });
+    });
+
+    describe('getScreenshot', function() {
+      it('should get a base64 string', async function () {
+        const image = await simctl.getScreenshot();
+
+        // Use a rough regex to check if a returned value is base64 string
+        const regex = new RegExp(/[A-Za-z0-9+/=]/);
+        expect(regex.test(image)).to.be.true;
+      });
+    });
+
+    describe('pushNotification', function() {
+      it('should not throw an error when sending a push notification', function () {
+        const payload = {
+          'Simulator Target Bundle': 'com.apple.Preferences',
+          'aps': {
+            'alert': 'This is a simulated notification!',
+            'badge': 3,
+            'sound': 'default'
+          }
+        };
+
+        expect(async () => (await simctl.pushNotification(payload))).to.not.throw();
       });
     });
   });
