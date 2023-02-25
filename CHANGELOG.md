@@ -1,3 +1,10 @@
+## [7.1.12](https://github.com/appium/node-simctl/compare/v7.1.11...v7.1.12) (2023-02-25)
+
+
+### Bug Fixes
+
+* Update rimraf and fs promises usage ([#174](https://github.com/appium/node-simctl/issues/174)) ([3c2f510](https://github.com/appium/node-simctl/commit/3c2f5107dc51c92898afd44a0a2da99ddc65ed8b))
+
 ## [7.1.11](https://github.com/appium/node-simctl/compare/v7.1.10...v7.1.11) (2023-01-17)
 
 
