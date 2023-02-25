@@ -11,13 +11,10 @@ import rimraf from 'rimraf';
 import { v4 as uuidV4 } from 'uuid';
 import path from 'path';
 import os from 'os';
-import fs from 'fs';
-import B from 'bluebird';
+import fs from 'fs/promises';
 
 const should = chai.should();
 chai.use(chaiAsPromised);
-const rimrafAsync = B.promisify(rimraf);
-const writeFileAsync = B.promisify(fs.writeFile);
 
 
 describe('simctl', function () {
@@ -220,11 +217,11 @@ describe('simctl', function () {
           return this.skip();
         }
         picturePath = path.join(os.tmpdir(), `${uuidV4()}.png`);
-        await writeFileAsync(picturePath, Buffer.from(BASE64_PNG, 'base64').toString('binary'), 'binary');
+        await fs.writeFile(picturePath, Buffer.from(BASE64_PNG, 'base64').toString('binary'), 'binary');
       });
       after(async function () {
         if (picturePath) {
-          await rimrafAsync(picturePath);
+          await rimraf(picturePath);
         }
       });
       it('should add media files', async function () {
