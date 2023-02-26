@@ -274,7 +274,6 @@ describe('simctl', function () {
       it('should get a base64 string', async function () {
         const image = await simctl.getScreenshot();
 
-        // Use a rough regex to check if a returned value is base64 string
         expect(Buffer.from(image, 'base64').toString('base64') === image).to.be.true;
       });
     });
