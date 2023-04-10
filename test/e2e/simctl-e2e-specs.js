@@ -7,7 +7,7 @@ import _ from 'lodash';
 import Simctl from '../../lib/simctl.js';
 import xcode from 'appium-xcode';
 import { retryInterval } from 'asyncbox';
-import rimraf from 'rimraf';
+import { rimraf } from 'rimraf';
 import { v4 as uuidV4 } from 'uuid';
 import path from 'path';
 import os from 'os';
