@@ -1,3 +1,10 @@
+## [7.1.14](https://github.com/appium/node-simctl/compare/v7.1.13...v7.1.14) (2023-05-02)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump rimraf from 4.4.1 to 5.0.0 ([#178](https://github.com/appium/node-simctl/issues/178)) ([5c40d7d](https://github.com/appium/node-simctl/commit/5c40d7dd3e7d213210a67fd5067f26c0324ff255))
+
 ## [7.1.13](https://github.com/appium/node-simctl/compare/v7.1.12...v7.1.13) (2023-05-02)
 
 
