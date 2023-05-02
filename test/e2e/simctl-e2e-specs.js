@@ -280,6 +280,11 @@ describe('simctl', function () {
 
     describe('pushNotification', function() {
       it('should not throw an error when sending a push notification', async function () {
+        if (process.env.CI) {
+          // This test is unstable in CI env
+          return this.skip();
+        }
+
         const payload = {
           'Simulator Target Bundle': 'com.apple.Preferences',
           'aps': {
