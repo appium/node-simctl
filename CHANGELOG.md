@@ -1,3 +1,10 @@
+## [7.1.15](https://github.com/appium/node-simctl/compare/v7.1.14...v7.1.15) (2023-05-02)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump npmlog from 6.0.2 to 7.0.1 ([#166](https://github.com/appium/node-simctl/issues/166)) ([0ca5cb1](https://github.com/appium/node-simctl/commit/0ca5cb17c5c19c551325a7f5f7b877895d27cad2))
+
 ## [7.1.14](https://github.com/appium/node-simctl/compare/v7.1.13...v7.1.14) (2023-05-02)
 
 
