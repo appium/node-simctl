@@ -204,8 +204,8 @@ describe('simctl', function () {
         const pbContent = 'blablabla';
         const encoding = 'ascii';
 
-        await simctl.setPasteboard(pbContent, encoding);
         await retryInterval(pbRetries, 1000, async () => {
+          await simctl.setPasteboard(pbContent, encoding);
           (await simctl.getPasteboard(encoding)).should.eql(pbContent);
         });
       });
