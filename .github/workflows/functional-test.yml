@@ -8,19 +8,20 @@ jobs:
     strategy:
       matrix:
         include:
-        - xcodeVersion: 11.7
-          deviceName: iPhone 11
-        - xcodeVersion: 12.4
-          deviceName: iPhone X
-        - xcodeVersion: 13.2
-          deviceName: iPhone X
+        - xcodeVersion: '13.1'
+          iosVersion: '15.0'
+          deviceName: iPhone 13
+        - xcodeVersion: '14.2'
+          iosVersion: '16.2'
+          deviceName: iPhone 14
     env:
       CI: true
       _FORCE_LOGS: 1
       DEVICE_NAME: ${{ matrix.deviceName }}
       XCODE_VERSION: ${{ matrix.xcodeVersion }}
+      IOS_SDK: ${{ matrix.iosVersion }}
     # https://github.com/actions/runner-images/tree/main/images/macos
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
@@ -30,6 +31,8 @@ jobs:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: "${{ matrix.xcodeVersion }}"
+    - run: xcrun simctl list
+      name: List devices
     - run: npm install
       name: Install dev dependencies
     - run: npm run e2e-test
