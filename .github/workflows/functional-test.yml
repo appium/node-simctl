@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         include:
-        - xcodeVersion: 13.1
+        - xcodeVersion: 13.2.1
           deviceName: iPhone X
         - xcodeVersion: 14.2
           deviceName: iPhone 14
