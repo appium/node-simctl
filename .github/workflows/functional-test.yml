@@ -8,19 +8,17 @@ jobs:
     strategy:
       matrix:
         include:
-        - xcodeVersion: 11.7
-          deviceName: iPhone 11
-        - xcodeVersion: 12.4
+        - xcodeVersion: 13.1
           deviceName: iPhone X
-        - xcodeVersion: 13.2
-          deviceName: iPhone X
+        - xcodeVersion: 14.2
+          deviceName: iPhone 14
     env:
       CI: true
       _FORCE_LOGS: 1
       DEVICE_NAME: ${{ matrix.deviceName }}
       XCODE_VERSION: ${{ matrix.xcodeVersion }}
     # https://github.com/actions/runner-images/tree/main/images/macos
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
