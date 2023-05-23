@@ -31,6 +31,8 @@ jobs:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: "${{ matrix.xcodeVersion }}"
+    - run: xcrun simctl list
+      name: List devices
     - run: npm install
       name: Install dev dependencies
     - run: npm run e2e-test
