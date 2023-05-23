@@ -31,6 +31,7 @@ describe('simctl', function () {
   before(async function () {
     simctl = new Simctl();
     const devices = await simctl.getDevices();
+    console.log(`Found devices: ${JSON.stringify(devices, null, 2)}`); // eslint-disable-line no-console
     validSdks = _.keys(devices)
       .filter((key) => !_.isEmpty(devices[key]))
       .sort((a, b) => a - b);
@@ -38,7 +39,7 @@ describe('simctl', function () {
       throw new Error('No valid SDKs');
     }
     console.log(`Found valid SDKs: ${validSdks.join(', ')}`); // eslint-disable-line no-console
-    sdk = process.env.IOS_SDK || _.last(validSdks);
+    sdk = `${process.env.IOS_SDK || _.last(validSdks)}`;
 
     // need to find a random name that does not already exist
     // give it 5 tries
