@@ -1,3 +1,10 @@
+## [7.1.17](https://github.com/appium/node-simctl/compare/v7.1.16...v7.1.17) (2023-07-07)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump prettier from 2.8.8 to 3.0.0 ([#187](https://github.com/appium/node-simctl/issues/187)) ([5d2523c](https://github.com/appium/node-simctl/commit/5d2523c823b686c2cb4207200d4b582bfb88120f))
+
 ## [7.1.16](https://github.com/appium/node-simctl/compare/v7.1.15...v7.1.16) (2023-06-07)
 
 
