@@ -1,3 +1,10 @@
+## [7.2.0](https://github.com/appium/node-simctl/compare/v7.1.17...v7.2.0) (2023-08-09)
+
+
+### Features
+
+* Add a possibility to select architecture while executing xcrun commands ([#188](https://github.com/appium/node-simctl/issues/188)) ([ab555d7](https://github.com/appium/node-simctl/commit/ab555d73d855991360af842f140a4164af50b6a6))
+
 ## [7.1.17](https://github.com/appium/node-simctl/compare/v7.1.16...v7.1.17) (2023-07-07)
 
 
