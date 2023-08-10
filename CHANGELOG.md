@@ -1,3 +1,10 @@
+## [7.2.1](https://github.com/appium/node-simctl/compare/v7.2.0...v7.2.1) (2023-08-10)
+
+
+### Bug Fixes
+
+* Construct proper execution arguments ([68295e8](https://github.com/appium/node-simctl/commit/68295e8247c0b11620fc231cc7e5f4ec143e363d))
+
 ## [7.2.0](https://github.com/appium/node-simctl/compare/v7.1.17...v7.2.0) (2023-08-09)
 
 
