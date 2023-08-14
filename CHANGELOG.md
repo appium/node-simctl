@@ -1,3 +1,10 @@
+## [7.2.2](https://github.com/appium/node-simctl/compare/v7.2.1...v7.2.2) (2023-08-14)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump lint-staged from 13.3.0 to 14.0.0 ([#189](https://github.com/appium/node-simctl/issues/189)) ([a42aaf5](https://github.com/appium/node-simctl/commit/a42aaf5698deadc722c909c1e505b8fbeccaecb4))
+
 ## [7.2.1](https://github.com/appium/node-simctl/compare/v7.2.0...v7.2.1) (2023-08-10)
 
 
