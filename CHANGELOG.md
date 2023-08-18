@@ -1,3 +1,10 @@
+## [7.3.0](https://github.com/appium/node-simctl/compare/v7.2.2...v7.3.0) (2023-08-18)
+
+
+### Features
+
+* Switch from babel to typescript ([#190](https://github.com/appium/node-simctl/issues/190)) ([bed549f](https://github.com/appium/node-simctl/commit/bed549f4be5c0261ebc2e479fdbed68db963fc15))
+
 ## [7.2.2](https://github.com/appium/node-simctl/compare/v7.2.1...v7.2.2) (2023-08-14)
 
 
