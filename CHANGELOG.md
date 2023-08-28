@@ -1,3 +1,10 @@
+## [7.3.2](https://github.com/appium/node-simctl/compare/v7.3.1...v7.3.2) (2023-08-28)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump conventional-changelog-conventionalcommits ([#195](https://github.com/appium/node-simctl/issues/195)) ([bd066dc](https://github.com/appium/node-simctl/commit/bd066dc151dd205d4da36c1f65b71478958d1d07))
+
 ## [7.3.1](https://github.com/appium/node-simctl/compare/v7.3.0...v7.3.1) (2023-08-25)
 
 
