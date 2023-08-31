@@ -1,3 +1,10 @@
+## [7.3.3](https://github.com/appium/node-simctl/compare/v7.3.2...v7.3.3) (2023-08-31)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump which from 3.0.1 to 4.0.0 ([#197](https://github.com/appium/node-simctl/issues/197)) ([fa2d8c3](https://github.com/appium/node-simctl/commit/fa2d8c344cc8623af2504fd8bc103f1e948183f4))
+
 ## [7.3.2](https://github.com/appium/node-simctl/compare/v7.3.1...v7.3.2) (2023-08-28)
 
 
