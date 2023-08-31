@@ -42,7 +42,7 @@
     "source-map-support": "^0.x",
     "teen_process": "^2.0.0",
     "uuid": "^9.0.0",
-    "which": "^3.0.1"
+    "which": "^4.0.0"
   },
   "scripts": {
     "build": "tsc -b",
