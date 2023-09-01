@@ -1,3 +1,10 @@
+## [7.3.4](https://github.com/appium/node-simctl/compare/v7.3.3...v7.3.4) (2023-09-01)
+
+
+### Miscellaneous Chores
+
+* Improve type declarations ([#198](https://github.com/appium/node-simctl/issues/198)) ([314df12](https://github.com/appium/node-simctl/commit/314df12dfa9f2e7afa06d67f211b3dffe84755dc))
+
 ## [7.3.3](https://github.com/appium/node-simctl/compare/v7.3.2...v7.3.3) (2023-08-31)
 
 
