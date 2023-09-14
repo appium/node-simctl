@@ -1,3 +1,11 @@
+## [7.3.5](https://github.com/appium/node-simctl/compare/v7.3.4...v7.3.5) (2023-09-14)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/teen_process from 2.0.0 to 2.0.1 ([#201](https://github.com/appium/node-simctl/issues/201)) ([24b224c](https://github.com/appium/node-simctl/commit/24b224cec5124990f5098f474bbffc4749830776))
+* **deps-dev:** bump sinon from 15.2.0 to 16.0.0 ([#202](https://github.com/appium/node-simctl/issues/202)) ([e436b63](https://github.com/appium/node-simctl/commit/e436b632962a87cdea543e1395bd83307dd2427f))
+
 ## [7.3.4](https://github.com/appium/node-simctl/compare/v7.3.3...v7.3.4) (2023-09-01)
 
 
