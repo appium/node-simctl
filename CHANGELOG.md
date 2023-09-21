@@ -1,3 +1,10 @@
+## [7.3.7](https://github.com/appium/node-simctl/compare/v7.3.6...v7.3.7) (2023-09-21)
+
+
+### Bug Fixes
+
+* Tune conditional type declarations ([#206](https://github.com/appium/node-simctl/issues/206)) ([a44b0d2](https://github.com/appium/node-simctl/commit/a44b0d2a57c6532c9feff3a65c46bd3a067d2bfb))
+
 ## [7.3.6](https://github.com/appium/node-simctl/compare/v7.3.5...v7.3.6) (2023-09-21)
 
 
