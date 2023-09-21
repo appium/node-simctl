@@ -1,3 +1,10 @@
+## [7.3.6](https://github.com/appium/node-simctl/compare/v7.3.5...v7.3.6) (2023-09-21)
+
+
+### Miscellaneous Chores
+
+* Import all mixin methods explicitly ([#205](https://github.com/appium/node-simctl/issues/205)) ([c691f20](https://github.com/appium/node-simctl/commit/c691f20ef4d843349b3c8ae0847b0a0d896482a0))
+
 ## [7.3.5](https://github.com/appium/node-simctl/compare/v7.3.4...v7.3.5) (2023-09-14)
 
 
