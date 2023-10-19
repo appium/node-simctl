@@ -1,3 +1,14 @@
+## [7.3.8](https://github.com/appium/node-simctl/compare/v7.3.7...v7.3.8) (2023-10-19)
+
+
+### Miscellaneous Chores
+
+* Always use the latest types ([e44fdf5](https://github.com/appium/node-simctl/commit/e44fdf58830474ee70eda47600477efa4b87dab1))
+* **deps-dev:** bump @types/teen_process from 2.0.1 to 2.0.2 ([#214](https://github.com/appium/node-simctl/issues/214)) ([e53930b](https://github.com/appium/node-simctl/commit/e53930bbafdcf0931729966f09e7a79a795c7969))
+* **deps-dev:** bump eslint-config-prettier from 8.10.0 to 9.0.0 ([#217](https://github.com/appium/node-simctl/issues/217)) ([9b7ba38](https://github.com/appium/node-simctl/commit/9b7ba38d719a1ecc63efdffa8878309b1d6b24ec))
+* **deps-dev:** bump lint-staged from 14.0.1 to 15.0.2 ([#216](https://github.com/appium/node-simctl/issues/216)) ([462f131](https://github.com/appium/node-simctl/commit/462f131e3cd6e663e4f790b586ffa31e34c3edbc))
+* Use latest teen_process types ([e967251](https://github.com/appium/node-simctl/commit/e9672515b6914dd626cda0d686828b9866f13a24))
+
 ## [7.3.7](https://github.com/appium/node-simctl/compare/v7.3.6...v7.3.7) (2023-09-21)
 
 
