@@ -1,3 +1,10 @@
+## [7.3.9](https://github.com/appium/node-simctl/compare/v7.3.8...v7.3.9) (2023-10-24)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump sinon from 16.1.3 to 17.0.0 ([#218](https://github.com/appium/node-simctl/issues/218)) ([d21e964](https://github.com/appium/node-simctl/commit/d21e9645d5a529a918a8a73b1fdc33e90568d889))
+
 ## [7.3.8](https://github.com/appium/node-simctl/compare/v7.3.7...v7.3.8) (2023-10-19)
 
 
