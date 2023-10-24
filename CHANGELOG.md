@@ -1,3 +1,11 @@
+## [7.3.10](https://github.com/appium/node-simctl/compare/v7.3.9...v7.3.10) (2023-10-24)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump semantic-release from 21.1.2 to 22.0.5 ([#208](https://github.com/appium/node-simctl/issues/208)) ([bf4e580](https://github.com/appium/node-simctl/commit/bf4e580734e88df73820222adaf2c19c2d9f5f90))
+* Use latest types ([3ce87f9](https://github.com/appium/node-simctl/commit/3ce87f95868e6b5cff3b8205c0d4c31a56813449))
+
 ## [7.3.9](https://github.com/appium/node-simctl/compare/v7.3.8...v7.3.9) (2023-10-24)
 
 
