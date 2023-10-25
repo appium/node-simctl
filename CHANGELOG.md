@@ -1,3 +1,10 @@
+## [7.3.11](https://github.com/appium/node-simctl/compare/v7.3.10...v7.3.11) (2023-10-25)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @typescript-eslint/eslint-plugin from 5.62.0 to 6.9.0 ([#219](https://github.com/appium/node-simctl/issues/219)) ([f9cc806](https://github.com/appium/node-simctl/commit/f9cc80608b2bf72e0ac9db6c9c398d8236f041bd))
+
 ## [7.3.10](https://github.com/appium/node-simctl/compare/v7.3.9...v7.3.10) (2023-10-24)
 
 
