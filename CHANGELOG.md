@@ -1,3 +1,10 @@
+## [7.3.12](https://github.com/appium/node-simctl/compare/v7.3.11...v7.3.12) (2023-11-01)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump asyncbox from 2.9.4 to 3.0.0 ([#220](https://github.com/appium/node-simctl/issues/220)) ([8085447](https://github.com/appium/node-simctl/commit/80854473df00942931401fa271077058f4203ff6))
+
 ## [7.3.11](https://github.com/appium/node-simctl/compare/v7.3.10...v7.3.11) (2023-10-25)
 
 
