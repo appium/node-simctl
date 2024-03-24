@@ -107,6 +107,7 @@
     "semantic-release": "^22.0.5",
     "sinon": "^17.0.0",
     "ts-node": "^10.9.1",
-    "typescript": "~5.2"
-  }
+    "typescript": "^5.4.3"
+  },
+  "types": "./build/lib/index.d.ts"
 }
