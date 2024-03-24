@@ -1,3 +1,10 @@
+## [7.4.0](https://github.com/appium/node-simctl/compare/v7.3.13...v7.4.0) (2024-03-24)
+
+
+### Features
+
+* Add types to package.json ([#236](https://github.com/appium/node-simctl/issues/236)) ([fc33007](https://github.com/appium/node-simctl/commit/fc33007e8073287ae245c20696b1e583c8e3595f))
+
 ## [7.3.13](https://github.com/appium/node-simctl/compare/v7.3.12...v7.3.13) (2023-11-08)
 
 
