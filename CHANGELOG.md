@@ -1,3 +1,15 @@
+## [7.4.1](https://github.com/appium/node-simctl/compare/v7.4.0...v7.4.1) (2024-03-24)
+
+
+### Bug Fixes
+
+* types pubishing ([6755d64](https://github.com/appium/node-simctl/commit/6755d64d8185df65963f51697f58f8cb3c02cdb8))
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump semantic-release from 22.0.12 to 23.0.2 ([#230](https://github.com/appium/node-simctl/issues/230)) ([7c06e04](https://github.com/appium/node-simctl/commit/7c06e04e4913c51eeec61cb4dbd34d7c261abefc))
+
 ## [7.4.0](https://github.com/appium/node-simctl/compare/v7.3.13...v7.4.0) (2024-03-24)
 
 
