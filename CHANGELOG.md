@@ -1,3 +1,11 @@
+## [7.4.2](https://github.com/appium/node-simctl/compare/v7.4.1...v7.4.2) (2024-04-09)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @typescript-eslint/parser from 6.21.0 to 7.6.0 ([#240](https://github.com/appium/node-simctl/issues/240)) ([baa83c9](https://github.com/appium/node-simctl/commit/baa83c9783b8c0aa09e6c88aed5d9e58dbcceaa2))
+* Remove extra imports ([3dbe75b](https://github.com/appium/node-simctl/commit/3dbe75b594cb7e6a993e7e0b7681c94372c79457))
+
 ## [7.4.1](https://github.com/appium/node-simctl/compare/v7.4.0...v7.4.1) (2024-03-24)
 
 
