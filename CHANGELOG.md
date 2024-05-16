@@ -1,3 +1,10 @@
+## [7.4.4](https://github.com/appium/node-simctl/compare/v7.4.3...v7.4.4) (2024-05-16)
+
+
+### Miscellaneous Chores
+
+* Update dev dependencies ([22b51c8](https://github.com/appium/node-simctl/commit/22b51c839455651b3d38d46a53ba19f48a3d557c))
+
 ## [7.4.3](https://github.com/appium/node-simctl/compare/v7.4.2...v7.4.3) (2024-05-16)
 
 
