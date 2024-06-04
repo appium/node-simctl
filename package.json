@@ -79,7 +79,7 @@
     "appium-xcode": "^5.0.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "conventional-changelog-conventionalcommits": "^7.0.1",
+    "conventional-changelog-conventionalcommits": "^8.0.0",
     "mocha": "^10.0.0",
     "prettier": "^3.0.0",
     "proxyquire": "^2.1.3",
