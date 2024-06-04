@@ -1,3 +1,9 @@
+## [7.4.5](https://github.com/appium/node-simctl/compare/v7.4.4...v7.4.5) (2024-06-04)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump semantic-release from 23.1.1 to 24.0.0 and conventional-changelog-conventionalcommits to 8.0.0 ([#245](https://github.com/appium/node-simctl/issues/245)) ([b793746](https://github.com/appium/node-simctl/commit/b793746404a46e28649d5949c3ced75066c4a9a5))
+
 ## [7.4.4](https://github.com/appium/node-simctl/compare/v7.4.3...v7.4.4) (2024-05-16)
 
 
