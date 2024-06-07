@@ -1,3 +1,9 @@
+## [7.5.0](https://github.com/appium/node-simctl/compare/v7.4.5...v7.5.0) (2024-06-07)
+
+### Features
+
+* Replace the deprecated npmlog with @appium/logger fork ([#246](https://github.com/appium/node-simctl/issues/246)) ([059afe8](https://github.com/appium/node-simctl/commit/059afe8e3e2e97ec61c1bd0b28e4b159d3d31004))
+
 ## [7.4.5](https://github.com/appium/node-simctl/compare/v7.4.4...v7.4.5) (2024-06-04)
 
 ### Miscellaneous Chores
