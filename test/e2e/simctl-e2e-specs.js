@@ -1,8 +1,3 @@
-/* global it:true, describe:true*/
-// transpile:mocha
-
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import _ from 'lodash';
 import Simctl from '../../lib/simctl.js';
 import xcode from 'appium-xcode';
@@ -13,22 +8,28 @@ import path from 'path';
 import os from 'os';
 import fs from 'fs/promises';
 
-const expect = chai.expect;
-const should = chai.should();
-chai.use(chaiAsPromised);
-
-
 describe('simctl', function () {
   const DEVICE_NAME = process.env.DEVICE_NAME || 'iPhone X';
   const MOCHA_TIMEOUT = 200000;
   this.timeout(MOCHA_TIMEOUT);
 
+  let chai;
+  let chaiAsPromised;
+  let expect;
+  let should;
   let randName;
   let validSdks = [];
   let sdk;
   let simctl;
 
   before(async function () {
+    chai = await import('chai');
+    chaiAsPromised = await import('chai-as-promised');
+
+    chai.use(chaiAsPromised.default);
+    expect = chai.expect;
+    should = chai.should();
+
     simctl = new Simctl();
     const devices = await simctl.getDevices();
     console.log(`Found devices: ${JSON.stringify(devices, null, 2)}`); // eslint-disable-line no-console
