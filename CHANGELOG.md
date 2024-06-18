@@ -1,3 +1,9 @@
+## [7.5.2](https://github.com/appium/node-simctl/compare/v7.5.1...v7.5.2) (2024-06-18)
+
+### Miscellaneous Chores
+
+* Bump chai and chai-as-promised ([#249](https://github.com/appium/node-simctl/issues/249)) ([7572c9c](https://github.com/appium/node-simctl/commit/7572c9c326205a1737227c603a347f1c21f7ddda))
+
 ## [7.5.1](https://github.com/appium/node-simctl/compare/v7.5.0...v7.5.1) (2024-06-17)
 
 ### Miscellaneous Chores
