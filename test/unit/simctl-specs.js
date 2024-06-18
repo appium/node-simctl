@@ -1,6 +1,4 @@
-import chai from 'chai';
 import pq from 'proxyquire';
-import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 import * as TeenProcess from 'teen_process';
 import _ from 'lodash';
@@ -25,10 +23,10 @@ const devicePayloads = [
   ],
 ];
 
-chai.should();
-chai.use(chaiAsPromised);
-
 describe('simctl', function () {
+  let chai;
+  let chaiAsPromised;
+
   const execStub = sinon.stub(TeenProcess, 'exec');
   function stubSimctl (xcrun = {}) {
     const xcrunPath = process.env.XCRUN_BINARY || xcrun.path;
@@ -38,6 +36,14 @@ describe('simctl', function () {
 
     return new Simctl({ xcrun });
   }
+
+  before(async function() {
+    chai = await import('chai');
+    chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+  });
 
   describe('getDevices', function () {
     let simctl;
