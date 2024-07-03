@@ -40,7 +40,7 @@
     "rimraf": "^5.0.0",
     "semver": "^7.0.0",
     "source-map-support": "^0.x",
-    "teen_process": "^2.0.0",
+    "teen_process": "^2.2.0",
     "uuid": "^10.0.0",
     "which": "^4.0.0"
   },
@@ -61,7 +61,6 @@
     "singleQuote": true
   },
   "devDependencies": {
-    "@appium/eslint-config-appium": "^8.0.4",
     "@appium/eslint-config-appium-ts": "^0.x",
     "@appium/tsconfig": "^0.x",
     "@appium/types": "^0.x",
