@@ -1,3 +1,9 @@
+## [7.5.3](https://github.com/appium/node-simctl/compare/v7.5.2...v7.5.3) (2024-07-03)
+
+### Miscellaneous Chores
+
+* Simplify booting status monitoring ([#250](https://github.com/appium/node-simctl/issues/250)) ([508a2e5](https://github.com/appium/node-simctl/commit/508a2e55021c8bc8119c07ba20fbc2073bd84192))
+
 ## [7.5.2](https://github.com/appium/node-simctl/compare/v7.5.1...v7.5.2) (2024-06-18)
 
 ### Miscellaneous Chores
