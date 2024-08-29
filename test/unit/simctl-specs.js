@@ -7,8 +7,16 @@ import path from 'node:path';
 import { fileURLToPath } from 'url';
 
 const proxyquire = pq.noCallThru();
-const FILENAME = fileURLToPath(import.meta.url);
+const FILENAME = getFilename();
 const DIRNAME = path.dirname(FILENAME);
+
+function getFilename() {
+  try {
+    return fileURLToPath(import.meta.url);
+  } catch (e) {
+    return __filename;
+  }
+}
 
 const devicePayloads = [
   [
