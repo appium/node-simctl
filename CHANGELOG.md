@@ -1,3 +1,9 @@
+## [7.5.5](https://github.com/appium/node-simctl/compare/v7.5.4...v7.5.5) (2024-08-29)
+
+### Bug Fixes
+
+* Update tests for node.js 22.7 ([#255](https://github.com/appium/node-simctl/issues/255)) ([723568b](https://github.com/appium/node-simctl/commit/723568b320364051289e94dda384fd25b50f19d9))
+
 ## [7.5.4](https://github.com/appium/node-simctl/compare/v7.5.3...v7.5.4) (2024-07-29)
 
 ### Miscellaneous Chores
