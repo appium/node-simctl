@@ -2,23 +2,25 @@ import pq from 'proxyquire';
 import sinon from 'sinon';
 import * as TeenProcess from 'teen_process';
 import _ from 'lodash';
+import fs from 'node:fs';
+
 const proxyquire = pq.noCallThru();
 
 const devicePayloads = [
   [
     {
-      stdout: JSON.stringify(require(`${__dirname}/fixtures/devices.json`)),
+      stdout: fs.readFileSync(`${__dirname}/fixtures/devices.json`, 'utf-8'),
     },
     {
-      stdout: JSON.stringify(require(`${__dirname}/fixtures/devices-with-unavailable.json`)),
+      stdout: fs.readFileSync(`${__dirname}/fixtures/devices-with-unavailable.json`, 'utf-8'),
     },
   ],
   [
     {
-      stdout: JSON.stringify(require(`${__dirname}/fixtures/devices-simple.json`)),
+      stdout: fs.readFileSync(`${__dirname}/fixtures/devices-simple.json`, 'utf-8'),
     },
     {
-      stdout: JSON.stringify(require(`${__dirname}/fixtures/devices-with-unavailable-simple.json`)),
+      stdout: fs.readFileSync(`${__dirname}/fixtures/devices-with-unavailable-simple.json`, 'utf-8'),
     },
   ],
 ];
@@ -44,6 +46,7 @@ describe('simctl', function () {
     chai.should();
     chai.use(chaiAsPromised.default);
   });
+
 
   describe('getDevices', function () {
     let simctl;
