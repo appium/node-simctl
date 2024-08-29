@@ -7,24 +7,24 @@ import path from 'node:path';
 import { fileURLToPath } from 'url';
 
 const proxyquire = pq.noCallThru();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const FILENAME = fileURLToPath(import.meta.url);
+const DIRNAME = path.dirname(FILENAME);
 
 const devicePayloads = [
   [
     {
-      stdout: fs.readFileSync(`${__dirname}/fixtures/devices.json`, 'utf-8'),
+      stdout: fs.readFileSync(`${DIRNAME}/fixtures/devices.json`, 'utf-8'),
     },
     {
-      stdout: fs.readFileSync(`${__dirname}/fixtures/devices-with-unavailable.json`, 'utf-8'),
+      stdout: fs.readFileSync(`${DIRNAME}/fixtures/devices-with-unavailable.json`, 'utf-8'),
     },
   ],
   [
     {
-      stdout: fs.readFileSync(`${__dirname}/fixtures/devices-simple.json`, 'utf-8'),
+      stdout: fs.readFileSync(`${DIRNAME}/fixtures/devices-simple.json`, 'utf-8'),
     },
     {
-      stdout: fs.readFileSync(`${__dirname}/fixtures/devices-with-unavailable-simple.json`, 'utf-8'),
+      stdout: fs.readFileSync(`${DIRNAME}/fixtures/devices-with-unavailable-simple.json`, 'utf-8'),
     },
   ],
 ];
