@@ -3,37 +3,24 @@ import sinon from 'sinon';
 import * as TeenProcess from 'teen_process';
 import _ from 'lodash';
 import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'url';
 
 const proxyquire = pq.noCallThru();
-const FILENAME = getFilename();
-const DIRNAME = path.dirname(FILENAME);
-
-function getFilename() {
-  try {
-    const url = eval('import.meta.url');
-    return fileURLToPath(url);
-  } catch (e) {
-    return __filename;
-  }
-}
 
 const devicePayloads = [
   [
     {
-      stdout: fs.readFileSync(`${DIRNAME}/fixtures/devices.json`, 'utf-8'),
+      stdout: fs.readFileSync(`${__dirname}/fixtures/devices.json`, 'utf-8'),
     },
     {
-      stdout: fs.readFileSync(`${DIRNAME}/fixtures/devices-with-unavailable.json`, 'utf-8'),
+      stdout: fs.readFileSync(`${__dirname}/fixtures/devices-with-unavailable.json`, 'utf-8'),
     },
   ],
   [
     {
-      stdout: fs.readFileSync(`${DIRNAME}/fixtures/devices-simple.json`, 'utf-8'),
+      stdout: fs.readFileSync(`${__dirname}/fixtures/devices-simple.json`, 'utf-8'),
     },
     {
-      stdout: fs.readFileSync(`${DIRNAME}/fixtures/devices-with-unavailable-simple.json`, 'utf-8'),
+      stdout: fs.readFileSync(`${__dirname}/fixtures/devices-with-unavailable-simple.json`, 'utf-8'),
     },
   ],
 ];
@@ -59,6 +46,7 @@ describe('simctl', function () {
     chai.should();
     chai.use(chaiAsPromised.default);
   });
+
 
   describe('getDevices', function () {
     let simctl;
