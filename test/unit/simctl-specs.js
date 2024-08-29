@@ -12,7 +12,8 @@ const DIRNAME = path.dirname(FILENAME);
 
 function getFilename() {
   try {
-    return fileURLToPath(import.meta.url);
+    const url = eval('import.meta.url');
+    return fileURLToPath(url);
   } catch (e) {
     return __filename;
   }
