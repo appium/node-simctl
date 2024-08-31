@@ -1,3 +1,9 @@
+## [7.6.0](https://github.com/appium/node-simctl/compare/v7.5.5...v7.6.0) (2024-08-31)
+
+### Features
+
+* add timeout option for exec ([#254](https://github.com/appium/node-simctl/issues/254)) ([1c2e1d8](https://github.com/appium/node-simctl/commit/1c2e1d829815f1e465c0497b0e87914e56222e8e))
+
 ## [7.5.5](https://github.com/appium/node-simctl/compare/v7.5.4...v7.5.5) (2024-08-29)
 
 ### Bug Fixes
