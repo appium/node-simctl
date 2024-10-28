@@ -1,3 +1,9 @@
+## [7.6.2](https://github.com/appium/node-simctl/compare/v7.6.1...v7.6.2) (2024-10-28)
+
+### Miscellaneous Chores
+
+* **deps:** bump uuid from 10.0.0 to 11.0.1 ([#259](https://github.com/appium/node-simctl/issues/259)) ([642cbfe](https://github.com/appium/node-simctl/commit/642cbfef8c8d3720aec6ffc0861e486ec0e443a2))
+
 ## [7.6.1](https://github.com/appium/node-simctl/compare/v7.6.0...v7.6.1) (2024-09-13)
 
 ### Miscellaneous Chores
