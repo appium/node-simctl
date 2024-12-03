@@ -1,3 +1,9 @@
+## [7.6.3](https://github.com/appium/node-simctl/compare/v7.6.2...v7.6.3) (2024-12-03)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump mocha from 10.8.2 to 11.0.1 ([#260](https://github.com/appium/node-simctl/issues/260)) ([2effed6](https://github.com/appium/node-simctl/commit/2effed6f7e9260f53762da7e9de5a919edd3dbab))
+
 ## [7.6.2](https://github.com/appium/node-simctl/compare/v7.6.1...v7.6.2) (2024-10-28)
 
 ### Miscellaneous Chores
