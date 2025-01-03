@@ -1,4 +1,4 @@
-import Simctl from './lib/simctl';
+import { Simctl } from './lib/simctl';
 
 export { Simctl };
 export default Simctl;
