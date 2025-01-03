@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import Simctl from '../../lib/simctl.js';
+import { Simctl } from '../../lib/simctl.js';
 import xcode from 'appium-xcode';
 import { retryInterval } from 'asyncbox';
 import { rimraf } from 'rimraf';
@@ -159,7 +159,7 @@ describe('simctl', function () {
       if (simctl.udid) {
         try {
           await simctl.shutdownDevice();
-        } catch (ign) {}
+        } catch {}
         await simctl.deleteDevice();
         simctl.udid = null;
       }
