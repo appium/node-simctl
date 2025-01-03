@@ -1,3 +1,9 @@
+## [7.6.4](https://github.com/appium/node-simctl/compare/v7.6.3...v7.6.4) (2025-01-03)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @appium/eslint-config-appium-ts from 0.3.3 to 1.0.1 ([#261](https://github.com/appium/node-simctl/issues/261)) ([d5f22e9](https://github.com/appium/node-simctl/commit/d5f22e9bf5f40a576a393425bf5a527d535dd155))
+
 ## [7.6.3](https://github.com/appium/node-simctl/compare/v7.6.2...v7.6.3) (2024-12-03)
 
 ### Miscellaneous Chores
