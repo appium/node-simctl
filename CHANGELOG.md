@@ -1,3 +1,9 @@
+## [7.6.5](https://github.com/appium/node-simctl/compare/v7.6.4...v7.6.5) (2025-01-05)
+
+### Miscellaneous Chores
+
+* **deps:** bump which from 4.0.0 to 5.0.0 ([#257](https://github.com/appium/node-simctl/issues/257)) ([9d158a5](https://github.com/appium/node-simctl/commit/9d158a5824fcd2b39db34fba71adbb2c8b4fdee1))
+
 ## [7.6.4](https://github.com/appium/node-simctl/compare/v7.6.3...v7.6.4) (2025-01-03)
 
 ### Miscellaneous Chores
