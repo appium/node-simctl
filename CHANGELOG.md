@@ -1,3 +1,9 @@
+## [7.7.0](https://github.com/appium/node-simctl/compare/v7.6.5...v7.7.0) (2025-01-26)
+
+### Features
+
+* add content_size and increase_contrast commands for ui ([#262](https://github.com/appium/node-simctl/issues/262)) ([379c933](https://github.com/appium/node-simctl/commit/379c9332687d51b08f04553f28ef51ee3f2ec927))
+
 ## [7.6.5](https://github.com/appium/node-simctl/compare/v7.6.4...v7.6.5) (2025-01-05)
 
 ### Miscellaneous Chores
