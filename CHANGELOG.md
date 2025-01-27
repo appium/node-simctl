@@ -1,3 +1,9 @@
+## [7.7.1](https://github.com/appium/node-simctl/compare/v7.7.0...v7.7.1) (2025-01-27)
+
+### Bug Fixes
+
+* add definitions in Simctl ([#263](https://github.com/appium/node-simctl/issues/263)) ([60ee831](https://github.com/appium/node-simctl/commit/60ee831765369e7cd9b3c91693a984a3c6d7ea1d))
+
 ## [7.7.0](https://github.com/appium/node-simctl/compare/v7.6.5...v7.7.0) (2025-01-26)
 
 ### Features
