@@ -1,3 +1,9 @@
+## [7.7.2](https://github.com/appium/node-simctl/compare/v7.7.1...v7.7.2) (2025-03-25)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump sinon from 19.0.5 to 20.0.0 ([#264](https://github.com/appium/node-simctl/issues/264)) ([e7639f7](https://github.com/appium/node-simctl/commit/e7639f7781be0e87f5e6b73ca6aa388d59c2a5b3))
+
 ## [7.7.1](https://github.com/appium/node-simctl/compare/v7.7.0...v7.7.1) (2025-01-27)
 
 ### Bug Fixes
