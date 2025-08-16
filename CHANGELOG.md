@@ -1,3 +1,14 @@
+## [8.0.0](https://github.com/appium/node-simctl/compare/v7.7.5...v8.0.0) (2025-08-16)
+
+### ⚠ BREAKING CHANGES
+
+* Required Node.js version has been bumped to ^20.19.0 || ^22.12.0 || >=24.0.0
+* Required npm version has been bumped to >=10
+
+### Features
+
+* Bump Node.js version ([#268](https://github.com/appium/node-simctl/issues/268)) ([fe51657](https://github.com/appium/node-simctl/commit/fe51657f423844431941ecd754d81f0b7dda30f0))
+
 ## [7.7.5](https://github.com/appium/node-simctl/compare/v7.7.4...v7.7.5) (2025-06-13)
 
 ### Miscellaneous Chores
