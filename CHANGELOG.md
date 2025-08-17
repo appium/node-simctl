@@ -1,3 +1,9 @@
+## [8.0.1](https://github.com/appium/node-simctl/compare/v8.0.0...v8.0.1) (2025-08-17)
+
+### Miscellaneous Chores
+
+* **deps:** bump rimraf from 5.0.9 to 6.0.1 ([#252](https://github.com/appium/node-simctl/issues/252)) ([8cad9b9](https://github.com/appium/node-simctl/commit/8cad9b99b7f23fad9cbfe84315a6c439b9af74bc))
+
 ## [8.0.0](https://github.com/appium/node-simctl/compare/v7.7.5...v8.0.0) (2025-08-16)
 
 ### ⚠ BREAKING CHANGES
