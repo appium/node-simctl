@@ -1,3 +1,9 @@
+## [8.0.2](https://github.com/appium/node-simctl/compare/v8.0.1...v8.0.2) (2025-08-20)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump appium-xcode from 5.2.23 to 6.0.0 ([#269](https://github.com/appium/node-simctl/issues/269)) ([3822395](https://github.com/appium/node-simctl/commit/3822395a7763e176da7ad712120881af49881c20))
+
 ## [8.0.1](https://github.com/appium/node-simctl/compare/v8.0.0...v8.0.1) (2025-08-17)
 
 ### Miscellaneous Chores
