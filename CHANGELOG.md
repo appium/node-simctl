@@ -1,3 +1,9 @@
+## [8.0.3](https://github.com/appium/node-simctl/compare/v8.0.2...v8.0.3) (2025-08-23)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump chai from 5.3.2 to 6.0.0 ([#270](https://github.com/appium/node-simctl/issues/270)) ([9a47873](https://github.com/appium/node-simctl/commit/9a478734c6197cc037398357abdfa50424975324))
+
 ## [8.0.2](https://github.com/appium/node-simctl/compare/v8.0.1...v8.0.2) (2025-08-20)
 
 ### Miscellaneous Chores
