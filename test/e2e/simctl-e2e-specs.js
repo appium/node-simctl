@@ -3,7 +3,7 @@ import { Simctl } from '../../lib/simctl.js';
 import xcode from 'appium-xcode';
 import { retryInterval } from 'asyncbox';
 import { rimraf } from 'rimraf';
-import { v4 as uuidV4 } from 'uuid';
+import { uuidV4 } from '../../lib/helpers';
 import path from 'path';
 import os from 'os';
 import fs from 'fs/promises';
@@ -219,7 +219,7 @@ describe('simctl', function () {
         if (major < 8 || (major === 8 && minor < 1)) {
           return this.skip();
         }
-        picturePath = path.join(os.tmpdir(), `${uuidV4()}.png`);
+        picturePath = path.join(os.tmpdir(), `${await uuidV4()}.png`);
         await fs.writeFile(picturePath, Buffer.from(BASE64_PNG, 'base64').toString('binary'), 'binary');
       });
       after(async function () {
