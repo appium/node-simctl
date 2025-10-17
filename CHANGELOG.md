@@ -1,3 +1,9 @@
+## [8.0.5](https://github.com/appium/node-simctl/compare/v8.0.4...v8.0.5) (2025-10-17)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump semantic-release from 24.2.9 to 25.0.0 ([#274](https://github.com/appium/node-simctl/issues/274)) ([c56ecaa](https://github.com/appium/node-simctl/commit/c56ecaa45471c0e42d71346bd481cecf53c44e67))
+
 ## [8.0.4](https://github.com/appium/node-simctl/compare/v8.0.3...v8.0.4) (2025-10-09)
 
 ### Miscellaneous Chores
