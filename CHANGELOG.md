@@ -1,3 +1,9 @@
+## [8.0.6](https://github.com/appium/node-simctl/compare/v8.0.5...v8.0.6) (2025-11-15)
+
+### Miscellaneous Chores
+
+* publish via trusted publisher ([#276](https://github.com/appium/node-simctl/issues/276)) ([0943910](https://github.com/appium/node-simctl/commit/09439105216cd949e38583033a09ce64360a8f3d))
+
 ## [8.0.5](https://github.com/appium/node-simctl/compare/v8.0.4...v8.0.5) (2025-10-17)
 
 ### Miscellaneous Chores
