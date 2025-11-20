@@ -5,11 +5,12 @@
     "strict": false,
     "esModuleInterop": true,
     "outDir": "build",
-    "types": ["node"],
+    "types": ["node", "mocha"],
     "checkJs": true
   },
   "include": [
     "index.js",
-    "lib"
+    "lib",
+    "test"
   ]
 }

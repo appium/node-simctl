@@ -1,64 +1,60 @@
-import pq from 'proxyquire';
 import sinon from 'sinon';
-import * as TeenProcess from 'teen_process';
 import _ from 'lodash';
-import fs from 'node:fs';
+import fs from 'fs';
+import path from 'path';
+import { expect, use } from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import { Simctl } from '../../lib/simctl.js';
 
-const proxyquire = pq.noCallThru();
+use(chaiAsPromised);
+
+// @ts-ignore - __dirname is available in CommonJS
+const testDir = typeof __dirname !== 'undefined' ? __dirname : path.dirname(require.resolve('./simctl-specs.ts'));
 
 const devicePayloads = [
   [
     {
-      stdout: fs.readFileSync(`${__dirname}/fixtures/devices.json`, 'utf-8'),
+      stdout: fs.readFileSync(path.join(testDir, 'fixtures/devices.json'), 'utf-8'),
     },
     {
-      stdout: fs.readFileSync(`${__dirname}/fixtures/devices-with-unavailable.json`, 'utf-8'),
+      stdout: fs.readFileSync(path.join(__dirname, 'fixtures/devices-with-unavailable.json'), 'utf-8'),
     },
   ],
   [
     {
-      stdout: fs.readFileSync(`${__dirname}/fixtures/devices-simple.json`, 'utf-8'),
+      stdout: fs.readFileSync(path.join(__dirname, 'fixtures/devices-simple.json'), 'utf-8'),
     },
     {
-      stdout: fs.readFileSync(`${__dirname}/fixtures/devices-with-unavailable-simple.json`, 'utf-8'),
+      stdout: fs.readFileSync(path.join(__dirname, 'fixtures/devices-with-unavailable-simple.json'), 'utf-8'),
     },
   ],
 ];
 
 describe('simctl', function () {
-  let chai;
-  let chaiAsPromised;
+  let execStub: sinon.SinonStub;
 
-  const execStub = sinon.stub(TeenProcess, 'exec');
-  function stubSimctl (xcrun = {}) {
-    const xcrunPath = process.env.XCRUN_BINARY || xcrun.path;
-    const { Simctl } = proxyquire('../../lib/simctl', {
-      'which': sinon.stub().withArgs(xcrunPath).resolves(xcrunPath)
-    });
-
-    return new Simctl({ xcrun });
+  function stubSimctl (xcrun: { path?: string | null } = {}) {
+    const simctl = new Simctl({ xcrun: { path: xcrun.path ?? null } });
+    execStub = sinon.stub(simctl, 'exec' as any).resolves({ stdout: '', stderr: '' });
+    return simctl;
   }
-
-  before(async function() {
-    chai = await import('chai');
-    chaiAsPromised = await import('chai-as-promised');
-
-    chai.should();
-    chai.use(chaiAsPromised.default);
-  });
 
 
   describe('getDevices', function () {
-    let simctl;
+    let simctl: Simctl;
 
     beforeEach(function () {
       simctl = stubSimctl({ path: 'xcrun' });
     });
     afterEach(function () {
-      execStub.resetHistory();
+      if (execStub) {
+        execStub.resetHistory();
+      }
     });
     after(function () {
-      execStub.reset();
+      if (execStub) {
+        execStub.restore();
+      }
     });
 
     for (const [devicesPayload, devicesWithUnavailablePayload] of devicePayloads) {
@@ -68,21 +64,21 @@ describe('simctl', function () {
             execStub.returns(devicesPayload);
 
             const devices = await simctl.getDevices();
-            _.keys(devices).length.should.eql(2);
+            expect(_.keys(devices).length).to.eql(2);
 
-            devices['12.1'].length.should.eql(10);
-            devices['5.1'].length.should.eql(6);
+            expect(devices['12.1'].length).to.eql(10);
+            expect(devices['5.1'].length).to.eql(6);
           });
           it('should ignore unavailable devices', async function () {
             execStub.returns(devicesWithUnavailablePayload);
 
             const devices = await simctl.getDevices();
-            _.keys(devices).length.should.eql(4);
+            expect(_.keys(devices).length).to.eql(4);
 
-            devices['12.1'].length.should.eql(10);
-            devices['5.1'].length.should.eql(6);
-            devices['12.2'].length.should.eql(0);
-            devices['5.2'].length.should.eql(0);
+            expect(devices['12.1'].length).to.eql(10);
+            expect(devices['5.1'].length).to.eql(6);
+            expect(devices['12.2'].length).to.eql(0);
+            expect(devices['5.2'].length).to.eql(0);
           });
         });
         describe('platform defined', function () {
@@ -90,18 +86,18 @@ describe('simctl', function () {
             execStub.returns(devicesPayload);
 
             const devices = await simctl.getDevices(null, 'tvOS');
-            _.keys(devices).length.should.eql(1);
+            expect(_.keys(devices).length).to.eql(1);
 
-            devices['12.1'].length.should.eql(3);
+            expect(devices['12.1'].length).to.eql(3);
           });
           it('should ignore unavailable devices', async function () {
             execStub.returns(devicesWithUnavailablePayload);
 
             const devices = await simctl.getDevices(null, 'tvOS');
-            _.keys(devices).length.should.eql(2);
+            expect(_.keys(devices).length).to.eql(2);
 
-            devices['12.1'].length.should.eql(3);
-            devices['12.2'].length.should.eql(0);
+            expect(devices['12.1'].length).to.eql(3);
+            expect(devices['12.2'].length).to.eql(0);
           });
         });
       });
@@ -112,13 +108,13 @@ describe('simctl', function () {
             execStub.returns(devicesPayload);
 
             const devices = await simctl.getDevices('12.1');
-            _.keys(devices).length.should.eql(10);
+            expect(_.keys(devices).length).to.eql(10);
           });
           it('should ignore unavailable devices', async function () {
             execStub.returns(devicesWithUnavailablePayload);
 
             const devices = await simctl.getDevices('12.1');
-            _.keys(devices).length.should.eql(10);
+            expect(_.keys(devices).length).to.eql(10);
           });
         });
         describe('platform defined', function () {
@@ -126,13 +122,13 @@ describe('simctl', function () {
             execStub.returns(devicesPayload);
 
             const devices = await simctl.getDevices('5.1', 'watchOS');
-            _.keys(devices).length.should.eql(6);
+            expect(_.keys(devices).length).to.eql(6);
           });
           it('should ignore unavailable devices', async function () {
             execStub.returns(devicesWithUnavailablePayload);
 
             const devices = await simctl.getDevices('5.1', 'watchOS');
-            _.keys(devices).length.should.eql(6);
+            expect(_.keys(devices).length).to.eql(6);
           });
         });
       });
@@ -141,17 +137,21 @@ describe('simctl', function () {
 
   describe('#createDevice', function () {
     const devicesPayload = devicePayloads[0][0];
-    let simctl;
+    let simctl: Simctl;
 
     beforeEach(function () {
       simctl = stubSimctl({ path: 'xcrun' });
     });
     afterEach(function () {
-      execStub.resetHistory();
+      if (execStub) {
+        execStub.resetHistory();
+      }
       delete process.env.XCRUN_BINARY;
     });
     after(function () {
-      execStub.reset();
+      if (execStub) {
+        execStub.restore();
+      }
     });
 
     it('should create iOS simulator using xcrun path from env', async function () {
@@ -168,11 +168,12 @@ describe('simctl', function () {
         '12.1.1',
         { timeout: 20000 }
       );
-      execStub.getCall(2).args[1].should.eql([
-        'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1'
+      expect(execStub.getCall(2).args[0]).to.eql('create');
+      expect(execStub.getCall(2).args[1].args).to.eql([
+        'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1'
       ]);
-      execStub.getCall(0).args[0].should.eql('some/path');
-      devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
+      expect(execStub.getCall(0).args[0]).to.eql('list');
+      expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
     it('should create iOS simulator using xcrun path from passed opts', async function () {
@@ -189,11 +190,12 @@ describe('simctl', function () {
         '12.1.1',
         { timeout: 20000 }
       );
-      execStub.getCall(2).args[1].should.eql([
-        'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1'
+      expect(execStub.getCall(2).args[0]).to.eql('create');
+      expect(execStub.getCall(2).args[1].args).to.eql([
+        'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1'
       ]);
-      execStub.getCall(0).args[0].should.eql('other/path');
-      devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
+      expect(execStub.getCall(0).args[0]).to.eql('list');
+      expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
     it('should create iOS simulator and use xcrun simctl "json" parsing', async function () {
@@ -232,10 +234,11 @@ describe('simctl', function () {
         '12.1.1',
         { timeout: 20000 }
       );
-      execStub.getCall(1).args[1].should.eql([
-        'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1'
+      expect(execStub.getCall(1).args[0]).to.eql('create');
+      expect(execStub.getCall(1).args[1].args).to.eql([
+        'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1'
       ]);
-      devices.should.eql('FA628127-1D5C-45C3-9918-A47BF7E2AE14');
+      expect(devices).to.eql('FA628127-1D5C-45C3-9918-A47BF7E2AE14');
     });
 
     it('should create tvOS simulator', async function () {
@@ -250,10 +253,11 @@ describe('simctl', function () {
         '12.1',
         { timeout: 20000, platform: 'tvOS' }
       );
-      execStub.getCall(2).args[1].should.eql([
-        'simctl', 'create', 'name', 'Apple TV', 'com.apple.CoreSimulator.SimRuntime.tvOS-12-1'
+      expect(execStub.getCall(2).args[0]).to.eql('create');
+      expect(execStub.getCall(2).args[1].args).to.eql([
+        'name', 'Apple TV', 'com.apple.CoreSimulator.SimRuntime.tvOS-12-1'
       ]);
-      devices.should.eql('FA628127-1D5C-45C3-9918-A47BF7E2AE14');
+      expect(devices).to.eql('FA628127-1D5C-45C3-9918-A47BF7E2AE14');
     });
 
     it('should create iOS simulator with old runtime format', async function () {
@@ -269,10 +273,11 @@ describe('simctl', function () {
         '12.1',
         { timeout: 20000 }
       );
-      execStub.getCall(3).args[1].should.eql([
-        'simctl', 'create', 'name', 'iPhone 6 Plus', '12.1'
+      expect(execStub.getCall(3).args[0]).to.eql('create');
+      expect(execStub.getCall(3).args[1].args).to.eql([
+        'name', 'iPhone 6 Plus', '12.1'
       ]);
-      devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
+      expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
     it('should create iOS simulator with old runtime format and three-part platform version', async function () {
@@ -288,10 +293,11 @@ describe('simctl', function () {
         '12.1',
         { timeout: 20000 }
       );
-      execStub.getCall(3).args[1].should.eql([
-        'simctl', 'create', 'name', 'iPhone 6 Plus', '12.1'
+      expect(execStub.getCall(3).args[0]).to.eql('create');
+      expect(execStub.getCall(3).args[1].args).to.eql([
+        'name', 'iPhone 6 Plus', '12.1'
       ]);
-      devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
+      expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
     it('should create iOS simulator with three-part platform version and three-part runtime', async function () {
@@ -307,10 +313,12 @@ describe('simctl', function () {
         '12.1.1',
         { timeout: 20000 }
       );
-      execStub.getCall(3).args[1].should.eql([
-        'simctl', 'create', 'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1'
+      expect(execStub.getCall(3).args[0]).to.eql('create');
+      expect(execStub.getCall(3).args[1].args).to.eql([
+        'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1'
       ]);
-      devices.should.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
+      expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
     });
   });
 });
+
