@@ -7,35 +7,29 @@ import { uuidV4 } from '../../lib/helpers';
 import path from 'path';
 import os from 'os';
 import fs from 'fs/promises';
+import { expect, use } from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+
+use(chaiAsPromised);
 
 describe('simctl', function () {
-  const DEVICE_NAME = process.env.DEVICE_NAME || 'iPhone X';
+  const DEVICE_NAME = process.env.DEVICE_NAME || 'iPhone 17';
   const MOCHA_TIMEOUT = 200000;
   this.timeout(MOCHA_TIMEOUT);
 
-  let chai;
-  let chaiAsPromised;
-  let expect;
-  let should;
-  let randName;
-  let validSdks = [];
-  let sdk;
-  let simctl;
+  let randName: string;
+  let validSdks: string[] = [];
+  let sdk: string;
+  let simctl: Simctl;
 
   before(async function () {
-    chai = await import('chai');
-    chaiAsPromised = await import('chai-as-promised');
-
-    chai.use(chaiAsPromised.default);
-    expect = chai.expect;
-    should = chai.should();
 
     simctl = new Simctl();
     const devices = await simctl.getDevices();
     console.log(`Found devices: ${JSON.stringify(devices, null, 2)}`); // eslint-disable-line no-console
     validSdks = _.keys(devices)
       .filter((key) => !_.isEmpty(devices[key]))
-      .sort((a, b) => a - b);
+      .sort((a, b) => a.localeCompare(b));
     if (!validSdks.length) {
       throw new Error('No valid SDKs');
     }
@@ -45,11 +39,11 @@ describe('simctl', function () {
     // need to find a random name that does not already exist
     // give it 5 tries
     for (let i = 0; i < 5; i++) {
-      let randNum = parseInt(Math.random() * 100, 10);
+      const randNum = parseInt((Math.random() * 100).toString(), 10);
       randName = `device${randNum}`;
 
       let nameFound = false;
-      for (let list of _.values(devices)) {
+      for (const list of _.values(devices)) {
         if (_.includes(_.map(list, 'name'), randName)) {
           // need to find another random name
           nameFound = true;
@@ -64,33 +58,33 @@ describe('simctl', function () {
     const devices = (await simctl.getDevices())[sdk];
     const firstDevice = devices[0];
     const expectedList = ['name', 'sdk', 'state', 'udid'];
-    firstDevice.should.have.any.keys(...expectedList);
+    expect(firstDevice).to.have.any.keys(...expectedList);
   });
 
   describe('createDevice', function () {
     after(async function () {
       if (simctl.udid) {
-        await simctl.deleteDevice(16000);
+        await simctl.deleteDevice();
         simctl.udid = null;
       }
     });
 
     it('should create a device', async function () {
       simctl.udid = await simctl.createDevice(randName, DEVICE_NAME, sdk);
-      (typeof simctl.udid).should.equal('string');
-      simctl.udid.length.should.equal(36);
+      expect(typeof simctl.udid).to.equal('string');
+      expect(simctl.udid.length).to.equal(36);
     });
 
     it('should create a device and be able to see it in devices list right away', async function () {
       const numSimsBefore = (await simctl.getDevices())[sdk].length;
       simctl.udid = await simctl.createDevice('node-simctl test', DEVICE_NAME, sdk);
       const numSimsAfter = (await simctl.getDevices())[sdk].length;
-      numSimsAfter.should.equal(numSimsBefore + 1);
+      expect(numSimsAfter).to.equal(numSimsBefore + 1);
     });
   });
 
   describe('device manipulation', function () {
-    let simctl;
+    let simctl: Simctl;
     const name = 'node-simctl test';
     beforeEach(async function () {
       simctl = new Simctl();
@@ -98,13 +92,13 @@ describe('simctl', function () {
     });
     afterEach(async function () {
       if (simctl.udid) {
-        await simctl.deleteDevice(simctl.udid, 16000);
+        await simctl.deleteDevice();
         simctl.udid = null;
       }
     });
     it('should get devices', async function () {
       const sdkDevices = await simctl.getDevices(sdk);
-      _.map(sdkDevices, 'name').should.include(name);
+      expect(_.map(sdkDevices, 'name')).to.include(name);
     });
 
     it('should erase devices', async function () {
@@ -114,26 +108,26 @@ describe('simctl', function () {
     it('should delete devices', async function () {
       await simctl.deleteDevice();
       const sdkDevices = await simctl.getDevices(sdk);
-      _.map(sdkDevices, 'name').should.not.include(simctl.udid);
+      expect(_.map(sdkDevices, 'name')).to.not.include(simctl.udid);
 
       // so we do not delete again
       simctl.udid = null;
     });
 
     it('should not fail to shutdown a shutdown simulator', async function () {
-      await simctl.shutdownDevice().should.eventually.not.be.rejected;
+      await expect(simctl.shutdownDevice()).to.eventually.not.be.rejected;
     });
   });
 
   it('should return a nice error for invalid usage', async function () {
-    let err = null;
+    let err: Error | null = null;
     try {
       await simctl.createDevice('foo', 'bar', 'baz');
     } catch (e) {
-      err = e;
+      err = e as Error;
     }
-    should.exist(err);
-    err.message.should.include(`Unable to parse version 'baz'`);
+    expect(err).to.exist;
+    expect(err!.message).to.include(`Unable to parse version 'baz'`);
   });
 
   describe('on running Simulator', function () {
@@ -141,16 +135,20 @@ describe('simctl', function () {
       this.retries(3);
     }
 
-    let major, minor;
+    let major: number, minor: number;
 
     before(async function () {
-      ({major, minor} = await xcode.getVersion(true));
+      const version = await xcode.getVersion(true);
+      if (typeof version === 'string') {
+        return this.skip();
+      }
+      ({major, minor} = version);
       if (major < 8 || (major === 8 && minor < 1)) {
         return this.skip();
       }
 
       const sdk = process.env.IOS_SDK || _.last(validSdks);
-      simctl.udid = await simctl.createDevice('runningSimTest', DEVICE_NAME, sdk);
+      simctl.udid = await simctl.createDevice('runningSimTest', DEVICE_NAME, sdk!);
 
       await simctl.bootDevice();
       await simctl.startBootMonitor({timeout: MOCHA_TIMEOUT});
@@ -170,7 +168,7 @@ describe('simctl', function () {
         if (major < 8 || (major === 8 && minor < 1)) {
           return this.skip();
         }
-        await simctl.startBootMonitor().should.eventually.be.fulfilled;
+        await expect(simctl.startBootMonitor()).to.eventually.be.fulfilled;
       });
       it('should fail to monitor booting of non-existing simulator', async function () {
         if (major < 8 || (major === 8 && minor < 1)) {
@@ -179,7 +177,7 @@ describe('simctl', function () {
         const udid = simctl.udid;
         try {
           simctl.udid = 'blabla';
-          await simctl.startBootMonitor({timeout: 1000}).should.eventually.be.rejected;
+          await expect(simctl.startBootMonitor({timeout: 1000})).to.eventually.be.rejected;
         } finally {
           simctl.udid = udid;
         }
@@ -207,14 +205,14 @@ describe('simctl', function () {
 
         await retryInterval(pbRetries, 1000, async () => {
           await simctl.setPasteboard(pbContent, encoding);
-          (await simctl.getPasteboard(encoding)).should.eql(pbContent);
+          expect(await simctl.getPasteboard(encoding)).to.eql(pbContent);
         });
       });
     });
 
     describe('add media', function () {
       const BASE64_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
-      let picturePath;
+      let picturePath: string | undefined;
       before(async function () {
         if (major < 8 || (major === 8 && minor < 1)) {
           return this.skip();
@@ -228,47 +226,47 @@ describe('simctl', function () {
         }
       });
       it('should add media files', async function () {
-        (await simctl.addMedia(picturePath)).code.should.eql(0);
+        expect((await simctl.addMedia(picturePath!)).code).to.eql(0);
       });
     });
 
     it('should extract applications information', async function () {
-      (await simctl.appInfo('com.apple.springboard')).should.include('ApplicationType');
+      expect(await simctl.appInfo('com.apple.springboard')).to.include('ApplicationType');
     });
 
     describe('getEnv', function () {
       it('should get env variable value', async function () {
         const udid = await simctl.getEnv('SIMULATOR_UDID');
-        udid.length.should.be.above(0);
+        expect(udid!.length).to.be.above(0);
       });
       it('should return null if no var is found', async function () {
         const udid = await simctl.getEnv('SIMULATOR_UDD');
-        _.isNull(udid).should.be.true;
+        expect(_.isNull(udid)).to.be.true;
       });
     });
 
     describe('getDeviceTypes', function () {
       it('should get device types', async function () {
         const deviceTypes = await simctl.getDeviceTypes();
-        deviceTypes.should.have.length;
-        deviceTypes.length.should.be.above(0);
+        expect(deviceTypes).to.have.length;
+        expect(deviceTypes.length).to.be.above(0);
         // at least one type, no matter the version of Xcode, should be an iPhone
-        deviceTypes.filter((el) => el.includes('iPhone')).length.should.be.above(1);
+        expect(deviceTypes.filter((el) => el.includes('iPhone')).length).to.be.above(1);
       });
     });
 
     describe('list', function () {
       it('should get everything from xcrun simctl list', async function () {
         const fullList = await simctl.list();
-        fullList.should.have.property('devicetypes');
-        fullList.should.have.property('runtimes');
-        fullList.should.have.property('devices');
-        fullList.should.have.property('pairs');
-        fullList.devicetypes.length.should.be.above(1);
+        expect(fullList).to.have.property('devicetypes');
+        expect(fullList).to.have.property('runtimes');
+        expect(fullList).to.have.property('devices');
+        expect(fullList).to.have.property('pairs');
+        expect(fullList.devicetypes.length).to.be.above(1);
         // at least one type, no matter the version of Xcode, should be an iPhone
-        fullList.devicetypes.filter((el) => el.identifier.includes('iPhone')).length.should.be.above(0);
+        expect(fullList.devicetypes.filter((el) => el.identifier.includes('iPhone')).length).to.be.above(0);
         // at least one runtime should be iOS
-        fullList.runtimes.filter((el) => el.identifier.includes('iOS')).length.should.be.above(0);
+        expect(fullList.runtimes.filter((el) => el.identifier.includes('iOS')).length).to.be.above(0);
       });
     });
 
@@ -296,8 +294,9 @@ describe('simctl', function () {
           }
         };
 
-        await simctl.pushNotification(payload).should.be.fulfilled;
+        await expect(simctl.pushNotification(payload)).to.be.fulfilled;
       });
     });
   });
 });
+
