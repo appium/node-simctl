@@ -1,3 +1,10 @@
+## [8.0.7](https://github.com/appium/node-simctl/compare/v8.0.6...v8.0.7) (2025-12-01)
+
+### Miscellaneous Chores
+
+* **deps:** bump actions/checkout from 2 to 6 ([#279](https://github.com/appium/node-simctl/issues/279)) ([5284c57](https://github.com/appium/node-simctl/commit/5284c5779e0fe1edcb85841845231eafc56d1767))
+* **deps:** bump which from 5.0.0 to 6.0.0 ([#275](https://github.com/appium/node-simctl/issues/275)) ([5824c36](https://github.com/appium/node-simctl/commit/5824c36724ad44e76e53c3f9d414a2a858014df9))
+
 ## [8.0.6](https://github.com/appium/node-simctl/compare/v8.0.5...v8.0.6) (2025-11-15)
 
 ### Miscellaneous Chores
