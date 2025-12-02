@@ -1,3 +1,9 @@
+## [8.0.8](https://github.com/appium/node-simctl/compare/v8.0.7...v8.0.8) (2025-12-02)
+
+### Miscellaneous Chores
+
+* **deps:** bump actions/setup-node from 3 to 6 ([#280](https://github.com/appium/node-simctl/issues/280)) ([d9ccf41](https://github.com/appium/node-simctl/commit/d9ccf418448e379c7e3508a3e54760c51386c33c))
+
 ## [8.0.7](https://github.com/appium/node-simctl/compare/v8.0.6...v8.0.7) (2025-12-01)
 
 ### Miscellaneous Chores
