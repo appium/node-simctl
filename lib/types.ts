@@ -143,3 +143,47 @@ export type ExecResult<T extends ExecOpts> = T extends AsyncExecOpts
   ? SubProcess
   : TeenProcessExecResult<string>;
 
+/**
+ * Boot monitor options
+ */
+export interface BootMonitorOptions {
+  /**
+   * Simulator booting timeout in ms.
+   */
+  timeout?: number;
+  /**
+   * This event is fired when data migration stage starts.
+   */
+  onWaitingDataMigration?: () => void;
+  /**
+   * This event is fired when system app wait stage starts.
+   */
+  onWaitingSystemApp?: () => void;
+  /**
+   * This event is fired when Simulator is fully booted.
+   */
+  onFinished?: () => void;
+  /**
+   * This event is fired when there was an error while monitoring the booting process
+   * or when the timeout has expired.
+   */
+  onError?: (error: Error) => void;
+  /**
+   * Whether to preboot the Simulator
+   * if this command is called and it is not already in booted or booting state.
+   */
+  shouldPreboot?: boolean;
+}
+
+/**
+ * Certificate options
+ */
+export interface CertOptions {
+  /**
+   * whether the `cert` argument
+   * is the path to the certificate on the local file system or
+   * a raw certificate content
+   */
+  raw?: boolean;
+}
+

@@ -97,6 +97,16 @@ export async function getDevicesByParsing (
  */
 export async function getDevices (
   this: Simctl,
+  forSdk: string,
+  platform?: string | null
+): Promise<DeviceInfo[]>;
+export async function getDevices (
+  this: Simctl,
+  forSdk?: undefined | null,
+  platform?: string | null
+): Promise<Record<string, DeviceInfo[]>>;
+export async function getDevices (
+  this: Simctl,
   forSdk?: string | null,
   platform?: string | null
 ): Promise<Record<string, DeviceInfo[]> | DeviceInfo[]> {

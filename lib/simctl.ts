@@ -35,31 +35,20 @@ import type {
 } from './types';
 
 const SIMCTL_ENV_PREFIX = 'SIMCTL_CHILD_';
-const DEFAULT_OPTS: Required<SimctlOpts> = {
-  xcrun: {
-    path: null,
-  },
-  execTimeout: DEFAULT_EXEC_TIMEOUT,
-  logErrors: true,
-  udid: null,
-  devicesSetPath: null,
-};
 
 export class Simctl {
-  xcrun: XCRun;
-  execTimeout: number;
-  logErrors: boolean;
+  private xcrun: XCRun;
+  private execTimeout: number;
+  private logErrors: boolean;
   private _udid: string | null;
   private _devicesSetPath: string | null;
 
   constructor (opts: SimctlOpts = {}) {
-    const mergedOpts = _.cloneDeep(opts);
-    _.defaultsDeep(mergedOpts, DEFAULT_OPTS);
-    for (const key of _.keys(DEFAULT_OPTS) as Array<keyof typeof DEFAULT_OPTS>) {
-      (this as any)[key] = mergedOpts[key] ?? DEFAULT_OPTS[key];
-    }
-    this._udid = _.isNil(opts.udid) ? null : opts.udid;
-    this._devicesSetPath = _.isNil(opts.devicesSetPath) ? null : opts.devicesSetPath;
+    this.xcrun = _.cloneDeep(opts.xcrun ?? { path: null });
+    this.execTimeout = opts.execTimeout ?? DEFAULT_EXEC_TIMEOUT;
+    this.logErrors = opts.logErrors ?? true;
+    this._udid = opts.udid ?? null;
+    this._devicesSetPath = opts.devicesSetPath ?? null;
   }
 
   set udid (value: string | null) {

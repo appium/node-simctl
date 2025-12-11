@@ -5,18 +5,7 @@ import path from 'path';
 import _ from 'lodash';
 import { rimraf } from 'rimraf';
 import type { Simctl } from '../simctl';
-
-/**
- * Certificate options
- */
-export interface CertOptions {
-  /**
-   * whether the `cert` argument
-   * is the path to the certificate on the local file system or
-   * a raw certificate content
-   */
-  raw?: boolean;
-}
+import type { CertOptions } from '../types';
 
 /**
  * @param payload - Certificate payload (string or Buffer)

@@ -2,39 +2,8 @@ import log from '../logger';
 import { waitForCondition } from 'asyncbox';
 import _ from 'lodash';
 import type { Simctl } from '../simctl';
+import type { BootMonitorOptions } from '../types';
 import type { SubProcess } from 'teen_process';
-
-/**
- * Boot monitor options
- */
-export interface BootMonitorOptions {
-  /**
-   * Simulator booting timeout in ms.
-   */
-  timeout?: number;
-  /**
-   * This event is fired when data migration stage starts.
-   */
-  onWaitingDataMigration?: () => void;
-  /**
-   * This event is fired when system app wait stage starts.
-   */
-  onWaitingSystemApp?: () => void;
-  /**
-   * This event is fired when Simulator is fully booted.
-   */
-  onFinished?: () => void;
-  /**
-   * This event is fired when there was an error while monitoring the booting process
-   * or when the timeout has expired.
-   */
-  onError?: (error: Error) => void;
-  /**
-   * Whether to preboot the Simulator
-   * if this command is called and it is not already in booted or booting state.
-   */
-  shouldPreboot?: boolean;
-}
 
 /**
  * Start monitoring for boot status of the particular Simulator.
