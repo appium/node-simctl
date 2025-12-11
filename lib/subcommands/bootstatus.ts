@@ -1,4 +1,4 @@
-import log from '../logger';
+import { log } from '../logger';
 import { waitForCondition } from 'asyncbox';
 import _ from 'lodash';
 import type { Simctl } from '../simctl';

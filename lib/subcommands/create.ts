@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import log, { LOG_PREFIX } from '../logger';
+import { log, LOG_PREFIX } from '../logger';
 import { retryInterval } from 'asyncbox';
 import { SIM_RUNTIME_NAME, normalizeVersion } from '../helpers';
 import type { Simctl } from '../simctl';

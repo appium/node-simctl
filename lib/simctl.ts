@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import which from 'which';
-import log, { LOG_PREFIX } from './logger';
+import { log, LOG_PREFIX } from './logger';
 import {
   DEFAULT_EXEC_TIMEOUT, getXcrunBinary,
 } from './helpers';

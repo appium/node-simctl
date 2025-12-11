@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import log, { LOG_PREFIX } from '../logger';
+import { log, LOG_PREFIX } from '../logger';
 import type { Simctl } from '../simctl';
 
 /**
