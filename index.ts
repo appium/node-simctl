@@ -6,6 +6,7 @@ export type {
   BootMonitorOptions,
   CertOptions,
   XCRun,
+  AppInfo,
 } from './lib/types';
 
 export { Simctl };

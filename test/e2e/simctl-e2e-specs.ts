@@ -233,8 +233,14 @@ describe('simctl', function () {
       });
     });
 
-    it('should extract applications information', async function () {
-      expect(await simctl.appInfo('com.apple.springboard')).to.include('ApplicationType');
+    describe('appInfo', function () {
+      it('should extract applications information', async function () {
+        const appInfo = await simctl.appInfo('com.apple.springboard');
+        expect(appInfo.ApplicationType).to.equal('Hidden');
+      });
+      it('should throw an error if the app is not installed', async function () {
+        await expect(simctl.appInfo('com.apple.notinstalled')).to.be.eventually.rejected;
+      });
     });
 
     describe('getEnv', function () {

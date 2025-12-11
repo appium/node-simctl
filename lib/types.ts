@@ -187,3 +187,57 @@ export interface CertOptions {
   raw?: boolean;
 }
 
+/**
+ * App information returned by simctl appinfo when the app is found
+ */
+export interface AppInfo {
+  /**
+   * Application type (e.g., "Hidden")
+   */
+  ApplicationType: string;
+  /**
+   * Bundle URL (file:// URL)
+   */
+  Bundle?: string;
+  /**
+   * Bundle container URL (file:// URL)
+   */
+  BundleContainer?: string;
+  /**
+   * Display name of the application
+   */
+  CFBundleDisplayName: string;
+  /**
+   * Executable name
+   */
+  CFBundleExecutable: string;
+  /**
+   * Bundle identifier
+   */
+  CFBundleIdentifier: string;
+  /**
+   * Bundle name
+   */
+  CFBundleName: string;
+  /**
+   * Bundle version
+   */
+  CFBundleVersion: string | number;
+  /**
+   * Data container URL (file:// URL)
+   */
+  DataContainer?: string;
+  /**
+   * Group containers dictionary
+   */
+  GroupContainers?: Record<string, any>;
+  /**
+   * Path to the app bundle
+   */
+  Path: string;
+  /**
+   * SpringBoard app tags
+   */
+  SBAppTags?: string[];
+}
+
