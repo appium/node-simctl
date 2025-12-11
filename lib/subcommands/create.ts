@@ -3,7 +3,7 @@ import { log, LOG_PREFIX } from '../logger';
 import { retryInterval } from 'asyncbox';
 import { SIM_RUNTIME_NAME, normalizeVersion } from '../helpers';
 import type { Simctl } from '../simctl';
-import type { SimCreationOpts, DeviceInfo } from '../types';
+import type { SimCreationOpts } from '../types';
 
 const SIM_RUNTIME_NAME_SUFFIX_IOS = 'iOS';
 const DEFAULT_CREATE_SIMULATOR_TIMEOUT = 10000;
@@ -92,20 +92,15 @@ export async function createDevice (
   // make sure that it gets out of the "Creating" state
   const retries = parseInt(`${timeout / 1000}`, 10);
   await retryInterval(retries, 1000, async () => {
-    const devicesResult = await this.getDevices();
-    const devices = _.isArray(devicesResult)
-      ? {}
-      : devicesResult as Record<string, DeviceInfo[]>;
-    for (const deviceArr of _.values(devices)) {
-      for (const device of deviceArr) {
-        if (device.udid === udid) {
-          if (device.state === 'Creating') {
-            // need to retry
-            throw new Error(`Device with udid '${udid}' still being created`);
-          } else {
-            // stop looking, we're done
-            return;
-          }
+    const devices = _.flatMap(_.values(await this.getDevices()));
+    for (const device of devices) {
+      if (device.udid === udid) {
+        if (device.state === 'Creating') {
+          // need to retry
+          throw new Error(`Device with udid '${udid}' still being created`);
+        } else {
+          // stop looking, we're done
+          return;
         }
       }
     }
