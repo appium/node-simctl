@@ -1,3 +1,9 @@
+## [8.0.9](https://github.com/appium/node-simctl/compare/v8.0.8...v8.0.9) (2025-12-11)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/node from 24.10.3 to 25.0.0 ([#281](https://github.com/appium/node-simctl/issues/281)) ([fca184a](https://github.com/appium/node-simctl/commit/fca184af6e40d3b7405245663ba40b15444fabf1))
+
 ## [8.0.8](https://github.com/appium/node-simctl/compare/v8.0.7...v8.0.8) (2025-12-02)
 
 ### Miscellaneous Chores
