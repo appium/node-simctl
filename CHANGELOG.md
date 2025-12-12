@@ -1,3 +1,9 @@
+## [8.1.1](https://github.com/appium/node-simctl/compare/v8.1.0...v8.1.1) (2025-12-12)
+
+### Miscellaneous Chores
+
+* **deps:** remove source-map-support ([#283](https://github.com/appium/node-simctl/issues/283)) ([595a0dc](https://github.com/appium/node-simctl/commit/595a0dc58e3d0aa510ca500b40af42db6e99f735))
+
 ## [8.1.0](https://github.com/appium/node-simctl/compare/v8.0.9...v8.1.0) (2025-12-12)
 
 ### Features
