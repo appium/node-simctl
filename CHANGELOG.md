@@ -1,3 +1,9 @@
+## [8.1.0](https://github.com/appium/node-simctl/compare/v8.0.9...v8.1.0) (2025-12-12)
+
+### Features
+
+* Migrate the module to typescript ([#282](https://github.com/appium/node-simctl/issues/282)) ([6d3c887](https://github.com/appium/node-simctl/commit/6d3c8878cdea433e853be77fef34417e6eb3785a))
+
 ## [8.0.9](https://github.com/appium/node-simctl/compare/v8.0.8...v8.0.9) (2025-12-11)
 
 ### Miscellaneous Chores
