@@ -1,13 +1,12 @@
-const commands = {};
+import type { Simctl } from '../simctl';
 
 /**
  * Grants the given permission on the app with the given bundle identifier
  *
  * @since Xcode 11.4 SDK
- * @this {import('../simctl').Simctl}
- * @param {string} bundleId the identifier of the application whose
+ * @param bundleId the identifier of the application whose
  * privacy settings are going to be changed
- * @param {string} perm one of possible permission values:
+ * @param perm one of possible permission values:
  * - all: Apply the action to all services.
  * - calendar: Allow access to calendar.
  * - contacts-limited: Allow access to basic contact info.
@@ -25,48 +24,45 @@ const commands = {};
  * or there was an error while granting the permission
  * @throws {Error} If the `udid` instance property is unset
  */
-commands.grantPermission = async function grantPermission (bundleId, perm) {
+export async function grantPermission (this: Simctl, bundleId: string, perm: string): Promise<void> {
   await this.exec('privacy', {
     args: [this.requireUdid('privacy grant'), 'grant', perm, bundleId],
   });
-};
+}
 
 /**
  * Revokes the given permission on the app with the given bundle identifier
  * after it has been granted
  *
  * @since Xcode 11.4 SDK
- * @this {import('../simctl').Simctl}
- * @param {string} bundleId the identifier of the application whose
+ * @param bundleId the identifier of the application whose
  * privacy settings are going to be changed
- * @param {string} perm one of possible permission values (see `grantPermission`)
+ * @param perm one of possible permission values (see `grantPermission`)
  * @throws {Error} if the current SDK version does not support the command
  * or there was an error while revoking the permission
  * @throws {Error} If the `udid` instance property is unset
  */
-commands.revokePermission = async function revokePermission (bundleId, perm) {
+export async function revokePermission (this: Simctl, bundleId: string, perm: string): Promise<void> {
   await this.exec('privacy', {
     args: [this.requireUdid('privacy revoke'), 'revoke', perm, bundleId],
   });
-};
+}
 
 /**
  * Resets the given permission on the app with the given bundle identifier
  * to its default state
  *
  * @since Xcode 11.4 SDK
- * @this {import('../simctl').Simctl}
- * @param {string} bundleId the identifier of the application whose
+ * @param bundleId the identifier of the application whose
  * privacy settings are going to be changed
- * @param {string} perm one of possible permission values (see `grantPermission`)
+ * @param perm one of possible permission values (see `grantPermission`)
  * @throws {Error} if the current SDK version does not support the command
  * or there was an error while resetting the permission
  * @throws {Error} If the `udid` instance property is unset
  */
-commands.resetPermission = async function resetPermission (bundleId, perm) {
+export async function resetPermission (this: Simctl, bundleId: string, perm: string): Promise<void> {
   await this.exec('privacy', {
     args: [this.requireUdid('private reset'), 'reset', perm, bundleId],
   });
-};
+}
 
-export default commands;

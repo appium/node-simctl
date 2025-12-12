@@ -1,12 +1,12 @@
 import _ from 'lodash';
-import { Simctl } from '../../lib/simctl.js';
+import { Simctl } from '../../lib/simctl';
 import xcode from 'appium-xcode';
 import { retryInterval } from 'asyncbox';
 import { rimraf } from 'rimraf';
 import { uuidV4 } from '../../lib/helpers';
-import path from 'path';
-import os from 'os';
-import fs from 'fs/promises';
+import path from 'node:path';
+import os from 'node:os';
+import fs from 'node:fs/promises';
 import { expect, use } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
@@ -55,8 +55,9 @@ describe('simctl', function () {
   });
 
   it('should retrieve a device with compatible properties', async function () {
-    const devices = (await simctl.getDevices())[sdk];
-    const firstDevice = devices[0];
+    const devices = await simctl.getDevices();
+    const sdkDevices = devices[sdk];
+    const firstDevice = sdkDevices[0];
     const expectedList = ['name', 'sdk', 'state', 'udid'];
     expect(firstDevice).to.have.any.keys(...expectedList);
   });
@@ -76,9 +77,11 @@ describe('simctl', function () {
     });
 
     it('should create a device and be able to see it in devices list right away', async function () {
-      const numSimsBefore = (await simctl.getDevices())[sdk].length;
+      const devicesBefore = await simctl.getDevices();
+      const numSimsBefore = devicesBefore[sdk].length;
       simctl.udid = await simctl.createDevice('node-simctl test', DEVICE_NAME, sdk);
-      const numSimsAfter = (await simctl.getDevices())[sdk].length;
+      const devicesAfter = await simctl.getDevices();
+      const numSimsAfter = devicesAfter[sdk].length;
       expect(numSimsAfter).to.equal(numSimsBefore + 1);
     });
   });
@@ -230,8 +233,14 @@ describe('simctl', function () {
       });
     });
 
-    it('should extract applications information', async function () {
-      expect(await simctl.appInfo('com.apple.springboard')).to.include('ApplicationType');
+    describe('appInfo', function () {
+      it('should extract applications information', async function () {
+        const appInfo = await simctl.appInfo('com.apple.springboard');
+        expect(appInfo.ApplicationType).to.equal('Hidden');
+      });
+      it('should throw an error if the app is not installed', async function () {
+        await expect(simctl.appInfo('com.apple.notinstalled')).to.be.eventually.rejected;
+      });
     });
 
     describe('getEnv', function () {

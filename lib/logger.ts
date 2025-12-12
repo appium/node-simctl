@@ -1,6 +1,6 @@
 import appiumLogger from '@appium/logger';
 
-const LOG_PREFIX = 'simctl';
+export const LOG_PREFIX = 'simctl';
 
 function getLogger () {
   const logger = global._global_npmlog || appiumLogger;
@@ -10,7 +10,4 @@ function getLogger () {
   return logger;
 }
 
-const log = getLogger();
-
-export { LOG_PREFIX };
-export default log;
+export const log = getLogger();

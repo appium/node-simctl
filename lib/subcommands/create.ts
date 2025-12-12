@@ -1,41 +1,38 @@
 import _ from 'lodash';
-import log, { LOG_PREFIX } from '../logger';
+import { log, LOG_PREFIX } from '../logger';
 import { retryInterval } from 'asyncbox';
 import { SIM_RUNTIME_NAME, normalizeVersion } from '../helpers';
-
+import type { Simctl } from '../simctl';
+import type { SimCreationOpts } from '../types';
 
 const SIM_RUNTIME_NAME_SUFFIX_IOS = 'iOS';
 const DEFAULT_CREATE_SIMULATOR_TIMEOUT = 10000;
-
-const commands = {};
-
-/**
- * @typedef {Object} SimCreationOpts
- * @property {string} [platform='iOS'] - Platform name in order to specify runtime such as 'iOS', 'tvOS', 'watchOS'
- * @property {number} [timeout=10000] - The maximum number of milliseconds to wait
- *                                      unit device creation is completed.
- */
 
 /**
  * Create Simulator device with given name for the particular
  * platform type and version.
  *
- * @this {import('../simctl').Simctl}
- * @param {string} name - The device name to be created.
- * @param {string} deviceTypeId - Device type, for example 'iPhone 6'.
- * @param {string} platformVersion - Platform version, for example '10.3'.
- * @param {SimCreationOpts} [opts={}] - Simulator options for creating devices.
- * @return {Promise<string>} The UDID of the newly created device.
+ * @param name - The device name to be created.
+ * @param deviceTypeId - Device type, for example 'iPhone 6'.
+ * @param platformVersion - Platform version, for example '10.3'.
+ * @param opts - Simulator options for creating devices.
+ * @return The UDID of the newly created device.
  * @throws {Error} If the corresponding simctl subcommand command
  *                 returns non-zero return code.
  */
-commands.createDevice = async function createDevice (name, deviceTypeId, platformVersion, opts = {}) {
+export async function createDevice (
+  this: Simctl,
+  name: string,
+  deviceTypeId: string,
+  platformVersion: string,
+  opts: SimCreationOpts = {}
+): Promise<string> {
   const {
     platform = SIM_RUNTIME_NAME_SUFFIX_IOS,
     timeout = DEFAULT_CREATE_SIMULATOR_TIMEOUT
   } = opts;
 
-  let runtimeIds = [];
+  const runtimeIds: string[] = [];
 
   // Try getting runtimeId using JSON flag
   try {
@@ -45,7 +42,7 @@ commands.createDevice = async function createDevice (name, deviceTypeId, platfor
   if (_.isEmpty(runtimeIds)) {
     // at first make sure that the runtime id is the right one
     // in some versions of Xcode it will be a patch version
-    let runtimeId;
+    let runtimeId: string;
     try {
       runtimeId = await this.getRuntimeForPlatformVersion(platformVersion, platform);
     } catch {
@@ -56,7 +53,7 @@ commands.createDevice = async function createDevice (name, deviceTypeId, platfor
     // get the possible runtimes, which will be iterated over
 
     // start with major-minor version
-    let potentialRuntimeIds = [normalizeVersion(runtimeId)];
+    const potentialRuntimeIds = [normalizeVersion(runtimeId)];
     if (runtimeId.split('.').length === 3) {
       // add patch version if it exists
       potentialRuntimeIds.push(runtimeId);
@@ -71,7 +68,7 @@ commands.createDevice = async function createDevice (name, deviceTypeId, platfor
   }
 
   // go through the runtime ids and try to create a simulator with each
-  let udid;
+  let udid: string | undefined;
   for (const runtimeId of runtimeIds) {
     log.debug(LOG_PREFIX,
       `Creating simulator with name '${name}', device type id '${deviceTypeId}' and runtime id '${runtimeId}'`);
@@ -95,17 +92,15 @@ commands.createDevice = async function createDevice (name, deviceTypeId, platfor
   // make sure that it gets out of the "Creating" state
   const retries = parseInt(`${timeout / 1000}`, 10);
   await retryInterval(retries, 1000, async () => {
-    const devices = _.values(await this.getDevices());
-    for (const deviceArr of _.values(devices)) {
-      for (const device of deviceArr) {
-        if (device.udid === udid) {
-          if (device.state === 'Creating') {
-            // need to retry
-            throw new Error(`Device with udid '${udid}' still being created`);
-          } else {
-            // stop looking, we're done
-            return;
-          }
+    const devices = _.flatMap(_.values(await this.getDevices()));
+    for (const device of devices) {
+      if (device.udid === udid) {
+        if (device.state === 'Creating') {
+          // need to retry
+          throw new Error(`Device with udid '${udid}' still being created`);
+        } else {
+          // stop looking, we're done
+          return;
         }
       }
     }
@@ -113,6 +108,5 @@ commands.createDevice = async function createDevice (name, deviceTypeId, platfor
   });
 
   return udid;
-};
+}
 
-export default commands;

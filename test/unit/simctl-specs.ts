@@ -1,10 +1,10 @@
 import sinon from 'sinon';
 import _ from 'lodash';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import { expect, use } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { Simctl } from '../../lib/simctl.js';
+import { Simctl } from '../../lib/simctl';
 
 use(chaiAsPromised);
 
