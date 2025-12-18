@@ -1,3 +1,9 @@
+## [8.1.2](https://github.com/appium/node-simctl/compare/v8.1.1...v8.1.2) (2025-12-18)
+
+### Miscellaneous Chores
+
+* **deps:** bump asyncbox from 3.0.0 to 4.0.1 ([#284](https://github.com/appium/node-simctl/issues/284)) ([b06688b](https://github.com/appium/node-simctl/commit/b06688b686fe13a41072c0367458a4e6f74cd029))
+
 ## [8.1.1](https://github.com/appium/node-simctl/compare/v8.1.0...v8.1.1) (2025-12-12)
 
 ### Miscellaneous Chores
