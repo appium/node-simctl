@@ -17,7 +17,7 @@ export async function spawnProcess (
   this: Simctl,
   args: string | string[],
   env: Record<string, any> = {}
-): Promise<ExecResult<boolean>> {
+): Promise<ExecResult<false>> {
   if (_.isEmpty(args)) {
     throw new Error('Spawn arguments are required');
   }

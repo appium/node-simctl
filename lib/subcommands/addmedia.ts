@@ -12,7 +12,7 @@ import type { ExecResult } from 'teen_process';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function addMedia (this: Simctl, filePath: string): Promise<ExecResult<boolean>> {
+export async function addMedia (this: Simctl, filePath: string): Promise<ExecResult<false>> {
   return await this.exec('addmedia', {
     args: [this.requireUdid('addmedia'), filePath],
   });

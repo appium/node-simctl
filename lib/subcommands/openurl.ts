@@ -13,7 +13,7 @@ import type { ExecResult } from 'teen_process';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function openUrl (this: Simctl, url: string): Promise<ExecResult<boolean>> {
+export async function openUrl (this: Simctl, url: string): Promise<ExecResult<false>> {
   return await this.exec('openurl', {
     args: [this.requireUdid('openurl'), url],
   });
