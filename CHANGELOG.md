@@ -1,3 +1,9 @@
+## [8.1.3](https://github.com/appium/node-simctl/compare/v8.1.2...v8.1.3) (2025-12-21)
+
+### Miscellaneous Chores
+
+* bump teen_process ([#285](https://github.com/appium/node-simctl/issues/285)) ([1edc4ff](https://github.com/appium/node-simctl/commit/1edc4ff0bc536de047a55fd8f4814dbf1f1e45a1))
+
 ## [8.1.2](https://github.com/appium/node-simctl/compare/v8.1.1...v8.1.2) (2025-12-18)
 
 ### Miscellaneous Chores
