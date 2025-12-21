@@ -18,4 +18,3 @@ export async function openUrl (this: Simctl, url: string): Promise<TeenProcessEx
     args: [this.requireUdid('openurl'), url],
   });
 }
-
