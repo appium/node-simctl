@@ -1,4 +1,4 @@
-import type { SubProcess, ExecResult as TExecResult } from 'teen_process';
+import type { SubProcess, TeenProcessExecResult } from 'teen_process';
 
 /**
  * XCRun configuration
@@ -141,7 +141,7 @@ export interface SimCreationOpts {
  */
 export type ExecResult<T extends ExecOpts> = T extends AsyncExecOpts
   ? SubProcess
-  : TExecResult<false>;
+  : TeenProcessExecResult<string>;
 
 /**
  * Boot monitor options

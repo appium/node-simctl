@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import type { Simctl } from '../simctl';
-import type { ExecResult, SubProcess } from 'teen_process';
+import type { TeenProcessExecResult, SubProcess } from 'teen_process';
 
 /**
  * Spawn the particular process on Simulator.
@@ -17,7 +17,7 @@ export async function spawnProcess (
   this: Simctl,
   args: string | string[],
   env: Record<string, any> = {}
-): Promise<ExecResult<false>> {
+): Promise<TeenProcessExecResult<string>> {
   if (_.isEmpty(args)) {
     throw new Error('Spawn arguments are required');
   }
