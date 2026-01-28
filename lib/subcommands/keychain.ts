@@ -1,7 +1,7 @@
-import os from 'os';
-import fs from 'fs/promises';
+import os from 'node:os';
+import fs from 'node:fs/promises';
 import { uuidV4 } from '../helpers';
-import path from 'path';
+import path from 'node:path';
 import _ from 'lodash';
 import { rimraf } from 'rimraf';
 import type { Simctl } from '../simctl';
