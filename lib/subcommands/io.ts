@@ -1,9 +1,9 @@
-import { rimraf } from 'rimraf';
+import {rimraf} from 'rimraf';
 import path from 'node:path';
 import os from 'node:os';
 import fs from 'node:fs/promises';
-import { uuidV4 } from '../helpers';
-import type { Simctl } from '../simctl';
+import {uuidV4} from '../helpers';
+import type {Simctl} from '../simctl';
 
 /**
  * Gets base64 screenshot for device
@@ -15,7 +15,7 @@ import type { Simctl } from '../simctl';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function getScreenshot (this: Simctl): Promise<string> {
+export async function getScreenshot(this: Simctl): Promise<string> {
   const udid = this.requireUdid('io screenshot');
   const pathToScreenshotPng = path.resolve(os.tmpdir(), `${await uuidV4()}.png`);
   try {
@@ -27,4 +27,3 @@ export async function getScreenshot (this: Simctl): Promise<string> {
     await rimraf(pathToScreenshotPng);
   }
 }
-

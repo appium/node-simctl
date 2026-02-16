@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import { log, LOG_PREFIX } from '../logger';
-import { retryInterval } from 'asyncbox';
-import { SIM_RUNTIME_NAME, normalizeVersion } from '../helpers';
-import type { Simctl } from '../simctl';
-import type { SimCreationOpts } from '../types';
+import {log, LOG_PREFIX} from '../logger';
+import {retryInterval} from 'asyncbox';
+import {SIM_RUNTIME_NAME, normalizeVersion} from '../helpers';
+import type {Simctl} from '../simctl';
+import type {SimCreationOpts} from '../types';
 
 const SIM_RUNTIME_NAME_SUFFIX_IOS = 'iOS';
 const DEFAULT_CREATE_SIMULATOR_TIMEOUT = 10000;
@@ -20,17 +20,14 @@ const DEFAULT_CREATE_SIMULATOR_TIMEOUT = 10000;
  * @throws {Error} If the corresponding simctl subcommand command
  *                 returns non-zero return code.
  */
-export async function createDevice (
+export async function createDevice(
   this: Simctl,
   name: string,
   deviceTypeId: string,
   platformVersion: string,
-  opts: SimCreationOpts = {}
+  opts: SimCreationOpts = {},
 ): Promise<string> {
-  const {
-    platform = SIM_RUNTIME_NAME_SUFFIX_IOS,
-    timeout = DEFAULT_CREATE_SIMULATOR_TIMEOUT
-  } = opts;
+  const {platform = SIM_RUNTIME_NAME_SUFFIX_IOS, timeout = DEFAULT_CREATE_SIMULATOR_TIMEOUT} = opts;
 
   const runtimeIds: string[] = [];
 
@@ -62,19 +59,23 @@ export async function createDevice (
     // add modified versions, since modern Xcodes use this, then the bare
     // versions, to accomodate older Xcodes
     runtimeIds.push(
-      ...(potentialRuntimeIds.map((id) => `${SIM_RUNTIME_NAME}${platform}-${id.replace(/\./g, '-')}`)),
-      ...potentialRuntimeIds
+      ...potentialRuntimeIds.map(
+        (id) => `${SIM_RUNTIME_NAME}${platform}-${id.replace(/\./g, '-')}`,
+      ),
+      ...potentialRuntimeIds,
     );
   }
 
   // go through the runtime ids and try to create a simulator with each
   let udid: string | undefined;
   for (const runtimeId of runtimeIds) {
-    log.debug(LOG_PREFIX,
-      `Creating simulator with name '${name}', device type id '${deviceTypeId}' and runtime id '${runtimeId}'`);
+    log.debug(
+      LOG_PREFIX,
+      `Creating simulator with name '${name}', device type id '${deviceTypeId}' and runtime id '${runtimeId}'`,
+    );
     try {
       const {stdout} = await this.exec('create', {
-        args: [name, deviceTypeId, runtimeId]
+        args: [name, deviceTypeId, runtimeId],
       });
       udid = stdout.trim();
       break;
@@ -84,9 +85,11 @@ export async function createDevice (
   }
 
   if (!udid) {
-    throw new Error(`Could not create simulator with name '${name}', device ` +
-      `type id '${deviceTypeId}', with runtime ids ` +
-      `${runtimeIds.map((id) => `'${id}'`).join(', ')}`);
+    throw new Error(
+      `Could not create simulator with name '${name}', device ` +
+        `type id '${deviceTypeId}', with runtime ids ` +
+        `${runtimeIds.map((id) => `'${id}'`).join(', ')}`,
+    );
   }
 
   // make sure that it gets out of the "Creating" state
@@ -109,4 +112,3 @@ export async function createDevice (
 
   return udid;
 }
-

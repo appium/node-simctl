@@ -1,4 +1,4 @@
-import type { Simctl } from '../simctl';
+import type {Simctl} from '../simctl';
 
 /**
  * Terminate the given running application on Simulator.
@@ -10,9 +10,8 @@ import type { Simctl } from '../simctl';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function terminateApp (this: Simctl, bundleId: string): Promise<void> {
+export async function terminateApp(this: Simctl, bundleId: string): Promise<void> {
   await this.exec('terminate', {
     args: [this.requireUdid('terminate'), bundleId],
   });
 }
-

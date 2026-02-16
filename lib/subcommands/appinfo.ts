@@ -1,6 +1,6 @@
-import type { Simctl } from '../simctl';
-import type { AppInfo } from '../types';
-import { convertPlistToJson } from '../helpers';
+import type {Simctl} from '../simctl';
+import type {AppInfo} from '../types';
+import {convertPlistToJson} from '../helpers';
 import _ from 'lodash';
 
 /**
@@ -13,7 +13,7 @@ import _ from 'lodash';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function appInfo (this: Simctl, bundleId: string): Promise<AppInfo> {
+export async function appInfo(this: Simctl, bundleId: string): Promise<AppInfo> {
   const {stdout} = await this.exec('appinfo', {
     args: [this.requireUdid('appinfo'), bundleId],
   });
@@ -26,7 +26,7 @@ export async function appInfo (this: Simctl, bundleId: string): Promise<AppInfo>
       result = await convertPlistToJson(stdout);
     } catch (err) {
       throw new Error(
-        `Cannot retrieve app info for ${bundleId}: ${err instanceof Error ? err.message : String(err)}`
+        `Cannot retrieve app info for ${bundleId}: ${err instanceof Error ? err.message : String(err)}`,
       );
     }
   }

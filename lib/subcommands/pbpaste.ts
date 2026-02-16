@@ -1,4 +1,4 @@
-import type { Simctl } from '../simctl';
+import type {Simctl} from '../simctl';
 
 /**
  * Get the content of Simulator pasteboard.
@@ -12,11 +12,13 @@ import type { Simctl } from '../simctl';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function getPasteboard (this: Simctl, encoding: BufferEncoding = 'utf8'): Promise<string> {
+export async function getPasteboard(
+  this: Simctl,
+  encoding: BufferEncoding = 'utf8',
+): Promise<string> {
   const {stdout} = await this.exec('pbpaste', {
     args: [this.requireUdid('pbpaste')],
     encoding,
   });
   return stdout;
 }
-
