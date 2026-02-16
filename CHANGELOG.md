@@ -1,3 +1,9 @@
+## [8.1.6](https://github.com/appium/node-simctl/compare/v8.1.5...v8.1.6) (2026-02-16)
+
+### Bug Fixes
+
+* format ([#290](https://github.com/appium/node-simctl/issues/290)) ([76e0979](https://github.com/appium/node-simctl/commit/76e0979f13fce7ec94f45124dc4a68642efefa09))
+
 ## [8.1.5](https://github.com/appium/node-simctl/compare/v8.1.4...v8.1.5) (2026-01-28)
 
 ### Miscellaneous Chores
