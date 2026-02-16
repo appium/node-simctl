@@ -1,10 +1,8 @@
 import _ from 'lodash';
 import which from 'which';
-import { log, LOG_PREFIX } from './logger';
-import {
-  DEFAULT_EXEC_TIMEOUT, getXcrunBinary,
-} from './helpers';
-import { exec as tpExec, SubProcess } from 'teen_process';
+import {log, LOG_PREFIX} from './logger';
+import {DEFAULT_EXEC_TIMEOUT, getXcrunBinary} from './helpers';
+import {exec as tpExec, SubProcess} from 'teen_process';
 import * as addmediaCommands from './subcommands/addmedia';
 import * as appinfoCommands from './subcommands/appinfo';
 import * as bootCommands from './subcommands/boot';
@@ -30,9 +28,7 @@ import * as terminateCommands from './subcommands/terminate';
 import * as uiCommands from './subcommands/ui';
 import * as uninstallCommands from './subcommands/uninstall';
 import * as locationCommands from './subcommands/location';
-import type {
-  XCRun, ExecOpts, SimctlOpts, ExecResult,
-} from './types';
+import type {XCRun, ExecOpts, SimctlOpts, ExecResult} from './types';
 
 const SIMCTL_ENV_PREFIX = 'SIMCTL_CHILD_';
 
@@ -43,27 +39,27 @@ export class Simctl {
   private _udid: string | null;
   private _devicesSetPath: string | null;
 
-  constructor (opts: SimctlOpts = {}) {
-    this.xcrun = _.cloneDeep(opts.xcrun ?? { path: null });
+  constructor(opts: SimctlOpts = {}) {
+    this.xcrun = _.cloneDeep(opts.xcrun ?? {path: null});
     this.execTimeout = opts.execTimeout ?? DEFAULT_EXEC_TIMEOUT;
     this.logErrors = opts.logErrors ?? true;
     this._udid = opts.udid ?? null;
     this._devicesSetPath = opts.devicesSetPath ?? null;
   }
 
-  set udid (value: string | null) {
+  set udid(value: string | null) {
     this._udid = value;
   }
 
-  get udid (): string | null {
+  get udid(): string | null {
     return this._udid;
   }
 
-  set devicesSetPath (value: string | null) {
+  set devicesSetPath(value: string | null) {
     this._devicesSetPath = value;
   }
 
-  get devicesSetPath (): string | null {
+  get devicesSetPath(): string | null {
     return this._devicesSetPath;
   }
 
@@ -72,10 +68,12 @@ export class Simctl {
    * @returns The UDID string
    * @throws {Error} If UDID is not set
    */
-  requireUdid (commandName: string | null = null): string {
+  requireUdid(commandName: string | null = null): string {
     if (!this.udid) {
-      throw new Error(`udid is required to be set for ` +
-        (commandName ? `the '${commandName}' command` : 'this simctl command'));
+      throw new Error(
+        `udid is required to be set for ` +
+          (commandName ? `the '${commandName}' command` : 'this simctl command'),
+      );
     }
     return this.udid;
   }
@@ -83,15 +81,17 @@ export class Simctl {
   /**
    * @returns Promise resolving to the xcrun binary path
    */
-  async requireXcrun (): Promise<string> {
+  async requireXcrun(): Promise<string> {
     const xcrunBinary = getXcrunBinary();
 
     if (!this.xcrun.path) {
       try {
         this.xcrun.path = await which(xcrunBinary);
       } catch {
-        throw new Error(`${xcrunBinary} tool has not been found in PATH. ` +
-          `Are Xcode developers tools installed?`);
+        throw new Error(
+          `${xcrunBinary} tool has not been found in PATH. ` +
+            `Are Xcode developers tools installed?`,
+        );
       }
     }
     if (!this.xcrun.path) {
@@ -110,10 +110,7 @@ export class Simctl {
    * `SubProcess` instance depending of `opts.asynchronous` value.
    * @throws {Error} If the simctl subcommand command returns non-zero return code.
    */
-  async exec<T extends ExecOpts> (
-    subcommand: string,
-    opts?: T
-  ): Promise<ExecResult<T>> {
+  async exec<T extends ExecOpts>(subcommand: string, opts?: T): Promise<ExecResult<T>> {
     const {
       args: initialArgs = [],
       env: initialEnv = {},
@@ -122,20 +119,21 @@ export class Simctl {
       logErrors = true,
       architectures,
       timeout,
-    } = opts ?? {} as T;
+    } = opts ?? ({} as T);
     // run a particular simctl command
     const args = [
       'simctl',
       ...(this.devicesSetPath ? ['--set', this.devicesSetPath] : []),
       subcommand,
-      ...initialArgs
+      ...initialArgs,
     ];
     // Prefix all passed in environment variables with 'SIMCTL_CHILD_', simctl
     // will then pass these to the child (spawned) process.
     const env = _.defaults(
-      _.mapKeys(initialEnv,
-        (value, key) => _.startsWith(key, SIMCTL_ENV_PREFIX) ? key : `${SIMCTL_ENV_PREFIX}${key}`),
-      process.env
+      _.mapKeys(initialEnv, (value, key) =>
+        _.startsWith(key, SIMCTL_ENV_PREFIX) ? key : `${SIMCTL_ENV_PREFIX}${key}`,
+      ),
+      process.env,
     );
 
     const execOpts: any = {
@@ -150,14 +148,19 @@ export class Simctl {
       let execArgs: [string, string[], any];
       if (architectures?.length) {
         const archArgs = _.flatMap(
-          (_.isArray(architectures) ? architectures : [architectures]).map((arch) => ['-arch', arch])
+          (_.isArray(architectures) ? architectures : [architectures]).map((arch) => [
+            '-arch',
+            arch,
+          ]),
         );
         execArgs = ['arch', [...archArgs, xcrun, ...args], execOpts];
       } else {
         execArgs = [xcrun, args, execOpts];
       }
       // We know what we are doing here - the type system can't handle the dynamic nature
-      return (asynchronous ? new SubProcess(...execArgs) : await tpExec(...execArgs)) as ExecResult<T>;
+      return (
+        asynchronous ? new SubProcess(...execArgs) : await tpExec(...execArgs)
+      ) as ExecResult<T>;
     } catch (e: any) {
       if (!this.logErrors || !logErrors) {
         // if we don't want to see the errors, just throw and allow the calling
@@ -218,4 +221,3 @@ export class Simctl {
 }
 
 export default Simctl;
-

@@ -1,4 +1,4 @@
-import type { Simctl } from '../simctl';
+import type {Simctl} from '../simctl';
 
 /**
  * Remove the particular application package from Simulator.
@@ -11,9 +11,8 @@ import type { Simctl } from '../simctl';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function removeApp (this: Simctl, bundleId: string): Promise<void> {
+export async function removeApp(this: Simctl, bundleId: string): Promise<void> {
   await this.exec('uninstall', {
     args: [this.requireUdid('uninstall'), bundleId],
   });
 }
-

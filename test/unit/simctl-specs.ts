@@ -2,14 +2,15 @@ import sinon from 'sinon';
 import _ from 'lodash';
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect, use } from 'chai';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { Simctl } from '../../lib/simctl';
+import {Simctl} from '../../lib/simctl';
 
 use(chaiAsPromised);
 
 // @ts-ignore - __dirname is available in CommonJS
-const testDir = typeof __dirname !== 'undefined' ? __dirname : path.dirname(require.resolve('./simctl-specs.ts'));
+const testDir =
+  typeof __dirname !== 'undefined' ? __dirname : path.dirname(require.resolve('./simctl-specs.ts'));
 
 const devicePayloads = [
   [
@@ -17,7 +18,10 @@ const devicePayloads = [
       stdout: fs.readFileSync(path.join(testDir, 'fixtures/devices.json'), 'utf-8'),
     },
     {
-      stdout: fs.readFileSync(path.join(__dirname, 'fixtures/devices-with-unavailable.json'), 'utf-8'),
+      stdout: fs.readFileSync(
+        path.join(__dirname, 'fixtures/devices-with-unavailable.json'),
+        'utf-8',
+      ),
     },
   ],
   [
@@ -25,7 +29,10 @@ const devicePayloads = [
       stdout: fs.readFileSync(path.join(__dirname, 'fixtures/devices-simple.json'), 'utf-8'),
     },
     {
-      stdout: fs.readFileSync(path.join(__dirname, 'fixtures/devices-with-unavailable-simple.json'), 'utf-8'),
+      stdout: fs.readFileSync(
+        path.join(__dirname, 'fixtures/devices-with-unavailable-simple.json'),
+        'utf-8',
+      ),
     },
   ],
 ];
@@ -33,18 +40,17 @@ const devicePayloads = [
 describe('simctl', function () {
   let execStub: sinon.SinonStub;
 
-  function stubSimctl (xcrun: { path?: string | null } = {}) {
-    const simctl = new Simctl({ xcrun: { path: xcrun.path ?? null } });
-    execStub = sinon.stub(simctl, 'exec' as any).resolves({ stdout: '', stderr: '' });
+  function stubSimctl(xcrun: {path?: string | null} = {}) {
+    const simctl = new Simctl({xcrun: {path: xcrun.path ?? null}});
+    execStub = sinon.stub(simctl, 'exec' as any).resolves({stdout: '', stderr: ''});
     return simctl;
   }
-
 
   describe('getDevices', function () {
     let simctl: Simctl;
 
     beforeEach(function () {
-      simctl = stubSimctl({ path: 'xcrun' });
+      simctl = stubSimctl({path: 'xcrun'});
     });
     afterEach(function () {
       if (execStub) {
@@ -140,7 +146,7 @@ describe('simctl', function () {
     let simctl: Simctl;
 
     beforeEach(function () {
-      simctl = stubSimctl({ path: 'xcrun' });
+      simctl = stubSimctl({path: 'xcrun'});
     });
     afterEach(function () {
       if (execStub) {
@@ -156,21 +162,25 @@ describe('simctl', function () {
 
     it('should create iOS simulator using xcrun path from env', async function () {
       process.env.XCRUN_BINARY = 'some/path';
-      simctl = stubSimctl({ path: undefined });
-      execStub.onCall(0).returns({stdout: 'not json'})
-              .onCall(1).returns({stdout: '12.1.1', stderr: ''})
-              .onCall(2).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
-              .onCall(3).returns(devicesPayload);
+      simctl = stubSimctl({path: undefined});
+      execStub
+        .onCall(0)
+        .returns({stdout: 'not json'})
+        .onCall(1)
+        .returns({stdout: '12.1.1', stderr: ''})
+        .onCall(2)
+        .returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
+        .onCall(3)
+        .returns(devicesPayload);
 
-      const devices = await simctl.createDevice(
-        'name',
-        'iPhone 6 Plus',
-        '12.1.1',
-        { timeout: 20000 }
-      );
+      const devices = await simctl.createDevice('name', 'iPhone 6 Plus', '12.1.1', {
+        timeout: 20000,
+      });
       expect(execStub.getCall(2).args[0]).to.eql('create');
       expect(execStub.getCall(2).args[1].args).to.eql([
-        'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1'
+        'name',
+        'iPhone 6 Plus',
+        'com.apple.CoreSimulator.SimRuntime.iOS-12-1',
       ]);
       expect(execStub.getCall(0).args[0]).to.eql('list');
       expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
@@ -178,21 +188,25 @@ describe('simctl', function () {
 
     it('should create iOS simulator using xcrun path from passed opts', async function () {
       process.env.XCRUN_BINARY = 'some/path';
-      simctl = stubSimctl({ path: 'other/path' });
-      execStub.onCall(0).returns({stdout: 'not json'})
-              .onCall(1).returns({stdout: '12.1.1', stderr: ''})
-              .onCall(2).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
-              .onCall(3).returns(devicesPayload);
+      simctl = stubSimctl({path: 'other/path'});
+      execStub
+        .onCall(0)
+        .returns({stdout: 'not json'})
+        .onCall(1)
+        .returns({stdout: '12.1.1', stderr: ''})
+        .onCall(2)
+        .returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
+        .onCall(3)
+        .returns(devicesPayload);
 
-      const devices = await simctl.createDevice(
-        'name',
-        'iPhone 6 Plus',
-        '12.1.1',
-        { timeout: 20000 }
-      );
+      const devices = await simctl.createDevice('name', 'iPhone 6 Plus', '12.1.1', {
+        timeout: 20000,
+      });
       expect(execStub.getCall(2).args[0]).to.eql('create');
       expect(execStub.getCall(2).args[1].args).to.eql([
-        'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1'
+        'name',
+        'iPhone 6 Plus',
+        'com.apple.CoreSimulator.SimRuntime.iOS-12-1',
       ]);
       expect(execStub.getCall(0).args[0]).to.eql('list');
       expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
@@ -224,101 +238,111 @@ describe('simctl', function () {
           }
         ]
       }`;
-      execStub.onCall(0).returns({stdout: runtimesJson})
-        .onCall(1).returns({stdout: 'FA628127-1D5C-45C3-9918-A47BF7E2AE14', stderr: ''})
-        .onCall(2).returns(devicesPayload);
+      execStub
+        .onCall(0)
+        .returns({stdout: runtimesJson})
+        .onCall(1)
+        .returns({stdout: 'FA628127-1D5C-45C3-9918-A47BF7E2AE14', stderr: ''})
+        .onCall(2)
+        .returns(devicesPayload);
 
-      const devices = await simctl.createDevice(
-        'name',
-        'iPhone 6 Plus',
-        '12.1.1',
-        { timeout: 20000 }
-      );
+      const devices = await simctl.createDevice('name', 'iPhone 6 Plus', '12.1.1', {
+        timeout: 20000,
+      });
       expect(execStub.getCall(1).args[0]).to.eql('create');
       expect(execStub.getCall(1).args[1].args).to.eql([
-        'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1'
+        'name',
+        'iPhone 6 Plus',
+        'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1',
       ]);
       expect(devices).to.eql('FA628127-1D5C-45C3-9918-A47BF7E2AE14');
     });
 
     it('should create tvOS simulator', async function () {
-      execStub.onCall(0).returns({stdout: 'invalid json'})
-              .onCall(1).returns({stdout: 'com.apple.CoreSimulator.SimRuntime.tvOS-12-1', stderr: ''})
-              .onCall(2).returns({stdout: 'FA628127-1D5C-45C3-9918-A47BF7E2AE14', stderr: ''})
-              .onCall(3).returns(devicesPayload);
+      execStub
+        .onCall(0)
+        .returns({stdout: 'invalid json'})
+        .onCall(1)
+        .returns({stdout: 'com.apple.CoreSimulator.SimRuntime.tvOS-12-1', stderr: ''})
+        .onCall(2)
+        .returns({stdout: 'FA628127-1D5C-45C3-9918-A47BF7E2AE14', stderr: ''})
+        .onCall(3)
+        .returns(devicesPayload);
 
-      const devices = await simctl.createDevice(
-        'name',
-        'Apple TV',
-        '12.1',
-        { timeout: 20000, platform: 'tvOS' }
-      );
+      const devices = await simctl.createDevice('name', 'Apple TV', '12.1', {
+        timeout: 20000,
+        platform: 'tvOS',
+      });
       expect(execStub.getCall(2).args[0]).to.eql('create');
       expect(execStub.getCall(2).args[1].args).to.eql([
-        'name', 'Apple TV', 'com.apple.CoreSimulator.SimRuntime.tvOS-12-1'
+        'name',
+        'Apple TV',
+        'com.apple.CoreSimulator.SimRuntime.tvOS-12-1',
       ]);
       expect(devices).to.eql('FA628127-1D5C-45C3-9918-A47BF7E2AE14');
     });
 
     it('should create iOS simulator with old runtime format', async function () {
-      execStub.onCall(0).returns({stdout: 'invalid json'})
-              .onCall(1).returns({stdout: '12.1', stderr: ''})
-              .onCall(2).throws('Invalid runtime: com.apple.CoreSimulator.SimRuntime.iOS-12-1')
-              .onCall(3).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
-              .onCall(4).returns(devicesPayload);
+      execStub
+        .onCall(0)
+        .returns({stdout: 'invalid json'})
+        .onCall(1)
+        .returns({stdout: '12.1', stderr: ''})
+        .onCall(2)
+        .throws('Invalid runtime: com.apple.CoreSimulator.SimRuntime.iOS-12-1')
+        .onCall(3)
+        .returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
+        .onCall(4)
+        .returns(devicesPayload);
 
-      const devices = await simctl.createDevice(
-        'name',
-        'iPhone 6 Plus',
-        '12.1',
-        { timeout: 20000 }
-      );
+      const devices = await simctl.createDevice('name', 'iPhone 6 Plus', '12.1', {timeout: 20000});
       expect(execStub.getCall(3).args[0]).to.eql('create');
-      expect(execStub.getCall(3).args[1].args).to.eql([
-        'name', 'iPhone 6 Plus', '12.1'
-      ]);
+      expect(execStub.getCall(3).args[1].args).to.eql(['name', 'iPhone 6 Plus', '12.1']);
       expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
     it('should create iOS simulator with old runtime format and three-part platform version', async function () {
-      execStub.onCall(0).returns({stdout: 'invalid json'})
-              .onCall(1).returns({stdout: '12.1.1', stderr: ''})
-              .onCall(2).throws('Invalid runtime: com.apple.CoreSimulator.SimRuntime.iOS-12-1')
-              .onCall(3).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
-              .onCall(4).returns(devicesPayload);
+      execStub
+        .onCall(0)
+        .returns({stdout: 'invalid json'})
+        .onCall(1)
+        .returns({stdout: '12.1.1', stderr: ''})
+        .onCall(2)
+        .throws('Invalid runtime: com.apple.CoreSimulator.SimRuntime.iOS-12-1')
+        .onCall(3)
+        .returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
+        .onCall(4)
+        .returns(devicesPayload);
 
-      const devices = await simctl.createDevice(
-        'name',
-        'iPhone 6 Plus',
-        '12.1',
-        { timeout: 20000 }
-      );
+      const devices = await simctl.createDevice('name', 'iPhone 6 Plus', '12.1', {timeout: 20000});
       expect(execStub.getCall(3).args[0]).to.eql('create');
-      expect(execStub.getCall(3).args[1].args).to.eql([
-        'name', 'iPhone 6 Plus', '12.1'
-      ]);
+      expect(execStub.getCall(3).args[1].args).to.eql(['name', 'iPhone 6 Plus', '12.1']);
       expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
     it('should create iOS simulator with three-part platform version and three-part runtime', async function () {
-      execStub.onCall(0).returns({stdout: 'invalid json'})
-              .onCall(1).returns({stdout: '12.1.1', stderr: ''})
-              .onCall(2).throws('Invalid runtime: com.apple.CoreSimulator.SimRuntime.iOS-12-1')
-              .onCall(3).returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
-              .onCall(4).returns(devicesPayload);
+      execStub
+        .onCall(0)
+        .returns({stdout: 'invalid json'})
+        .onCall(1)
+        .returns({stdout: '12.1.1', stderr: ''})
+        .onCall(2)
+        .throws('Invalid runtime: com.apple.CoreSimulator.SimRuntime.iOS-12-1')
+        .onCall(3)
+        .returns({stdout: 'EE76EA77-E975-4198-9859-69DFF74252D2', stderr: ''})
+        .onCall(4)
+        .returns(devicesPayload);
 
-      const devices = await simctl.createDevice(
-        'name',
-        'iPhone 6 Plus',
-        '12.1.1',
-        { timeout: 20000 }
-      );
+      const devices = await simctl.createDevice('name', 'iPhone 6 Plus', '12.1.1', {
+        timeout: 20000,
+      });
       expect(execStub.getCall(3).args[0]).to.eql('create');
       expect(execStub.getCall(3).args[1].args).to.eql([
-        'name', 'iPhone 6 Plus', 'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1'
+        'name',
+        'iPhone 6 Plus',
+        'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1',
       ]);
       expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
     });
   });
 });
-

@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import { SIM_RUNTIME_NAME, normalizeVersion } from '../helpers';
-import { log, LOG_PREFIX } from '../logger';
-import type { Simctl } from '../simctl';
-import type { DeviceInfo } from '../types';
+import {SIM_RUNTIME_NAME, normalizeVersion} from '../helpers';
+import {log, LOG_PREFIX} from '../logger';
+import type {Simctl} from '../simctl';
+import type {DeviceInfo} from '../types';
 
 /**
  * Parse the list of existing Simulator devices to represent
@@ -15,9 +15,9 @@ import type { DeviceInfo } from '../types';
  * @throws {Error} If the corresponding simctl subcommand command
  *                 returns non-zero return code.
  */
-export async function getDevicesByParsing (
+export async function getDevicesByParsing(
   this: Simctl,
-  platform?: string | null
+  platform?: string | null,
 ): Promise<Record<string, DeviceInfo[]>> {
   const {stdout} = await this.exec('list', {
     args: ['devices'],
@@ -32,9 +32,13 @@ export async function getDevicesByParsing (
   //     ...
   // so, get the `-- iOS X.X --` line to find the sdk (X.X)
   // and the rest of the listing in order to later find the devices
-  const deviceSectionRe = _.isEmpty(platform) || !platform
-    ? new RegExp(`\\-\\-\\s+(\\S+)\\s+(\\S+)\\s+\\-\\-(\\n\\s{4}.+)*`, 'mgi')
-    : new RegExp(`\\-\\-\\s+${_.escapeRegExp(platform)}\\s+(\\S+)\\s+\\-\\-(\\n\\s{4}.+)*`, 'mgi');
+  const deviceSectionRe =
+    _.isEmpty(platform) || !platform
+      ? new RegExp(`\\-\\-\\s+(\\S+)\\s+(\\S+)\\s+\\-\\-(\\n\\s{4}.+)*`, 'mgi')
+      : new RegExp(
+          `\\-\\-\\s+${_.escapeRegExp(platform)}\\s+(\\S+)\\s+\\-\\-(\\n\\s{4}.+)*`,
+          'mgi',
+        );
   const matches: RegExpExecArray[] = [];
   let match: RegExpExecArray | null;
   // make an entry for each sdk version
@@ -95,20 +99,20 @@ export async function getDevicesByParsing (
  *                 returns non-zero return code or if no matching
  *                 platform version is found in the system.
  */
-export async function getDevices (
+export async function getDevices(
   this: Simctl,
   forSdk: string,
-  platform?: string | null
+  platform?: string | null,
 ): Promise<DeviceInfo[]>;
-export async function getDevices (
+export async function getDevices(
   this: Simctl,
   forSdk?: undefined | null,
-  platform?: string | null
+  platform?: string | null,
 ): Promise<Record<string, DeviceInfo[]>>;
-export async function getDevices (
+export async function getDevices(
   this: Simctl,
   forSdk?: string | null,
-  platform?: string | null
+  platform?: string | null,
 ): Promise<Record<string, DeviceInfo[]> | DeviceInfo[]> {
   let devices: Record<string, DeviceInfo[]> = {};
   try {
@@ -131,9 +135,10 @@ export async function getDevices (
      *   }
      * }
      */
-    const versionMatchRe = _.isEmpty(platform) || !platform
-      ? new RegExp(`^([^\\s-]+)[\\s-](\\S+)`, 'i')
-      : new RegExp(`^${_.escapeRegExp(platform)}[\\s-](\\S+)`, 'i');
+    const versionMatchRe =
+      _.isEmpty(platform) || !platform
+        ? new RegExp(`^([^\\s-]+)[\\s-](\\S+)`, 'i')
+        : new RegExp(`^${_.escapeRegExp(platform)}[\\s-](\\S+)`, 'i');
     for (const [sdkNameRaw, entries] of _.toPairs(JSON.parse(stdout).devices)) {
       // there could be a longer name, so remove it
       const sdkName = sdkNameRaw.replace(SIM_RUNTIME_NAME, '');
@@ -145,15 +150,17 @@ export async function getDevices (
       // the sdk can have dashes (`12-2`) or dots (`12.1`)
       const sdk = (platform ? versionMatch[1] : versionMatch[2]).replace('-', '.');
       devices[sdk] = devices[sdk] || [];
-      devices[sdk].push(...(entries as any[]).filter((el) => _.isUndefined(el.isAvailable) || el.isAvailable)
-        .map((el: any) => {
-          delete el.availability;
-          return {
-            sdk,
-            ...el,
-            platform: platform || versionMatch[1],
-          };
-        })
+      devices[sdk].push(
+        ...(entries as any[])
+          .filter((el) => _.isUndefined(el.isAvailable) || el.isAvailable)
+          .map((el: any) => {
+            delete el.availability;
+            return {
+              sdk,
+              ...el,
+              platform: platform || versionMatch[1],
+            };
+          }),
       );
     }
   } catch (err: any) {
@@ -187,17 +194,19 @@ export async function getDevices (
  * @return The corresponding runtime name for the given
  *                  platform version.
  */
-export async function getRuntimeForPlatformVersionViaJson (
+export async function getRuntimeForPlatformVersionViaJson(
   this: Simctl,
   platformVersion: string,
-  platform: string = 'iOS'
+  platform: string = 'iOS',
 ): Promise<string> {
   const {stdout} = await this.exec('list', {
     args: ['runtimes', '--json'],
   });
   for (const {version, identifier, name} of JSON.parse(stdout).runtimes) {
-    if (normalizeVersion(version) === normalizeVersion(platformVersion)
-      && name.toLowerCase().startsWith(platform.toLowerCase())) {
+    if (
+      normalizeVersion(version) === normalizeVersion(platformVersion) &&
+      name.toLowerCase().startsWith(platform.toLowerCase())
+    ) {
       return identifier;
     }
   }
@@ -213,10 +222,10 @@ export async function getRuntimeForPlatformVersionViaJson (
  * @return The corresponding runtime name for the given
  *                  platform version.
  */
-export async function getRuntimeForPlatformVersion (
+export async function getRuntimeForPlatformVersion(
   this: Simctl,
   platformVersion: string,
-  platform: string = 'iOS'
+  platform: string = 'iOS',
 ): Promise<string> {
   // Try with parsing
   try {
@@ -224,8 +233,10 @@ export async function getRuntimeForPlatformVersion (
       args: ['runtimes'],
     });
     // https://regex101.com/r/UykjQZ/1
-    const runtimeRe =
-      new RegExp(`${_.escapeRegExp(platform)}\\s+(\\d+\\.\\d+)\\s+\\((\\d+\\.\\d+\\.*\\d*)`, 'i');
+    const runtimeRe = new RegExp(
+      `${_.escapeRegExp(platform)}\\s+(\\d+\\.\\d+)\\s+\\((\\d+\\.\\d+\\.*\\d*)`,
+      'i',
+    );
     for (const line of stdout.split('\n')) {
       const match = runtimeRe.exec(line);
       if (match && match[1] === platformVersion) {
@@ -244,7 +255,7 @@ export async function getRuntimeForPlatformVersion (
  * @return List of the types of devices available
  * @throws {Error} If the corresponding simctl command fails
  */
-export async function getDeviceTypes (this: Simctl): Promise<string[]> {
+export async function getDeviceTypes(this: Simctl): Promise<string[]> {
   const {stdout} = await this.exec('list', {
     args: ['devicetypes', '-j'],
   });
@@ -301,7 +312,7 @@ export async function getDeviceTypes (this: Simctl): Promise<string[]> {
  *   }
  * @throws {Error} If the corresponding simctl command fails
  */
-export async function list (this: Simctl): Promise<any> {
+export async function list(this: Simctl): Promise<any> {
   const {stdout} = await this.exec('list', {
     args: ['-j'],
   });
@@ -311,4 +322,3 @@ export async function list (this: Simctl): Promise<any> {
     throw new Error(`Unable to parse simctl list: ${e.message}`);
   }
 }
-

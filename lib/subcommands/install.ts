@@ -1,4 +1,4 @@
-import type { Simctl } from '../simctl';
+import type {Simctl} from '../simctl';
 
 /**
  * Install the particular application package on Simulator.
@@ -10,9 +10,8 @@ import type { Simctl } from '../simctl';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function installApp (this: Simctl, appPath: string): Promise<void> {
+export async function installApp(this: Simctl, appPath: string): Promise<void> {
   await this.exec('install', {
     args: [this.requireUdid('install'), appPath],
   });
 }
-

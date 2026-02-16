@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import type { Simctl } from '../simctl';
+import type {Simctl} from '../simctl';
 
 /**
  * Retrieves the current UI appearance value from the given simulator
@@ -10,7 +10,7 @@ import type { Simctl } from '../simctl';
  * or there was an error while getting the value
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function getAppearance (this: Simctl): Promise<string> {
+export async function getAppearance(this: Simctl): Promise<string> {
   const {stdout} = await this.exec('ui', {
     args: [this.requireUdid('ui'), 'appearance'],
   });
@@ -26,7 +26,7 @@ export async function getAppearance (this: Simctl): Promise<string> {
  * or there was an error while getting the value
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function setAppearance (this: Simctl, appearance: string): Promise<void> {
+export async function setAppearance(this: Simctl, appearance: string): Promise<void> {
   await this.exec('ui', {
     args: [this.requireUdid('ui'), 'appearance', appearance],
   });
@@ -48,7 +48,7 @@ export async function setAppearance (this: Simctl, appearance: string): Promise<
  * or there was an error while getting the value.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function getIncreaseContrast (this: Simctl): Promise<string> {
+export async function getIncreaseContrast(this: Simctl): Promise<string> {
   const {stdout} = await this.exec('ui', {
     args: [this.requireUdid('ui'), 'increase_contrast'],
   });
@@ -68,7 +68,7 @@ export async function getIncreaseContrast (this: Simctl): Promise<string> {
  * or the given value was invalid for the command.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function setIncreaseContrast (this: Simctl, increaseContrast: string): Promise<void> {
+export async function setIncreaseContrast(this: Simctl, increaseContrast: string): Promise<void> {
   await this.exec('ui', {
     args: [this.requireUdid('ui'), 'increase_contrast', increaseContrast],
   });
@@ -95,7 +95,7 @@ export async function setIncreaseContrast (this: Simctl, increaseContrast: strin
  * or there was an error while getting the value.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function getContentSize (this: Simctl): Promise<string> {
+export async function getContentSize(this: Simctl): Promise<string> {
   const {stdout} = await this.exec('ui', {
     args: [this.requireUdid('ui'), 'content_size'],
   });
@@ -124,9 +124,8 @@ export async function getContentSize (this: Simctl): Promise<string> {
  * or the given value was invalid for the command.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function setContentSize (this: Simctl, contentSizeAction: string): Promise<void> {
+export async function setContentSize(this: Simctl, contentSizeAction: string): Promise<void> {
   await this.exec('ui', {
     args: [this.requireUdid('ui'), 'content_size', contentSizeAction],
   });
 }
-

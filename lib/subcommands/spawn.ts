@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import type { Simctl } from '../simctl';
-import type { TeenProcessExecResult, SubProcess } from 'teen_process';
+import type {Simctl} from '../simctl';
+import type {TeenProcessExecResult, SubProcess} from 'teen_process';
 
 /**
  * Spawn the particular process on Simulator.
@@ -13,10 +13,10 @@ import type { TeenProcessExecResult, SubProcess } from 'teen_process';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function spawnProcess (
+export async function spawnProcess(
   this: Simctl,
   args: string | string[],
-  env: Record<string, any> = {}
+  env: Record<string, any> = {},
 ): Promise<TeenProcessExecResult<string>> {
   if (_.isEmpty(args)) {
     throw new Error('Spawn arguments are required');
@@ -37,19 +37,18 @@ export async function spawnProcess (
  * @return The instance of the process to be spawned.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function spawnSubProcess (
+export async function spawnSubProcess(
   this: Simctl,
   args: string | string[],
-  env: Record<string, any> = {}
+  env: Record<string, any> = {},
 ): Promise<SubProcess> {
   if (_.isEmpty(args)) {
     throw new Error('Spawn arguments are required');
   }
 
-  return await this.exec('spawn', {
+  return (await this.exec('spawn', {
     args: [this.requireUdid('spawn'), ...(_.isArray(args) ? args : [args])],
     env,
     asynchronous: true,
-  }) as SubProcess;
+  })) as SubProcess;
 }
-

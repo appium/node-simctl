@@ -1,5 +1,5 @@
-import type { Simctl } from '../simctl';
-import type { TeenProcessExecResult } from 'teen_process';
+import type {Simctl} from '../simctl';
+import type {TeenProcessExecResult} from 'teen_process';
 
 /**
  * Open URL scheme on Simulator. iOS will automatically try
@@ -13,7 +13,7 @@ import type { TeenProcessExecResult } from 'teen_process';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function openUrl (this: Simctl, url: string): Promise<TeenProcessExecResult<string>> {
+export async function openUrl(this: Simctl, url: string): Promise<TeenProcessExecResult<string>> {
   return await this.exec('openurl', {
     args: [this.requireUdid('openurl'), url],
   });

@@ -1,9 +1,9 @@
-import { rimraf } from 'rimraf';
-import { uuidV4 } from '../helpers';
+import {rimraf} from 'rimraf';
+import {uuidV4} from '../helpers';
 import path from 'node:path';
 import os from 'node:os';
 import fs from 'node:fs/promises';
-import type { Simctl } from '../simctl';
+import type {Simctl} from '../simctl';
 
 /**
  * Send a simulated push notification
@@ -25,7 +25,7 @@ import type { Simctl } from '../simctl';
  * or there was an error while pushing the notification
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function pushNotification (this: Simctl, payload: Record<string, any>): Promise<void> {
+export async function pushNotification(this: Simctl, payload: Record<string, any>): Promise<void> {
   const dstPath = path.resolve(os.tmpdir(), `${await uuidV4()}.json`);
   try {
     await fs.writeFile(dstPath, JSON.stringify(payload), 'utf8');
@@ -36,4 +36,3 @@ export async function pushNotification (this: Simctl, payload: Record<string, an
     await rimraf(dstPath);
   }
 }
-

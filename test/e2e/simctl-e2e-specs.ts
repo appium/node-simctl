@@ -1,13 +1,13 @@
 import _ from 'lodash';
-import { Simctl } from '../../lib/simctl';
+import {Simctl} from '../../lib/simctl';
 import xcode from 'appium-xcode';
-import { retryInterval } from 'asyncbox';
-import { rimraf } from 'rimraf';
-import { uuidV4 } from '../../lib/helpers';
+import {retryInterval} from 'asyncbox';
+import {rimraf} from 'rimraf';
+import {uuidV4} from '../../lib/helpers';
 import path from 'node:path';
 import os from 'node:os';
 import fs from 'node:fs/promises';
-import { expect, use } from 'chai';
+import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
 use(chaiAsPromised);
@@ -23,7 +23,6 @@ describe('simctl', function () {
   let simctl: Simctl;
 
   before(async function () {
-
     simctl = new Simctl();
     const devices = await simctl.getDevices();
     console.log(`Found devices: ${JSON.stringify(devices, null, 2)}`); // eslint-disable-line no-console
@@ -214,14 +213,19 @@ describe('simctl', function () {
     });
 
     describe('add media', function () {
-      const BASE64_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+      const BASE64_PNG =
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
       let picturePath: string | undefined;
       before(async function () {
         if (major < 8 || (major === 8 && minor < 1)) {
           return this.skip();
         }
         picturePath = path.join(os.tmpdir(), `${await uuidV4()}.png`);
-        await fs.writeFile(picturePath, Buffer.from(BASE64_PNG, 'base64').toString('binary'), 'binary');
+        await fs.writeFile(
+          picturePath,
+          Buffer.from(BASE64_PNG, 'base64').toString('binary'),
+          'binary',
+        );
       });
       after(async function () {
         if (picturePath) {
@@ -273,13 +277,17 @@ describe('simctl', function () {
         expect(fullList).to.have.property('pairs');
         expect(fullList.devicetypes.length).to.be.above(1);
         // at least one type, no matter the version of Xcode, should be an iPhone
-        expect(fullList.devicetypes.filter((el) => el.identifier.includes('iPhone')).length).to.be.above(0);
+        expect(
+          fullList.devicetypes.filter((el) => el.identifier.includes('iPhone')).length,
+        ).to.be.above(0);
         // at least one runtime should be iOS
-        expect(fullList.runtimes.filter((el) => el.identifier.includes('iOS')).length).to.be.above(0);
+        expect(fullList.runtimes.filter((el) => el.identifier.includes('iOS')).length).to.be.above(
+          0,
+        );
       });
     });
 
-    describe('getScreenshot', function() {
+    describe('getScreenshot', function () {
       it('should get a base64 string', async function () {
         const image = await simctl.getScreenshot();
 
@@ -287,7 +295,7 @@ describe('simctl', function () {
       });
     });
 
-    describe('pushNotification', function() {
+    describe('pushNotification', function () {
       it('should not throw an error when sending a push notification', async function () {
         if (process.env.CI) {
           // This test is unstable in CI env
@@ -296,11 +304,11 @@ describe('simctl', function () {
 
         const payload = {
           'Simulator Target Bundle': 'com.apple.Preferences',
-          'aps': {
-            'alert': 'This is a simulated notification!',
-            'badge': 3,
-            'sound': 'default'
-          }
+          aps: {
+            alert: 'This is a simulated notification!',
+            badge: 3,
+            sound: 'default',
+          },
         };
 
         await expect(simctl.pushNotification(payload)).to.be.fulfilled;
@@ -308,4 +316,3 @@ describe('simctl', function () {
     });
   });
 });
-

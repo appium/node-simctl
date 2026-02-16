@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { retryInterval } from 'asyncbox';
-import type { Simctl } from '../simctl';
+import {retryInterval} from 'asyncbox';
+import type {Simctl} from '../simctl';
 
 /**
  * Execute the particular application package on Simulator.
@@ -16,7 +16,11 @@ import type { Simctl } from '../simctl';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function launchApp (this: Simctl, bundleId: string, tries: number = 5): Promise<string> {
+export async function launchApp(
+  this: Simctl,
+  bundleId: string,
+  tries: number = 5,
+): Promise<string> {
   const result = await retryInterval(tries, 1000, async () => {
     const {stdout} = await this.exec('launch', {
       args: [this.requireUdid('launch'), bundleId],
@@ -25,4 +29,3 @@ export async function launchApp (this: Simctl, bundleId: string, tries: number =
   });
   return result || '';
 }
-

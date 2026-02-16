@@ -1,4 +1,4 @@
-import type { SubProcess, TeenProcessExecResult } from 'teen_process';
+import type {SubProcess, TeenProcessExecResult} from 'teen_process';
 
 /**
  * XCRun configuration
@@ -240,4 +240,3 @@ export interface AppInfo {
    */
   SBAppTags?: string[];
 }
-

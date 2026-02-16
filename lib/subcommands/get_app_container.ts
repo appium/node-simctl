@@ -1,4 +1,4 @@
-import type { Simctl } from '../simctl';
+import type {Simctl} from '../simctl';
 
 /**
  * Get the full path to the particular application container
@@ -17,10 +17,10 @@ import type { Simctl } from '../simctl';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function getAppContainer (
+export async function getAppContainer(
   this: Simctl,
   bundleId: string,
-  containerType: string | null = null
+  containerType: string | null = null,
 ): Promise<string> {
   const args = [this.requireUdid('get_app_container'), bundleId];
   if (containerType) {
@@ -29,4 +29,3 @@ export async function getAppContainer (
   const {stdout} = await this.exec('get_app_container', {args});
   return (stdout || '').trim();
 }
-
