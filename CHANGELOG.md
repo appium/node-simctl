@@ -1,3 +1,9 @@
+## [8.1.7](https://github.com/appium/node-simctl/compare/v8.1.6...v8.1.7) (2026-04-10)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump typescript from 5.9.3 to 6.0.2 ([#291](https://github.com/appium/node-simctl/issues/291)) ([2032f35](https://github.com/appium/node-simctl/commit/2032f3517fe91898b815be64f1ac00eaf7112962))
+
 ## [8.1.6](https://github.com/appium/node-simctl/compare/v8.1.5...v8.1.6) (2026-02-16)
 
 ### Bug Fixes
