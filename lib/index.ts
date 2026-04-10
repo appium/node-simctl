@@ -1,4 +1,4 @@
-import { Simctl } from './simctl';
+import {Simctl} from './simctl';
 export type {
   SimctlOpts,
   DeviceInfo,
@@ -9,5 +9,5 @@ export type {
   AppInfo,
 } from './types';
 
-export { Simctl };
+export {Simctl};
 export default Simctl;
