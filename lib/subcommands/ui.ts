@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import type {Simctl} from '../simctl';
 
 /**
@@ -14,7 +13,7 @@ export async function getAppearance(this: Simctl): Promise<string> {
   const {stdout} = await this.exec('ui', {
     args: [this.requireUdid('ui'), 'appearance'],
   });
-  return _.trim(stdout);
+  return stdout.trim();
 }
 
 /**
@@ -52,7 +51,7 @@ export async function getIncreaseContrast(this: Simctl): Promise<string> {
   const {stdout} = await this.exec('ui', {
     args: [this.requireUdid('ui'), 'increase_contrast'],
   });
-  return _.trim(stdout);
+  return stdout.trim();
 }
 
 /**
@@ -99,7 +98,7 @@ export async function getContentSize(this: Simctl): Promise<string> {
   const {stdout} = await this.exec('ui', {
     args: [this.requireUdid('ui'), 'content_size'],
   });
-  return _.trim(stdout);
+  return stdout.trim();
 }
 
 /**

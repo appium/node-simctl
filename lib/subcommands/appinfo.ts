@@ -1,7 +1,6 @@
 import type {Simctl} from '../simctl';
 import type {AppInfo} from '../types';
 import {convertPlistToJson} from '../helpers';
-import _ from 'lodash';
 
 /**
  * Get information about an app installed on the simulator
@@ -31,7 +30,7 @@ export async function appInfo(this: Simctl, bundleId: string): Promise<AppInfo> 
     }
   }
 
-  if (!_.isPlainObject(result) || !('ApplicationType' in result)) {
+  if (!result || typeof result !== 'object' || Array.isArray(result) || !('ApplicationType' in result)) {
     throw new Error(`App with bundle identifier "${bundleId}" not found. Is it installed?`);
   }
 

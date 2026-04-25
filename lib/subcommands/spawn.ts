@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import type {Simctl} from '../simctl';
 import type {TeenProcessExecResult, SubProcess} from 'teen_process';
 
@@ -18,12 +17,12 @@ export async function spawnProcess(
   args: string | string[],
   env: Record<string, any> = {},
 ): Promise<TeenProcessExecResult<string>> {
-  if (_.isEmpty(args)) {
+  if ((Array.isArray(args) && args.length === 0) || args === '') {
     throw new Error('Spawn arguments are required');
   }
 
   return await this.exec('spawn', {
-    args: [this.requireUdid('spawn'), ...(_.isArray(args) ? args : [args])],
+    args: [this.requireUdid('spawn'), ...(Array.isArray(args) ? args : [args])],
     env,
   });
 }
@@ -42,12 +41,12 @@ export async function spawnSubProcess(
   args: string | string[],
   env: Record<string, any> = {},
 ): Promise<SubProcess> {
-  if (_.isEmpty(args)) {
+  if ((Array.isArray(args) && args.length === 0) || args === '') {
     throw new Error('Spawn arguments are required');
   }
 
   return (await this.exec('spawn', {
-    args: [this.requireUdid('spawn'), ...(_.isArray(args) ? args : [args])],
+    args: [this.requireUdid('spawn'), ...(Array.isArray(args) ? args : [args])],
     env,
     asynchronous: true,
   })) as SubProcess;
