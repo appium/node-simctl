@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {Simctl} from '../../lib/simctl';
 import xcode from 'appium-xcode';
 import {retryInterval} from 'asyncbox';
@@ -26,14 +25,14 @@ describe('simctl', function () {
     simctl = new Simctl();
     const devices = await simctl.getDevices();
     console.log(`Found devices: ${JSON.stringify(devices, null, 2)}`); // eslint-disable-line no-console
-    validSdks = _.keys(devices)
-      .filter((key) => !_.isEmpty(devices[key]))
+    validSdks = Object.keys(devices)
+      .filter((key) => devices[key].length > 0)
       .sort((a, b) => a.localeCompare(b));
     if (!validSdks.length) {
       throw new Error('No valid SDKs');
     }
     console.log(`Found valid SDKs: ${validSdks.join(', ')}`); // eslint-disable-line no-console
-    sdk = `${process.env.IOS_SDK || _.last(validSdks)}`;
+    sdk = `${process.env.IOS_SDK || validSdks.at(-1)}`;
 
     // need to find a random name that does not already exist
     // give it 5 tries
@@ -42,8 +41,8 @@ describe('simctl', function () {
       randName = `device${randNum}`;
 
       let nameFound = false;
-      for (const list of _.values(devices)) {
-        if (_.includes(_.map(list, 'name'), randName)) {
+      for (const list of Object.values(devices)) {
+        if (list.map((item) => item.name).includes(randName)) {
           // need to find another random name
           nameFound = true;
           break;
@@ -100,7 +99,7 @@ describe('simctl', function () {
     });
     it('should get devices', async function () {
       const sdkDevices = await simctl.getDevices(sdk);
-      expect(_.map(sdkDevices, 'name')).to.include(name);
+      expect(sdkDevices.map((item) => item.name)).to.include(name);
     });
 
     it('should erase devices', async function () {
@@ -110,7 +109,7 @@ describe('simctl', function () {
     it('should delete devices', async function () {
       await simctl.deleteDevice();
       const sdkDevices = await simctl.getDevices(sdk);
-      expect(_.map(sdkDevices, 'name')).to.not.include(simctl.udid);
+      expect(sdkDevices.map((item) => item.name)).to.not.include(simctl.udid);
 
       // so we do not delete again
       simctl.udid = null;
@@ -149,7 +148,7 @@ describe('simctl', function () {
         return this.skip();
       }
 
-      const sdk = process.env.IOS_SDK || _.last(validSdks);
+      const sdk = process.env.IOS_SDK || validSdks.at(-1);
       simctl.udid = await simctl.createDevice('runningSimTest', DEVICE_NAME, sdk!);
 
       await simctl.bootDevice();
@@ -254,7 +253,7 @@ describe('simctl', function () {
       });
       it('should return null if no var is found', async function () {
         const udid = await simctl.getEnv('SIMULATOR_UDD');
-        expect(_.isNull(udid)).to.be.true;
+        expect(udid).to.be.null;
       });
     });
 

@@ -1,5 +1,4 @@
 import sinon from 'sinon';
-import _ from 'lodash';
 import fs from 'node:fs';
 import path from 'node:path';
 import {expect, use} from 'chai';
@@ -70,7 +69,7 @@ describe('simctl', function () {
             execStub.returns(devicesPayload);
 
             const devices = await simctl.getDevices();
-            expect(_.keys(devices).length).to.eql(2);
+            expect(Object.keys(devices).length).to.eql(2);
 
             expect(devices['12.1'].length).to.eql(10);
             expect(devices['5.1'].length).to.eql(6);
@@ -79,7 +78,7 @@ describe('simctl', function () {
             execStub.returns(devicesWithUnavailablePayload);
 
             const devices = await simctl.getDevices();
-            expect(_.keys(devices).length).to.eql(4);
+            expect(Object.keys(devices).length).to.eql(4);
 
             expect(devices['12.1'].length).to.eql(10);
             expect(devices['5.1'].length).to.eql(6);
@@ -92,7 +91,7 @@ describe('simctl', function () {
             execStub.returns(devicesPayload);
 
             const devices = await simctl.getDevices(null, 'tvOS');
-            expect(_.keys(devices).length).to.eql(1);
+            expect(Object.keys(devices).length).to.eql(1);
 
             expect(devices['12.1'].length).to.eql(3);
           });
@@ -100,7 +99,7 @@ describe('simctl', function () {
             execStub.returns(devicesWithUnavailablePayload);
 
             const devices = await simctl.getDevices(null, 'tvOS');
-            expect(_.keys(devices).length).to.eql(2);
+            expect(Object.keys(devices).length).to.eql(2);
 
             expect(devices['12.1'].length).to.eql(3);
             expect(devices['12.2'].length).to.eql(0);
@@ -114,13 +113,13 @@ describe('simctl', function () {
             execStub.returns(devicesPayload);
 
             const devices = await simctl.getDevices('12.1');
-            expect(_.keys(devices).length).to.eql(10);
+            expect(Object.keys(devices).length).to.eql(10);
           });
           it('should ignore unavailable devices', async function () {
             execStub.returns(devicesWithUnavailablePayload);
 
             const devices = await simctl.getDevices('12.1');
-            expect(_.keys(devices).length).to.eql(10);
+            expect(Object.keys(devices).length).to.eql(10);
           });
         });
         describe('platform defined', function () {
@@ -128,13 +127,13 @@ describe('simctl', function () {
             execStub.returns(devicesPayload);
 
             const devices = await simctl.getDevices('5.1', 'watchOS');
-            expect(_.keys(devices).length).to.eql(6);
+            expect(Object.keys(devices).length).to.eql(6);
           });
           it('should ignore unavailable devices', async function () {
             execStub.returns(devicesWithUnavailablePayload);
 
             const devices = await simctl.getDevices('5.1', 'watchOS');
-            expect(_.keys(devices).length).to.eql(6);
+            expect(Object.keys(devices).length).to.eql(6);
           });
         });
       });

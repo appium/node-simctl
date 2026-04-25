@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {log, LOG_PREFIX} from '../logger';
 import {retryInterval} from 'asyncbox';
 import {SIM_RUNTIME_NAME, normalizeVersion} from '../helpers';
@@ -36,7 +35,7 @@ export async function createDevice(
     runtimeIds.push(await this.getRuntimeForPlatformVersionViaJson(platformVersion, platform));
   } catch {}
 
-  if (_.isEmpty(runtimeIds)) {
+  if (runtimeIds.length === 0) {
     // at first make sure that the runtime id is the right one
     // in some versions of Xcode it will be a patch version
     let runtimeId: string;
@@ -95,7 +94,7 @@ export async function createDevice(
   // make sure that it gets out of the "Creating" state
   const retries = parseInt(`${timeout / 1000}`, 10);
   await retryInterval(retries, 1000, async () => {
-    const devices = _.flatMap(_.values(await this.getDevices()));
+    const devices = Object.values(await this.getDevices()).flatMap((entries) => entries);
     for (const device of devices) {
       if (device.udid === udid) {
         if (device.state === 'Creating') {

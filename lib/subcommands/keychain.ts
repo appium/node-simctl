@@ -1,32 +1,10 @@
 import os from 'node:os';
 import fs from 'node:fs/promises';
-import {uuidV4} from '../helpers';
+import {randomUUID} from 'node:crypto';
 import path from 'node:path';
-import _ from 'lodash';
 import {rimraf} from 'rimraf';
 import type {Simctl} from '../simctl';
 import type {CertOptions} from '../types';
-
-/**
- * @param payload - Certificate payload (string or Buffer)
- * @param onPayloadStored - Callback function to execute with the file path
- */
-async function handleRawPayload(
-  payload: string | Buffer,
-  onPayloadStored: (filePath: string) => Promise<any>,
-): Promise<void> {
-  const filePath = path.resolve(os.tmpdir(), `${await uuidV4()}.pem`);
-  try {
-    if (_.isBuffer(payload)) {
-      await fs.writeFile(filePath, payload);
-    } else {
-      await fs.writeFile(filePath, payload, 'utf8');
-    }
-    await onPayloadStored(filePath);
-  } finally {
-    await rimraf(filePath);
-  }
-}
 
 /**
  * Adds the given certificate to the Trusted Root Store on the simulator
@@ -98,4 +76,25 @@ export async function resetKeychain(this: Simctl): Promise<void> {
   await this.exec('keychain', {
     args: [this.requireUdid('keychain reset'), 'reset'],
   });
+}
+
+/**
+ * @param payload - Certificate payload (string or Buffer)
+ * @param onPayloadStored - Callback function to execute with the file path
+ */
+async function handleRawPayload(
+  payload: string | Buffer,
+  onPayloadStored: (filePath: string) => Promise<any>,
+): Promise<void> {
+  const filePath = path.resolve(os.tmpdir(), `${randomUUID()}.pem`);
+  try {
+    if (Buffer.isBuffer(payload)) {
+      await fs.writeFile(filePath, payload);
+    } else {
+      await fs.writeFile(filePath, payload, 'utf8');
+    }
+    await onPayloadStored(filePath);
+  } finally {
+    await rimraf(filePath);
+  }
 }

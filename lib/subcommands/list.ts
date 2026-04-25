@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {SIM_RUNTIME_NAME, normalizeVersion} from '../helpers';
 import {log, LOG_PREFIX} from '../logger';
 import type {Simctl} from '../simctl';
@@ -32,20 +31,16 @@ export async function getDevicesByParsing(
   //     ...
   // so, get the `-- iOS X.X --` line to find the sdk (X.X)
   // and the rest of the listing in order to later find the devices
-  const deviceSectionRe =
-    _.isEmpty(platform) || !platform
-      ? new RegExp(`\\-\\-\\s+(\\S+)\\s+(\\S+)\\s+\\-\\-(\\n\\s{4}.+)*`, 'mgi')
-      : new RegExp(
-          `\\-\\-\\s+${_.escapeRegExp(platform)}\\s+(\\S+)\\s+\\-\\-(\\n\\s{4}.+)*`,
-          'mgi',
-        );
+  const deviceSectionRe = !platform
+    ? new RegExp(`\\-\\-\\s+(\\S+)\\s+(\\S+)\\s+\\-\\-(\\n\\s{4}.+)*`, 'mgi')
+    : new RegExp(`\\-\\-\\s+${escapeRegExp(platform)}\\s+(\\S+)\\s+\\-\\-(\\n\\s{4}.+)*`, 'mgi');
   const matches: RegExpExecArray[] = [];
   let match: RegExpExecArray | null;
   // make an entry for each sdk version
   while ((match = deviceSectionRe.exec(stdout))) {
     matches.push(match);
   }
-  if (_.isEmpty(matches)) {
+  if (matches.length === 0) {
     throw new Error('Could not find device section');
   }
 
@@ -135,11 +130,10 @@ export async function getDevices(
      *   }
      * }
      */
-    const versionMatchRe =
-      _.isEmpty(platform) || !platform
-        ? new RegExp(`^([^\\s-]+)[\\s-](\\S+)`, 'i')
-        : new RegExp(`^${_.escapeRegExp(platform)}[\\s-](\\S+)`, 'i');
-    for (const [sdkNameRaw, entries] of _.toPairs(JSON.parse(stdout).devices)) {
+    const versionMatchRe = !platform
+      ? new RegExp(`^([^\\s-]+)[\\s-](\\S+)`, 'i')
+      : new RegExp(`^${escapeRegExp(platform)}[\\s-](\\S+)`, 'i');
+    for (const [sdkNameRaw, entries] of Object.entries(JSON.parse(stdout).devices)) {
       // there could be a longer name, so remove it
       const sdkName = sdkNameRaw.replace(SIM_RUNTIME_NAME, '');
       const versionMatch = versionMatchRe.exec(sdkName);
@@ -152,7 +146,7 @@ export async function getDevices(
       devices[sdk] = devices[sdk] || [];
       devices[sdk].push(
         ...(entries as any[])
-          .filter((el) => _.isUndefined(el.isAvailable) || el.isAvailable)
+          .filter((el) => el.isAvailable === undefined || el.isAvailable)
           .map((el: any) => {
             delete el.availability;
             return {
@@ -178,7 +172,7 @@ export async function getDevices(
   }
 
   let errMsg = `'${forSdk}' does not exist in the list of simctl SDKs.`;
-  const availableSDKs = _.keys(devices);
+  const availableSDKs = Object.keys(devices);
   errMsg += availableSDKs.length
     ? ` Only the following Simulator SDK versions are available on your system: ${availableSDKs.join(', ')}`
     : ` No Simulator SDK versions are available on your system. Please install some via Xcode preferences.`;
@@ -234,7 +228,7 @@ export async function getRuntimeForPlatformVersion(
     });
     // https://regex101.com/r/UykjQZ/1
     const runtimeRe = new RegExp(
-      `${_.escapeRegExp(platform)}\\s+(\\d+\\.\\d+)\\s+\\((\\d+\\.\\d+\\.*\\d*)`,
+      `${escapeRegExp(platform)}\\s+(\\d+\\.\\d+)\\s+\\((\\d+\\.\\d+\\.*\\d*)`,
       'i',
     );
     for (const line of stdout.split('\n')) {
@@ -321,4 +315,8 @@ export async function list(this: Simctl): Promise<any> {
   } catch (e: any) {
     throw new Error(`Unable to parse simctl list: ${e.message}`);
   }
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

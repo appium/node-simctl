@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {retryInterval} from 'asyncbox';
 import type {Simctl} from '../simctl';
 
@@ -25,7 +24,7 @@ export async function launchApp(
     const {stdout} = await this.exec('launch', {
       args: [this.requireUdid('launch'), bundleId],
     });
-    return _.trim(stdout) || '';
+    return stdout.trim() || '';
   });
   return result || '';
 }

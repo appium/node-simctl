@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import which from 'which';
 import {log, LOG_PREFIX} from './logger';
 import {DEFAULT_EXEC_TIMEOUT, getXcrunBinary} from './helpers';
@@ -33,6 +32,49 @@ import type {XCRun, ExecOpts, SimctlOpts, ExecResult} from './types';
 const SIMCTL_ENV_PREFIX = 'SIMCTL_CHILD_';
 
 export class Simctl {
+  // Extension methods
+  addMedia = addmediaCommands.addMedia;
+  appInfo = appinfoCommands.appInfo;
+  bootDevice = bootCommands.bootDevice;
+  startBootMonitor = bootstatusCommands.startBootMonitor;
+  createDevice = createCommands.createDevice;
+  deleteDevice = deleteCommands.deleteDevice;
+  eraseDevice = eraseCommands.eraseDevice;
+  getAppContainer = getappcontainerCommands.getAppContainer;
+  getEnv = envCommands.getEnv;
+  installApp = installCommands.installApp;
+  getScreenshot = ioCommands.getScreenshot;
+  addRootCertificate = keychainCommands.addRootCertificate;
+  addCertificate = keychainCommands.addCertificate;
+  resetKeychain = keychainCommands.resetKeychain;
+  launchApp = launchCommands.launchApp;
+  getDevicesByParsing = listCommands.getDevicesByParsing;
+  getDevices = listCommands.getDevices;
+  getRuntimeForPlatformVersionViaJson = listCommands.getRuntimeForPlatformVersionViaJson;
+  getRuntimeForPlatformVersion = listCommands.getRuntimeForPlatformVersion;
+  getDeviceTypes = listCommands.getDeviceTypes;
+  list = listCommands.list;
+  setLocation = locationCommands.setLocation;
+  clearLocation = locationCommands.clearLocation;
+  openUrl = openurlCommands.openUrl;
+  setPasteboard = pbcopyCommands.setPasteboard;
+  getPasteboard = pbpasteCommands.getPasteboard;
+  grantPermission = privacyCommands.grantPermission;
+  revokePermission = privacyCommands.revokePermission;
+  resetPermission = privacyCommands.resetPermission;
+  pushNotification = pushCommands.pushNotification;
+  shutdownDevice = shutdownCommands.shutdownDevice;
+  spawnProcess = spawnCommands.spawnProcess;
+  spawnSubProcess = spawnCommands.spawnSubProcess;
+  terminateApp = terminateCommands.terminateApp;
+  getAppearance = uiCommands.getAppearance;
+  setAppearance = uiCommands.setAppearance;
+  getIncreaseContrast = uiCommands.getIncreaseContrast;
+  setIncreaseContrast = uiCommands.setIncreaseContrast;
+  getContentSize = uiCommands.getContentSize;
+  setContentSize = uiCommands.setContentSize;
+  removeApp = uninstallCommands.removeApp;
+
   private xcrun: XCRun;
   private execTimeout: number;
   private logErrors: boolean;
@@ -40,27 +82,27 @@ export class Simctl {
   private _devicesSetPath: string | null;
 
   constructor(opts: SimctlOpts = {}) {
-    this.xcrun = _.cloneDeep(opts.xcrun ?? {path: null});
+    this.xcrun = {...(opts.xcrun ?? {path: null})};
     this.execTimeout = opts.execTimeout ?? DEFAULT_EXEC_TIMEOUT;
     this.logErrors = opts.logErrors ?? true;
     this._udid = opts.udid ?? null;
     this._devicesSetPath = opts.devicesSetPath ?? null;
   }
 
-  set udid(value: string | null) {
-    this._udid = value;
-  }
-
   get udid(): string | null {
     return this._udid;
   }
 
-  set devicesSetPath(value: string | null) {
-    this._devicesSetPath = value;
-  }
-
   get devicesSetPath(): string | null {
     return this._devicesSetPath;
+  }
+
+  set udid(value: string | null) {
+    this._udid = value;
+  }
+
+  set devicesSetPath(value: string | null) {
+    this._devicesSetPath = value;
   }
 
   /**
@@ -129,12 +171,13 @@ export class Simctl {
     ];
     // Prefix all passed in environment variables with 'SIMCTL_CHILD_', simctl
     // will then pass these to the child (spawned) process.
-    const env = _.defaults(
-      _.mapKeys(initialEnv, (value, key) =>
-        _.startsWith(key, SIMCTL_ENV_PREFIX) ? key : `${SIMCTL_ENV_PREFIX}${key}`,
-      ),
-      process.env,
+    const envWithPrefixedKeys = Object.fromEntries(
+      Object.entries(initialEnv).map(([key, value]) => [
+        key.startsWith(SIMCTL_ENV_PREFIX) ? key : `${SIMCTL_ENV_PREFIX}${key}`,
+        value,
+      ]),
     );
+    const env = {...process.env, ...envWithPrefixedKeys};
 
     const execOpts: any = {
       env,
@@ -147,11 +190,8 @@ export class Simctl {
     try {
       let execArgs: [string, string[], any];
       if (architectures?.length) {
-        const archArgs = _.flatMap(
-          (_.isArray(architectures) ? architectures : [architectures]).map((arch) => [
-            '-arch',
-            arch,
-          ]),
+        const archArgs = (Array.isArray(architectures) ? architectures : [architectures]).flatMap(
+          (arch) => ['-arch', arch],
         );
         execArgs = ['arch', [...archArgs, xcrun, ...args], execOpts];
       } else {
@@ -175,49 +215,6 @@ export class Simctl {
       throw e;
     }
   }
-
-  // Extension methods
-  addMedia = addmediaCommands.addMedia;
-  appInfo = appinfoCommands.appInfo;
-  bootDevice = bootCommands.bootDevice;
-  startBootMonitor = bootstatusCommands.startBootMonitor;
-  createDevice = createCommands.createDevice;
-  deleteDevice = deleteCommands.deleteDevice;
-  eraseDevice = eraseCommands.eraseDevice;
-  getAppContainer = getappcontainerCommands.getAppContainer;
-  getEnv = envCommands.getEnv;
-  installApp = installCommands.installApp;
-  getScreenshot = ioCommands.getScreenshot;
-  addRootCertificate = keychainCommands.addRootCertificate;
-  addCertificate = keychainCommands.addCertificate;
-  resetKeychain = keychainCommands.resetKeychain;
-  launchApp = launchCommands.launchApp;
-  getDevicesByParsing = listCommands.getDevicesByParsing;
-  getDevices = listCommands.getDevices;
-  getRuntimeForPlatformVersionViaJson = listCommands.getRuntimeForPlatformVersionViaJson;
-  getRuntimeForPlatformVersion = listCommands.getRuntimeForPlatformVersion;
-  getDeviceTypes = listCommands.getDeviceTypes;
-  list = listCommands.list;
-  setLocation = locationCommands.setLocation;
-  clearLocation = locationCommands.clearLocation;
-  openUrl = openurlCommands.openUrl;
-  setPasteboard = pbcopyCommands.setPasteboard;
-  getPasteboard = pbpasteCommands.getPasteboard;
-  grantPermission = privacyCommands.grantPermission;
-  revokePermission = privacyCommands.revokePermission;
-  resetPermission = privacyCommands.resetPermission;
-  pushNotification = pushCommands.pushNotification;
-  shutdownDevice = shutdownCommands.shutdownDevice;
-  spawnProcess = spawnCommands.spawnProcess;
-  spawnSubProcess = spawnCommands.spawnSubProcess;
-  terminateApp = terminateCommands.terminateApp;
-  getAppearance = uiCommands.getAppearance;
-  setAppearance = uiCommands.setAppearance;
-  getIncreaseContrast = uiCommands.getIncreaseContrast;
-  setIncreaseContrast = uiCommands.setIncreaseContrast;
-  getContentSize = uiCommands.getContentSize;
-  setContentSize = uiCommands.setContentSize;
-  removeApp = uninstallCommands.removeApp;
 }
 
 export default Simctl;

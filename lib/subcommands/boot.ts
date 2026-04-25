@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {log, LOG_PREFIX} from '../logger';
 import type {Simctl} from '../simctl';
 
@@ -15,7 +14,7 @@ export async function bootDevice(this: Simctl): Promise<void> {
       args: [this.requireUdid('boot')],
     });
   } catch (e: any) {
-    if (_.includes(e.message, 'Unable to boot device in current state: Booted')) {
+    if (e.message?.includes('Unable to boot device in current state: Booted')) {
       throw e;
     }
     log.debug(LOG_PREFIX, `Simulator already in 'Booted' state. Continuing`);

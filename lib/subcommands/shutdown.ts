@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {log, LOG_PREFIX} from '../logger';
 import type {Simctl} from '../simctl';
 
@@ -15,7 +14,7 @@ export async function shutdownDevice(this: Simctl): Promise<void> {
       args: [this.requireUdid('shutdown')],
     });
   } catch (e: any) {
-    if (!_.includes(e.message, 'current state: Shutdown')) {
+    if (!e.message?.includes('current state: Shutdown')) {
       throw e;
     }
     log.debug(LOG_PREFIX, `Simulator already in 'Shutdown' state. Continuing`);
