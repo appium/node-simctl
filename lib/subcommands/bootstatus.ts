@@ -63,9 +63,10 @@ export async function startBootMonitor(
       }
       isBootingFinished = true;
     } else {
-      const errMessage = status.length === 0
-        ? `The simulator booting process has exited with code ${code} by signal ${signal}`
-        : status.join('\n');
+      const errMessage =
+        status.length === 0
+          ? `The simulator booting process has exited with code ${code} by signal ${signal}`
+          : status.join('\n');
       error = new Error(errMessage);
       if (onError) {
         onError(error);

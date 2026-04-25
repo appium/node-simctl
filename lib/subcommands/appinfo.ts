@@ -30,7 +30,12 @@ export async function appInfo(this: Simctl, bundleId: string): Promise<AppInfo> 
     }
   }
 
-  if (!result || typeof result !== 'object' || Array.isArray(result) || !('ApplicationType' in result)) {
+  if (
+    !result ||
+    typeof result !== 'object' ||
+    Array.isArray(result) ||
+    !('ApplicationType' in result)
+  ) {
     throw new Error(`App with bundle identifier "${bundleId}" not found. Is it installed?`);
   }
 

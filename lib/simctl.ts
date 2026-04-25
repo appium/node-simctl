@@ -215,7 +215,6 @@ export class Simctl {
       throw e;
     }
   }
-
 }
 
 export default Simctl;

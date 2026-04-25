@@ -31,13 +31,9 @@ export async function getDevicesByParsing(
   //     ...
   // so, get the `-- iOS X.X --` line to find the sdk (X.X)
   // and the rest of the listing in order to later find the devices
-  const deviceSectionRe =
-    !platform
-      ? new RegExp(`\\-\\-\\s+(\\S+)\\s+(\\S+)\\s+\\-\\-(\\n\\s{4}.+)*`, 'mgi')
-      : new RegExp(
-          `\\-\\-\\s+${escapeRegExp(platform)}\\s+(\\S+)\\s+\\-\\-(\\n\\s{4}.+)*`,
-          'mgi',
-        );
+  const deviceSectionRe = !platform
+    ? new RegExp(`\\-\\-\\s+(\\S+)\\s+(\\S+)\\s+\\-\\-(\\n\\s{4}.+)*`, 'mgi')
+    : new RegExp(`\\-\\-\\s+${escapeRegExp(platform)}\\s+(\\S+)\\s+\\-\\-(\\n\\s{4}.+)*`, 'mgi');
   const matches: RegExpExecArray[] = [];
   let match: RegExpExecArray | null;
   // make an entry for each sdk version
@@ -134,10 +130,9 @@ export async function getDevices(
      *   }
      * }
      */
-    const versionMatchRe =
-      !platform
-        ? new RegExp(`^([^\\s-]+)[\\s-](\\S+)`, 'i')
-        : new RegExp(`^${escapeRegExp(platform)}[\\s-](\\S+)`, 'i');
+    const versionMatchRe = !platform
+      ? new RegExp(`^([^\\s-]+)[\\s-](\\S+)`, 'i')
+      : new RegExp(`^${escapeRegExp(platform)}[\\s-](\\S+)`, 'i');
     for (const [sdkNameRaw, entries] of Object.entries(JSON.parse(stdout).devices)) {
       // there could be a longer name, so remove it
       const sdkName = sdkNameRaw.replace(SIM_RUNTIME_NAME, '');
