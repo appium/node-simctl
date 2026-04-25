@@ -1,3 +1,9 @@
+## [8.2.0](https://github.com/appium/node-simctl/compare/v8.1.7...v8.2.0) (2026-04-25)
+
+### Features
+
+* Strip lodash, bluebird and uuid usages ([#294](https://github.com/appium/node-simctl/issues/294)) ([ffabc5b](https://github.com/appium/node-simctl/commit/ffabc5b1ed3d8bf18d1d8679dc89664fcc8033a5))
+
 ## [8.1.7](https://github.com/appium/node-simctl/compare/v8.1.6...v8.1.7) (2026-04-10)
 
 ### Miscellaneous Chores
