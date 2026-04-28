@@ -1,5 +1,5 @@
 import {rimraf} from 'rimraf';
-import {uuidV4} from '../helpers';
+import {randomUUID} from 'node:crypto';
 import path from 'node:path';
 import os from 'node:os';
 import fs from 'node:fs/promises';
@@ -26,7 +26,7 @@ import type {Simctl} from '../simctl';
  * @throws {Error} If the `udid` instance property is unset
  */
 export async function pushNotification(this: Simctl, payload: Record<string, any>): Promise<void> {
-  const dstPath = path.resolve(os.tmpdir(), `${await uuidV4()}.json`);
+  const dstPath = path.resolve(os.tmpdir(), `${randomUUID()}.json`);
   try {
     await fs.writeFile(dstPath, JSON.stringify(payload), 'utf8');
     await this.exec('push', {

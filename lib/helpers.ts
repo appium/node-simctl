@@ -29,16 +29,6 @@ export function getXcrunBinary(): string {
 }
 
 /**
- * Generate a UUID v4
- *
- * @returns Promise resolving to UUID string
- */
-export async function uuidV4(): Promise<string> {
-  const uuidLib = await import('uuid');
-  return uuidLib.v4();
-}
-
-/**
  * Convert plist-style output to JSON using plutil
  *
  * @param plistInput - The plist-style string to convert

@@ -2,7 +2,7 @@ import {Simctl} from '../../lib/simctl';
 import xcode from 'appium-xcode';
 import {retryInterval} from 'asyncbox';
 import {rimraf} from 'rimraf';
-import {uuidV4} from '../../lib/helpers';
+import {randomUUID} from 'node:crypto';
 import path from 'node:path';
 import os from 'node:os';
 import fs from 'node:fs/promises';
@@ -109,7 +109,7 @@ describe('simctl', function () {
     it('should delete devices', async function () {
       await simctl.deleteDevice();
       const sdkDevices = await simctl.getDevices(sdk);
-      expect(sdkDevices.map((item) => item.name)).to.not.include(simctl.udid);
+      expect(sdkDevices.map((item) => item.udid)).to.not.include(simctl.udid);
 
       // so we do not delete again
       simctl.udid = null;
@@ -219,7 +219,7 @@ describe('simctl', function () {
         if (major < 8 || (major === 8 && minor < 1)) {
           return this.skip();
         }
-        picturePath = path.join(os.tmpdir(), `${await uuidV4()}.png`);
+        picturePath = path.join(os.tmpdir(), `${randomUUID()}.png`);
         await fs.writeFile(
           picturePath,
           Buffer.from(BASE64_PNG, 'base64').toString('binary'),

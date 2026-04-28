@@ -1,8 +1,8 @@
 import {rimraf} from 'rimraf';
+import {randomUUID} from 'node:crypto';
 import path from 'node:path';
 import os from 'node:os';
 import fs from 'node:fs/promises';
-import {uuidV4} from '../helpers';
 import type {Simctl} from '../simctl';
 
 /**
@@ -17,7 +17,7 @@ import type {Simctl} from '../simctl';
  */
 export async function getScreenshot(this: Simctl): Promise<string> {
   const udid = this.requireUdid('io screenshot');
-  const pathToScreenshotPng = path.resolve(os.tmpdir(), `${await uuidV4()}.png`);
+  const pathToScreenshotPng = path.resolve(os.tmpdir(), `${randomUUID()}.png`);
   try {
     await this.exec('io', {
       args: [udid, 'screenshot', pathToScreenshotPng],
