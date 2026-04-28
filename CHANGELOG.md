@@ -1,3 +1,9 @@
+## [8.2.1](https://github.com/appium/node-simctl/compare/v8.2.0...v8.2.1) (2026-04-28)
+
+### Bug Fixes
+
+* Copilot review comments ([#295](https://github.com/appium/node-simctl/issues/295)) ([1055143](https://github.com/appium/node-simctl/commit/10551433cd68d2c8ad298392a9ab354deb5a841d))
+
 ## [8.2.0](https://github.com/appium/node-simctl/compare/v8.1.7...v8.2.0) (2026-04-25)
 
 ### Features
