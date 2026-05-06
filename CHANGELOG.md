@@ -1,3 +1,9 @@
+## [8.2.2](https://github.com/appium/node-simctl/compare/v8.2.1...v8.2.2) (2026-05-06)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump sinon from 21.1.2 to 22.0.0 ([#296](https://github.com/appium/node-simctl/issues/296)) ([1cbde44](https://github.com/appium/node-simctl/commit/1cbde44a8e4e5a7655ff54255272769556723edf))
+
 ## [8.2.1](https://github.com/appium/node-simctl/compare/v8.2.0...v8.2.1) (2026-04-28)
 
 ### Bug Fixes
