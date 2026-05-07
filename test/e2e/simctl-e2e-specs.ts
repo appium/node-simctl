@@ -277,12 +277,15 @@ describe('simctl', function () {
         expect(fullList.devicetypes.length).to.be.above(1);
         // at least one type, no matter the version of Xcode, should be an iPhone
         expect(
-          fullList.devicetypes.filter((el) => el.identifier.includes('iPhone')).length,
+          fullList.devicetypes.filter((el: {identifier: string}) =>
+            el.identifier.includes('iPhone'),
+          ).length,
         ).to.be.above(0);
         // at least one runtime should be iOS
-        expect(fullList.runtimes.filter((el) => el.identifier.includes('iOS')).length).to.be.above(
-          0,
-        );
+        expect(
+          fullList.runtimes.filter((el: {identifier: string}) => el.identifier.includes('iOS'))
+            .length,
+        ).to.be.above(0);
       });
     });
 
