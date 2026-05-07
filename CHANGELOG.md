@@ -1,3 +1,9 @@
+## [8.2.3](https://github.com/appium/node-simctl/compare/v8.2.2...v8.2.3) (2026-05-07)
+
+### Miscellaneous Chores
+
+* Enable strict TS mode ([#297](https://github.com/appium/node-simctl/issues/297)) ([878acff](https://github.com/appium/node-simctl/commit/878acffb7d956830154c3ac984f9701f2e7fc46f))
+
 ## [8.2.2](https://github.com/appium/node-simctl/compare/v8.2.1...v8.2.2) (2026-05-06)
 
 ### Miscellaneous Chores
