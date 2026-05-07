@@ -26,6 +26,7 @@ export async function appInfo(this: Simctl, bundleId: string): Promise<AppInfo> 
     } catch (err) {
       throw new Error(
         `Cannot retrieve app info for ${bundleId}: ${err instanceof Error ? err.message : String(err)}`,
+        {cause: err},
       );
     }
   }

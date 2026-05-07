@@ -63,6 +63,7 @@ export async function convertPlistToJson(plistInput: string): Promise<any> {
     plutilProcess.kill(9);
     throw new Error(
       `Failed to convert plist to JSON: ${err instanceof Error ? err.message : String(err)}`,
+      {cause: err},
     );
   } finally {
     plutilProcess.removeAllListeners();

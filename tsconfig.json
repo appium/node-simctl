@@ -4,7 +4,8 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "outDir": "build",
-    "types": ["node", "mocha"]
+    "types": ["node", "mocha"],
+    "strict": true
   },
   "ts-node": {
     "transpileOnly": true,

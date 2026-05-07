@@ -268,7 +268,7 @@ export async function getDeviceTypes(this: Simctl): Promise<string[]> {
     const deviceTypes = JSON.parse(stdout.trim());
     return deviceTypes.devicetypes.map((type: any) => type.name);
   } catch (err: any) {
-    throw new Error(`Unable to get list of device types: ${err.message}`);
+    throw new Error(`Unable to get list of device types: ${err.message}`, {cause: err});
   }
 }
 
@@ -313,7 +313,7 @@ export async function list(this: Simctl): Promise<any> {
   try {
     return JSON.parse(stdout.trim());
   } catch (e: any) {
-    throw new Error(`Unable to parse simctl list: ${e.message}`);
+    throw new Error(`Unable to parse simctl list: ${e.message}`, {cause: e});
   }
 }
 

@@ -1,4 +1,4 @@
-import {log} from '../logger';
+import {log, LOG_PREFIX} from '../logger';
 import {waitForCondition} from 'asyncbox';
 import type {Simctl} from '../simctl';
 import type {BootMonitorOptions} from '../types';
@@ -79,7 +79,7 @@ export async function startBootMonitor(
       try {
         await bootMonitor.stop();
       } catch (e: any) {
-        log.warn(e.message);
+        log.warn(LOG_PREFIX, e.message);
       }
     }
   };

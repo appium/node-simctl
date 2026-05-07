@@ -42,7 +42,7 @@ export async function createDevice(
     try {
       runtimeId = await this.getRuntimeForPlatformVersion(platformVersion, platform);
     } catch {
-      log.warn(`Unable to find runtime for iOS '${platformVersion}'. Continuing`);
+      log.warn(LOG_PREFIX, `Unable to find runtime for iOS '${platformVersion}'. Continuing`);
       runtimeId = platformVersion;
     }
 
