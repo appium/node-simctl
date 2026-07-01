@@ -1,3 +1,9 @@
+## [8.2.7](https://github.com/appium/node-simctl/compare/v8.2.6...v8.2.7) (2026-07-01)
+
+### Miscellaneous Chores
+
+* downgrade conventional-changelog-conventionalcommits to v9 ([#303](https://github.com/appium/node-simctl/issues/303)) ([22f17da](https://github.com/appium/node-simctl/commit/22f17daf18416219ca4c47fd4d176a9d9eb2e1dc))
+
 ## [8.2.6](https://github.com/appium/node-simctl/compare/v8.2.5...v8.2.6) (2026-07-01)
 
 ## [8.2.5](https://github.com/appium/node-simctl/compare/v8.2.4...v8.2.5) (2026-06-29)
