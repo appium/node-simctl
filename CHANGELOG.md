@@ -1,3 +1,5 @@
+## [8.2.6](https://github.com/appium/node-simctl/compare/v8.2.5...v8.2.6) (2026-07-01)
+
 ## [8.2.5](https://github.com/appium/node-simctl/compare/v8.2.4...v8.2.5) (2026-06-29)
 
 ## [8.2.4](https://github.com/appium/node-simctl/compare/v8.2.3...v8.2.4) (2026-06-19)
