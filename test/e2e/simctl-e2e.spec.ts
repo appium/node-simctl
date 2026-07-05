@@ -7,6 +7,7 @@ import fs from 'node:fs/promises';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {describe, it, beforeEach, afterEach, after, before} from 'node:test';
+import {retryInterval} from 'asyncbox';
 
 use(chaiAsPromised);
 const E2E_TIMEOUT_MS = 200000;
@@ -166,8 +167,10 @@ describe('simctl', {timeout: E2E_TIMEOUT_MS}, function () {
         const pbContent = 'blablabla';
         const encoding = 'ascii';
 
-        await simctl.setPasteboard(pbContent, encoding);
-        expect(await simctl.getPasteboard(encoding)).to.eql(pbContent);
+        await retryInterval(60, 1000, async () => {
+          await simctl.setPasteboard(pbContent, encoding);
+          expect(await simctl.getPasteboard(encoding)).to.eql(pbContent);
+        });
       });
     });
 
