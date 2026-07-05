@@ -10,9 +10,9 @@ import {describe, it, beforeEach, afterEach, after, before} from 'node:test';
 import {retryInterval} from 'asyncbox';
 
 use(chaiAsPromised);
-const E2E_TIMEOUT_MS = 200000;
+const BOOT_TIMEOUT_MS = 200000;
 
-describe('simctl', {timeout: E2E_TIMEOUT_MS}, function () {
+describe('simctl', function () {
   const DEVICE_NAME = process.env.DEVICE_NAME || 'iPhone 17';
   let randName: string;
   let validSdks: string[] = [];
@@ -135,7 +135,7 @@ describe('simctl', {timeout: E2E_TIMEOUT_MS}, function () {
       simctl.udid = await simctl.createDevice('runningSimTest', DEVICE_NAME, sdk!);
 
       await simctl.bootDevice();
-      await simctl.startBootMonitor({timeout: E2E_TIMEOUT_MS});
+      await simctl.startBootMonitor({timeout: BOOT_TIMEOUT_MS});
     });
     after(async function () {
       if (simctl.udid) {
@@ -167,7 +167,7 @@ describe('simctl', {timeout: E2E_TIMEOUT_MS}, function () {
         const pbContent = 'blablabla';
         const encoding = 'ascii';
 
-        await retryInterval(60, 1000, async () => {
+        await retryInterval(10, 1000, async () => {
           await simctl.setPasteboard(pbContent, encoding);
           expect(await simctl.getPasteboard(encoding)).to.eql(pbContent);
         });
