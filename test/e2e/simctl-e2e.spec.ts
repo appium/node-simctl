@@ -1,6 +1,4 @@
 import {Simctl} from '../../lib/simctl';
-import xcode from 'appium-xcode';
-import {retryInterval} from 'asyncbox';
 import {rimraf} from 'rimraf';
 import {randomUUID} from 'node:crypto';
 import path from 'node:path';
@@ -8,14 +6,13 @@ import os from 'node:os';
 import fs from 'node:fs/promises';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import {describe, it, beforeEach, afterEach, after, before} from 'node:test';
 
 use(chaiAsPromised);
+const E2E_TIMEOUT_MS = 200000;
 
-describe('simctl', function () {
+describe('simctl', {timeout: E2E_TIMEOUT_MS}, function () {
   const DEVICE_NAME = process.env.DEVICE_NAME || 'iPhone 17';
-  const MOCHA_TIMEOUT = 200000;
-  this.timeout(MOCHA_TIMEOUT);
-
   let randName: string;
   let validSdks: string[] = [];
   let sdk: string;
@@ -132,27 +129,12 @@ describe('simctl', function () {
   });
 
   describe('on running Simulator', function () {
-    if (process.env.TRAVIS) {
-      this.retries(3);
-    }
-
-    let major: number, minor: number;
-
     before(async function () {
-      const version = await xcode.getVersion(true);
-      if (typeof version === 'string') {
-        return this.skip();
-      }
-      ({major, minor} = version);
-      if (major < 8 || (major === 8 && minor < 1)) {
-        return this.skip();
-      }
-
       const sdk = process.env.IOS_SDK || validSdks.at(-1);
       simctl.udid = await simctl.createDevice('runningSimTest', DEVICE_NAME, sdk!);
 
       await simctl.bootDevice();
-      await simctl.startBootMonitor({timeout: MOCHA_TIMEOUT});
+      await simctl.startBootMonitor({timeout: E2E_TIMEOUT_MS});
     });
     after(async function () {
       if (simctl.udid) {
@@ -166,15 +148,9 @@ describe('simctl', function () {
 
     describe('startBootMonitor', function () {
       it('should be fulfilled if the simulator is already booted', async function () {
-        if (major < 8 || (major === 8 && minor < 1)) {
-          return this.skip();
-        }
         await expect(simctl.startBootMonitor()).to.eventually.be.fulfilled;
       });
       it('should fail to monitor booting of non-existing simulator', async function () {
-        if (major < 8 || (major === 8 && minor < 1)) {
-          return this.skip();
-        }
         const udid = simctl.udid;
         try {
           simctl.udid = 'blabla';
@@ -186,28 +162,12 @@ describe('simctl', function () {
     });
 
     describe('pasteboard', function () {
-      let pbRetries = 0;
-      before(function () {
-        if (major < 8 || (major === 8 && minor < 1)) {
-          return this.skip();
-        }
-        if (major === 9) {
-          if (process.env.TRAVIS) {
-            return this.skip();
-          }
-          // TODO: recheck when full Xcode 9 comes out to see if pasteboard works better
-          pbRetries = 200;
-          this.timeout(200 * 1000 * 2);
-        }
-      });
       it('should set and get the content of the pasteboard', async function () {
         const pbContent = 'blablabla';
         const encoding = 'ascii';
 
-        await retryInterval(pbRetries, 1000, async () => {
-          await simctl.setPasteboard(pbContent, encoding);
-          expect(await simctl.getPasteboard(encoding)).to.eql(pbContent);
-        });
+        await simctl.setPasteboard(pbContent, encoding);
+        expect(await simctl.getPasteboard(encoding)).to.eql(pbContent);
       });
     });
 
@@ -216,9 +176,6 @@ describe('simctl', function () {
         'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
       let picturePath: string | undefined;
       before(async function () {
-        if (major < 8 || (major === 8 && minor < 1)) {
-          return this.skip();
-        }
         picturePath = path.join(os.tmpdir(), `${randomUUID()}.png`);
         await fs.writeFile(
           picturePath,
@@ -299,11 +256,6 @@ describe('simctl', function () {
 
     describe('pushNotification', function () {
       it('should not throw an error when sending a push notification', async function () {
-        if (process.env.CI) {
-          // This test is unstable in CI env
-          return this.skip();
-        }
-
         const payload = {
           'Simulator Target Bundle': 'com.apple.Preferences',
           aps: {

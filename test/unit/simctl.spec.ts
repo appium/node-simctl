@@ -4,40 +4,14 @@ import path from 'node:path';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {Simctl} from '../../lib/simctl';
+import {describe, it, beforeEach, afterEach, after} from 'node:test';
 
 use(chaiAsPromised);
-
-// @ts-ignore - __dirname is available in CommonJS
-const testDir =
-  typeof __dirname !== 'undefined' ? __dirname : path.dirname(require.resolve('./simctl-specs.ts'));
-
-const devicePayloads = [
-  [
-    {
-      stdout: fs.readFileSync(path.join(testDir, 'fixtures/devices.json'), 'utf-8'),
-    },
-    {
-      stdout: fs.readFileSync(
-        path.join(__dirname, 'fixtures/devices-with-unavailable.json'),
-        'utf-8',
-      ),
-    },
-  ],
-  [
-    {
-      stdout: fs.readFileSync(path.join(__dirname, 'fixtures/devices-simple.json'), 'utf-8'),
-    },
-    {
-      stdout: fs.readFileSync(
-        path.join(__dirname, 'fixtures/devices-with-unavailable-simple.json'),
-        'utf-8',
-      ),
-    },
-  ],
-];
+const MODULE_NAME = 'node-simctl';
 
 describe('simctl', function () {
   let execStub: sinon.SinonStub;
+  const devicePayloads = getDevicePayloadsSync();
 
   function stubSimctl(xcrun: {path?: string | null} = {}) {
     const simctl = new Simctl({xcrun: {path: xcrun.path ?? null}});
@@ -345,3 +319,36 @@ describe('simctl', function () {
     });
   });
 });
+
+function getModuleRootSync(): string {
+  let currentDir = path.dirname(path.resolve(__filename));
+  let isAtFsRoot = false;
+  while (!isAtFsRoot) {
+    const manifestPath = path.join(currentDir, 'package.json');
+    try {
+      if (fs.existsSync(manifestPath)) {
+        const {name} = JSON.parse(fs.readFileSync(manifestPath, 'utf8')) as {name?: string};
+        if (name === MODULE_NAME) {
+          return currentDir;
+        }
+      }
+    } catch {
+      // ignore
+    }
+    currentDir = path.dirname(currentDir);
+    isAtFsRoot = currentDir.length <= path.dirname(currentDir).length;
+  }
+  throw new Error('Module root cannot be found');
+}
+
+function getDevicePayloadsSync(): {stdout: string}[][] {
+  const fixturesRoot = path.join(getModuleRootSync(), 'test', 'unit', 'fixtures');
+  const payloads: string[] = [
+    'devices.json',
+    'devices-with-unavailable.json',
+    'devices-simple.json',
+    'devices-with-unavailable-simple.json',
+  ].map((file) => fs.readFileSync(path.join(fixturesRoot, file), 'utf-8'));
+  const mapper = (payload: string) => ({stdout: payload});
+  return [[payloads[0], payloads[1]].map(mapper), [payloads[2], payloads[3]].map(mapper)];
+}
