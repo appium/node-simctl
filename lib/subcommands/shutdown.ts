@@ -1,5 +1,5 @@
-import {log, LOG_PREFIX} from '../logger';
-import type {Simctl} from '../simctl';
+import {log, LOG_PREFIX} from '../logger.js';
+import type {Simctl} from '../simctl.js';
 
 /**
  * Shutdown the given Simulator if it is running.

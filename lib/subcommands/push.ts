@@ -3,7 +3,7 @@ import {randomUUID} from 'node:crypto';
 import path from 'node:path';
 import os from 'node:os';
 import fs from 'node:fs/promises';
-import type {Simctl} from '../simctl';
+import type {Simctl} from '../simctl.js';
 
 /**
  * Send a simulated push notification

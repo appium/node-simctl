@@ -1,4 +1,4 @@
-import type {Simctl} from '../simctl';
+import type {Simctl} from '../simctl.js';
 
 /**
  * Set the Simulator location to a specific latitude and longitude.

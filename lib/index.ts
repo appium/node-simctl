@@ -1,4 +1,4 @@
-import {Simctl} from './simctl';
+import {Simctl} from './simctl.js';
 export type {
   SimctlOpts,
   DeviceInfo,
@@ -7,7 +7,7 @@ export type {
   CertOptions,
   XCRun,
   AppInfo,
-} from './types';
+} from './types.js';
 
 export {Simctl};
 export default Simctl;

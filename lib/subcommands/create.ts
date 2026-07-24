@@ -1,8 +1,8 @@
-import {log, LOG_PREFIX} from '../logger';
+import {log, LOG_PREFIX} from '../logger.js';
 import {retryInterval} from 'asyncbox';
-import {SIM_RUNTIME_NAME, normalizeVersion} from '../helpers';
-import type {Simctl} from '../simctl';
-import type {SimCreationOpts} from '../types';
+import {SIM_RUNTIME_NAME, normalizeVersion} from '../helpers.js';
+import type {Simctl} from '../simctl.js';
+import type {SimCreationOpts} from '../types.js';
 
 const SIM_RUNTIME_NAME_SUFFIX_IOS = 'iOS';
 const DEFAULT_CREATE_SIMULATOR_TIMEOUT = 10000;

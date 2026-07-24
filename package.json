@@ -48,8 +48,8 @@
     "format": "prettier -w ./lib ./test",
     "format:check": "prettier --check ./lib ./test",
     "prepare": "npm run build",
-    "test": "node --test --test-timeout=60000 \"./build/test/unit/**/*.spec.js\"",
-    "e2e-test": "node --test --test-force-exit --test-concurrency=1 --test-timeout=300000 \"./build/test/e2e/**/*.spec.js\""
+    "test": "node --enable-source-maps --test --test-timeout=60000 \"./build/test/unit/**/*.spec.js\"",
+    "e2e-test": "node --enable-source-maps --test --test-force-exit --test-concurrency=1 --test-timeout=300000 \"./build/test/e2e/**/*.spec.js\""
   },
   "prettier": {
     "bracketSpacing": false,
@@ -77,5 +77,13 @@
     "sinon": "^22.0.0",
     "typescript": "^6.0.2"
   },
-  "types": "./build/lib/index.d.ts"
+  "types": "./build/lib/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./build/lib/index.d.ts",
+      "import": "./build/lib/index.js"
+    },
+    "./package.json": "./package.json"
+  }
 }
