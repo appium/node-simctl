@@ -1,5 +1,5 @@
 import {retryInterval} from 'asyncbox';
-import type {Simctl} from '../simctl';
+import type {Simctl} from '../simctl.js';
 
 /**
  * Execute the particular application package on Simulator.

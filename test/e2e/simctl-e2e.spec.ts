@@ -1,4 +1,4 @@
-import {Simctl} from '../../lib/simctl';
+import {Simctl} from '../../lib/simctl.js';
 import {rimraf} from 'rimraf';
 import {randomUUID} from 'node:crypto';
 import path from 'node:path';

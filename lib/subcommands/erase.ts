@@ -1,5 +1,5 @@
 import {retryInterval} from 'asyncbox';
-import type {Simctl} from '../simctl';
+import type {Simctl} from '../simctl.js';
 
 /**
  * Reset the content and settings of the particular Simulator.

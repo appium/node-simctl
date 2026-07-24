@@ -1,6 +1,6 @@
-import type {Simctl} from '../simctl';
-import type {AppInfo} from '../types';
-import {convertPlistToJson} from '../helpers';
+import type {Simctl} from '../simctl.js';
+import type {AppInfo} from '../types.js';
+import {convertPlistToJson} from '../helpers.js';
 
 /**
  * Get information about an app installed on the simulator

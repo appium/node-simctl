@@ -1,4 +1,4 @@
-import type {Simctl} from '../simctl';
+import type {Simctl} from '../simctl.js';
 
 /**
  * Retrieves the current UI appearance value from the given simulator

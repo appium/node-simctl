@@ -1,4 +1,4 @@
-import type {Simctl} from '../simctl';
+import type {Simctl} from '../simctl.js';
 import type {TeenProcessExecResult} from 'teen_process';
 
 /**

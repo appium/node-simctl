@@ -1,7 +1,7 @@
-import {log, LOG_PREFIX} from '../logger';
+import {log, LOG_PREFIX} from '../logger.js';
 import {waitForCondition} from 'asyncbox';
-import type {Simctl} from '../simctl';
-import type {BootMonitorOptions} from '../types';
+import type {Simctl} from '../simctl.js';
+import type {BootMonitorOptions} from '../types.js';
 import type {SubProcess} from 'teen_process';
 
 /**

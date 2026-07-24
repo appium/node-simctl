@@ -1,4 +1,4 @@
-import type {Simctl} from '../simctl';
+import type {Simctl} from '../simctl.js';
 
 /**
  * Get the full path to the particular application container

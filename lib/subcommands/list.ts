@@ -1,7 +1,7 @@
-import {SIM_RUNTIME_NAME, normalizeVersion} from '../helpers';
-import {log, LOG_PREFIX} from '../logger';
-import type {Simctl} from '../simctl';
-import type {DeviceInfo} from '../types';
+import {SIM_RUNTIME_NAME, normalizeVersion} from '../helpers.js';
+import {log, LOG_PREFIX} from '../logger.js';
+import type {Simctl} from '../simctl.js';
+import type {DeviceInfo} from '../types.js';
 
 /**
  * Parse the list of existing Simulator devices to represent

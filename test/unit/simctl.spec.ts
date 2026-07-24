@@ -1,9 +1,10 @@
 import sinon from 'sinon';
 import fs from 'node:fs';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import {Simctl} from '../../lib/simctl';
+import {Simctl} from '../../lib/simctl.js';
 import {describe, it, beforeEach, afterEach, after} from 'node:test';
 
 use(chaiAsPromised);
@@ -321,7 +322,7 @@ describe('simctl', function () {
 });
 
 function getModuleRootSync(): string {
-  let currentDir = path.dirname(path.resolve(__filename));
+  let currentDir = path.dirname(fileURLToPath(import.meta.url));
   let isAtFsRoot = false;
   while (!isAtFsRoot) {
     const manifestPath = path.join(currentDir, 'package.json');

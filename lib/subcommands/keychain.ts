@@ -3,8 +3,8 @@ import fs from 'node:fs/promises';
 import {randomUUID} from 'node:crypto';
 import path from 'node:path';
 import {rimraf} from 'rimraf';
-import type {Simctl} from '../simctl';
-import type {CertOptions} from '../types';
+import type {Simctl} from '../simctl.js';
+import type {CertOptions} from '../types.js';
 
 /**
  * Adds the given certificate to the Trusted Root Store on the simulator
