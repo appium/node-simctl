@@ -1,3 +1,13 @@
+## [9.0.0](https://github.com/appium/node-simctl/compare/v8.2.9...v9.0.0) (2026-07-24)
+
+### ⚠ BREAKING CHANGES
+
+* Consumers using require('node-simctl') must switch to import/dynamic import() — the package no longer ships a CommonJS entry point.
+
+### Features
+
+* Migrate the package to ESM ([#312](https://github.com/appium/node-simctl/issues/312)) ([6f67beb](https://github.com/appium/node-simctl/commit/6f67beb4fcd0b220aac74e7948c53a2310006df2))
+
 ## [8.2.9](https://github.com/appium/node-simctl/compare/v8.2.8...v8.2.9) (2026-07-15)
 
 ### Miscellaneous Chores
