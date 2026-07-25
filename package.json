@@ -2,6 +2,11 @@
   "name": "node-simctl",
   "version": "9.0.0",
   "description": "Wrapper around Apple's simctl binary",
+  "keywords": [
+    "apple",
+    "ios",
+    "simctl"
+  ],
   "bugs": {
     "url": "https://github.com/appium/node-simctl/issues"
   },
@@ -70,10 +75,5 @@
   "engines": {
     "node": "^20.19.0 || ^22.12.0 || >=24.0.0",
     "npm": ">=10"
-  },
-  "keywords": [
-    "apple",
-    "ios",
-    "simctl"
-  ]
+  }
 }
