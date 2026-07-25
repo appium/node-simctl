@@ -130,7 +130,7 @@ export class Simctl {
       try {
         this.xcrun.path = await which(xcrunBinary);
       } catch {
-        throw new Error(`${xcrunBinary} tool has not been found in PATH. ` + `Are Xcode developers tools installed?`);
+        throw new Error(`${xcrunBinary} tool has not been found in PATH. Are Xcode developers tools installed?`);
       }
     }
     if (!this.xcrun.path) {
