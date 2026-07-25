@@ -1,6 +1,7 @@
-import * as semver from 'semver';
 import {spawn} from 'node:child_process';
 import {Readable} from 'node:stream';
+
+import * as semver from 'semver';
 
 export const DEFAULT_EXEC_TIMEOUT = 10 * 60 * 1000; // ms
 export const SIM_RUNTIME_NAME = 'com.apple.CoreSimulator.SimRuntime.';
@@ -61,10 +62,9 @@ export async function convertPlistToJson(plistInput: string): Promise<any> {
     });
   } catch (err) {
     plutilProcess.kill(9);
-    throw new Error(
-      `Failed to convert plist to JSON: ${err instanceof Error ? err.message : String(err)}`,
-      {cause: err},
-    );
+    throw new Error(`Failed to convert plist to JSON: ${err instanceof Error ? err.message : String(err)}`, {
+      cause: err,
+    });
   } finally {
     plutilProcess.removeAllListeners();
     inputStream.removeAllListeners();

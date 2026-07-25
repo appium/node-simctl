@@ -12,10 +12,7 @@ import type {Simctl} from '../simctl.js';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function getPasteboard(
-  this: Simctl,
-  encoding: BufferEncoding = 'utf8',
-): Promise<string> {
+export async function getPasteboard(this: Simctl, encoding: BufferEncoding = 'utf8'): Promise<string> {
   const {stdout} = await this.exec('pbpaste', {
     args: [this.requireUdid('pbpaste')],
     encoding,

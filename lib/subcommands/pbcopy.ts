@@ -1,5 +1,6 @@
-import type {Simctl} from '../simctl.js';
 import type {SubProcess} from 'teen_process';
+
+import type {Simctl} from '../simctl.js';
 
 /**
  * Set the content of Simulator pasteboard.
@@ -13,11 +14,7 @@ import type {SubProcess} from 'teen_process';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function setPasteboard(
-  this: Simctl,
-  content: string,
-  encoding: BufferEncoding = 'utf8',
-): Promise<void> {
+export async function setPasteboard(this: Simctl, content: string, encoding: BufferEncoding = 'utf8'): Promise<void> {
   const pbCopySubprocess = (await this.exec('pbcopy', {
     args: [this.requireUdid('pbcopy')],
     asynchronous: true,

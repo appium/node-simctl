@@ -1,7 +1,8 @@
-import which from 'which';
-import {log, LOG_PREFIX} from './logger.js';
-import {DEFAULT_EXEC_TIMEOUT, getXcrunBinary} from './helpers.js';
 import {exec as tpExec, SubProcess} from 'teen_process';
+import which from 'which';
+
+import {DEFAULT_EXEC_TIMEOUT, getXcrunBinary} from './helpers.js';
+import {log, LOG_PREFIX} from './logger.js';
 import * as addmediaCommands from './subcommands/addmedia.js';
 import * as appinfoCommands from './subcommands/appinfo.js';
 import * as bootCommands from './subcommands/boot.js';
@@ -10,23 +11,23 @@ import * as createCommands from './subcommands/create.js';
 import * as deleteCommands from './subcommands/delete.js';
 import * as eraseCommands from './subcommands/erase.js';
 import * as getappcontainerCommands from './subcommands/get_app_container.js';
+import * as envCommands from './subcommands/getenv.js';
 import * as installCommands from './subcommands/install.js';
 import * as ioCommands from './subcommands/io.js';
 import * as keychainCommands from './subcommands/keychain.js';
 import * as launchCommands from './subcommands/launch.js';
 import * as listCommands from './subcommands/list.js';
+import * as locationCommands from './subcommands/location.js';
 import * as openurlCommands from './subcommands/openurl.js';
 import * as pbcopyCommands from './subcommands/pbcopy.js';
 import * as pbpasteCommands from './subcommands/pbpaste.js';
 import * as privacyCommands from './subcommands/privacy.js';
 import * as pushCommands from './subcommands/push.js';
-import * as envCommands from './subcommands/getenv.js';
 import * as shutdownCommands from './subcommands/shutdown.js';
 import * as spawnCommands from './subcommands/spawn.js';
 import * as terminateCommands from './subcommands/terminate.js';
 import * as uiCommands from './subcommands/ui.js';
 import * as uninstallCommands from './subcommands/uninstall.js';
-import * as locationCommands from './subcommands/location.js';
 import type {XCRun, ExecOpts, SimctlOpts, ExecResult} from './types.js';
 
 const SIMCTL_ENV_PREFIX = 'SIMCTL_CHILD_';
@@ -113,8 +114,7 @@ export class Simctl {
   requireUdid(commandName: string | null = null): string {
     if (!this.udid) {
       throw new Error(
-        `udid is required to be set for ` +
-          (commandName ? `the '${commandName}' command` : 'this simctl command'),
+        `udid is required to be set for ` + (commandName ? `the '${commandName}' command` : 'this simctl command'),
       );
     }
     return this.udid;
@@ -130,10 +130,7 @@ export class Simctl {
       try {
         this.xcrun.path = await which(xcrunBinary);
       } catch {
-        throw new Error(
-          `${xcrunBinary} tool has not been found in PATH. ` +
-            `Are Xcode developers tools installed?`,
-        );
+        throw new Error(`${xcrunBinary} tool has not been found in PATH. Are Xcode developers tools installed?`);
       }
     }
     if (!this.xcrun.path) {
@@ -163,12 +160,7 @@ export class Simctl {
       timeout,
     } = opts ?? ({} as T);
     // run a particular simctl command
-    const args = [
-      'simctl',
-      ...(this.devicesSetPath ? ['--set', this.devicesSetPath] : []),
-      subcommand,
-      ...initialArgs,
-    ];
+    const args = ['simctl', ...(this.devicesSetPath ? ['--set', this.devicesSetPath] : []), subcommand, ...initialArgs];
     // Prefix all passed in environment variables with 'SIMCTL_CHILD_', simctl
     // will then pass these to the child (spawned) process.
     const envWithPrefixedKeys = Object.fromEntries(
@@ -190,17 +182,16 @@ export class Simctl {
     try {
       let execArgs: [string, string[], any];
       if (architectures?.length) {
-        const archArgs = (Array.isArray(architectures) ? architectures : [architectures]).flatMap(
-          (arch) => ['-arch', arch],
-        );
+        const archArgs = (Array.isArray(architectures) ? architectures : [architectures]).flatMap((arch) => [
+          '-arch',
+          arch,
+        ]);
         execArgs = ['arch', [...archArgs, xcrun, ...args], execOpts];
       } else {
         execArgs = [xcrun, args, execOpts];
       }
       // We know what we are doing here - the type system can't handle the dynamic nature
-      return (
-        asynchronous ? new SubProcess(...execArgs) : await tpExec(...execArgs)
-      ) as ExecResult<T>;
+      return (asynchronous ? new SubProcess(...execArgs) : await tpExec(...execArgs)) as ExecResult<T>;
     } catch (e: any) {
       if (!this.logErrors || !logErrors) {
         // if we don't want to see the errors, just throw and allow the calling

@@ -1,6 +1,6 @@
+import {convertPlistToJson} from '../helpers.js';
 import type {Simctl} from '../simctl.js';
 import type {AppInfo} from '../types.js';
-import {convertPlistToJson} from '../helpers.js';
 
 /**
  * Get information about an app installed on the simulator
@@ -24,19 +24,13 @@ export async function appInfo(this: Simctl, bundleId: string): Promise<AppInfo> 
     try {
       result = await convertPlistToJson(stdout);
     } catch (err) {
-      throw new Error(
-        `Cannot retrieve app info for ${bundleId}: ${err instanceof Error ? err.message : String(err)}`,
-        {cause: err},
-      );
+      throw new Error(`Cannot retrieve app info for ${bundleId}: ${err instanceof Error ? err.message : String(err)}`, {
+        cause: err,
+      });
     }
   }
 
-  if (
-    !result ||
-    typeof result !== 'object' ||
-    Array.isArray(result) ||
-    !('ApplicationType' in result)
-  ) {
+  if (!result || typeof result !== 'object' || Array.isArray(result) || !('ApplicationType' in result)) {
     throw new Error(`App with bundle identifier "${bundleId}" not found. Is it installed?`);
   }
 
