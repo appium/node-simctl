@@ -1,3 +1,9 @@
+## [9.1.0](https://github.com/appium/node-simctl/compare/v9.0.0...v9.1.0) (2026-07-25)
+
+### Features
+
+* Integrate shared oxc and release configs ([#313](https://github.com/appium/node-simctl/issues/313)) ([d3f6f8b](https://github.com/appium/node-simctl/commit/d3f6f8bc4e2c94b7248fd90eec4103284a4d3014))
+
 ## [9.0.0](https://github.com/appium/node-simctl/compare/v8.2.9...v9.0.0) (2026-07-24)
 
 ### ⚠ BREAKING CHANGES
