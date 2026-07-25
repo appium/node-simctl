@@ -1,8 +1,9 @@
-import {log, LOG_PREFIX} from '../logger.js';
 import {waitForCondition} from 'asyncbox';
+import type {SubProcess} from 'teen_process';
+
+import {log, LOG_PREFIX} from '../logger.js';
 import type {Simctl} from '../simctl.js';
 import type {BootMonitorOptions} from '../types.js';
-import type {SubProcess} from 'teen_process';
 
 /**
  * Start monitoring for boot status of the particular Simulator.
@@ -16,18 +17,8 @@ import type {SubProcess} from 'teen_process';
  * property is not set.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function startBootMonitor(
-  this: Simctl,
-  opts: BootMonitorOptions = {},
-): Promise<SubProcess> {
-  const {
-    timeout = 240000,
-    onWaitingDataMigration,
-    onWaitingSystemApp,
-    onFinished,
-    onError,
-    shouldPreboot,
-  } = opts;
+export async function startBootMonitor(this: Simctl, opts: BootMonitorOptions = {}): Promise<SubProcess> {
+  const {timeout = 240000, onWaitingDataMigration, onWaitingSystemApp, onFinished, onError, shouldPreboot} = opts;
   const udid = this.requireUdid('bootstatus');
 
   const status: string[] = [];

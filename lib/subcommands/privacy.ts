@@ -42,11 +42,7 @@ export async function grantPermission(this: Simctl, bundleId: string, perm: stri
  * or there was an error while revoking the permission
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function revokePermission(
-  this: Simctl,
-  bundleId: string,
-  perm: string,
-): Promise<void> {
+export async function revokePermission(this: Simctl, bundleId: string, perm: string): Promise<void> {
   await this.exec('privacy', {
     args: [this.requireUdid('privacy revoke'), 'revoke', perm, bundleId],
   });

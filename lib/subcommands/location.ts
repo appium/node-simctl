@@ -10,11 +10,7 @@ import type {Simctl} from '../simctl.js';
  *                 returns non-zero return code.
  * @throws {TypeError} If any of the arguments is not a valid value.
  */
-export async function setLocation(
-  this: Simctl,
-  latitude: string | number,
-  longitude: string | number,
-): Promise<void> {
+export async function setLocation(this: Simctl, latitude: string | number, longitude: string | number): Promise<void> {
   const lat = formatArg('latitude', latitude);
   const lon = formatArg('longitude', longitude);
   await this.exec('location', {

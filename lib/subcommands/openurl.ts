@@ -1,5 +1,6 @@
-import type {Simctl} from '../simctl.js';
 import type {TeenProcessExecResult} from 'teen_process';
+
+import type {Simctl} from '../simctl.js';
 
 /**
  * Open URL scheme on Simulator. iOS will automatically try

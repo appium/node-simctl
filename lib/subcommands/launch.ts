@@ -1,4 +1,5 @@
 import {retryInterval} from 'asyncbox';
+
 import type {Simctl} from '../simctl.js';
 
 /**
@@ -15,11 +16,7 @@ import type {Simctl} from '../simctl.js';
  *                 returns non-zero return code.
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function launchApp(
-  this: Simctl,
-  bundleId: string,
-  tries: number = 5,
-): Promise<string> {
+export async function launchApp(this: Simctl, bundleId: string, tries: number = 5): Promise<string> {
   const result = await retryInterval(tries, 1000, async () => {
     const {stdout} = await this.exec('launch', {
       args: [this.requireUdid('launch'), bundleId],

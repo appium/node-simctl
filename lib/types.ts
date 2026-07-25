@@ -139,9 +139,7 @@ export interface SimCreationOpts {
 /**
  * Result type for exec method - either SubProcess for async or TeenProcessExecResult for sync
  */
-export type ExecResult<T extends ExecOpts> = T extends AsyncExecOpts
-  ? SubProcess
-  : TeenProcessExecResult<string>;
+export type ExecResult<T extends ExecOpts> = T extends AsyncExecOpts ? SubProcess : TeenProcessExecResult<string>;
 
 /**
  * Boot monitor options

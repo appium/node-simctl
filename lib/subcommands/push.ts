@@ -1,8 +1,10 @@
-import {rimraf} from 'rimraf';
 import {randomUUID} from 'node:crypto';
-import path from 'node:path';
-import os from 'node:os';
 import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+
+import {rimraf} from 'rimraf';
+
 import type {Simctl} from '../simctl.js';
 
 /**

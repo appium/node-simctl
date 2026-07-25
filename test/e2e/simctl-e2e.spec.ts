@@ -1,13 +1,15 @@
-import {Simctl} from '../../lib/simctl.js';
-import {rimraf} from 'rimraf';
 import {randomUUID} from 'node:crypto';
-import path from 'node:path';
-import os from 'node:os';
 import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import {describe, it, beforeEach, afterEach, after, before} from 'node:test';
+
+import {retryInterval} from 'asyncbox';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import {describe, it, beforeEach, afterEach, after, before} from 'node:test';
-import {retryInterval} from 'asyncbox';
+import {rimraf} from 'rimraf';
+
+import {Simctl} from '../../lib/simctl.js';
 
 use(chaiAsPromised);
 const BOOT_TIMEOUT_MS = 200000;
@@ -180,11 +182,7 @@ describe('simctl', function () {
       let picturePath: string | undefined;
       before(async function () {
         picturePath = path.join(os.tmpdir(), `${randomUUID()}.png`);
-        await fs.writeFile(
-          picturePath,
-          Buffer.from(BASE64_PNG, 'base64').toString('binary'),
-          'binary',
-        );
+        await fs.writeFile(picturePath, Buffer.from(BASE64_PNG, 'base64').toString('binary'), 'binary');
       });
       after(async function () {
         if (picturePath) {
@@ -237,14 +235,11 @@ describe('simctl', function () {
         expect(fullList.devicetypes.length).to.be.above(1);
         // at least one type, no matter the version of Xcode, should be an iPhone
         expect(
-          fullList.devicetypes.filter((el: {identifier: string}) =>
-            el.identifier.includes('iPhone'),
-          ).length,
+          fullList.devicetypes.filter((el: {identifier: string}) => el.identifier.includes('iPhone')).length,
         ).to.be.above(0);
         // at least one runtime should be iOS
         expect(
-          fullList.runtimes.filter((el: {identifier: string}) => el.identifier.includes('iOS'))
-            .length,
+          fullList.runtimes.filter((el: {identifier: string}) => el.identifier.includes('iOS')).length,
         ).to.be.above(0);
       });
     });

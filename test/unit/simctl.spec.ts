@@ -1,11 +1,13 @@
-import sinon from 'sinon';
 import fs from 'node:fs';
 import path from 'node:path';
+import {describe, it, beforeEach, afterEach, after} from 'node:test';
 import {fileURLToPath} from 'node:url';
+
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import sinon from 'sinon';
+
 import {Simctl} from '../../lib/simctl.js';
-import {describe, it, beforeEach, afterEach, after} from 'node:test';
 
 use(chaiAsPromised);
 const MODULE_NAME = 'node-simctl';

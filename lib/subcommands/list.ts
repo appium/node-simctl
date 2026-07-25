@@ -94,11 +94,7 @@ export async function getDevicesByParsing(
  *                 returns non-zero return code or if no matching
  *                 platform version is found in the system.
  */
-export async function getDevices(
-  this: Simctl,
-  forSdk: string,
-  platform?: string | null,
-): Promise<DeviceInfo[]>;
+export async function getDevices(this: Simctl, forSdk: string, platform?: string | null): Promise<DeviceInfo[]>;
 export async function getDevices(
   this: Simctl,
   forSdk?: undefined | null,
@@ -227,10 +223,7 @@ export async function getRuntimeForPlatformVersion(
       args: ['runtimes'],
     });
     // https://regex101.com/r/UykjQZ/1
-    const runtimeRe = new RegExp(
-      `${escapeRegExp(platform)}\\s+(\\d+\\.\\d+)\\s+\\((\\d+\\.\\d+\\.*\\d*)`,
-      'i',
-    );
+    const runtimeRe = new RegExp(`${escapeRegExp(platform)}\\s+(\\d+\\.\\d+)\\s+\\((\\d+\\.\\d+\\.*\\d*)`, 'i');
     for (const line of stdout.split('\n')) {
       const match = runtimeRe.exec(line);
       if (match && match[1] === platformVersion) {

@@ -1,6 +1,7 @@
-import {log, LOG_PREFIX} from '../logger.js';
 import {retryInterval} from 'asyncbox';
+
 import {SIM_RUNTIME_NAME, normalizeVersion} from '../helpers.js';
+import {log, LOG_PREFIX} from '../logger.js';
 import type {Simctl} from '../simctl.js';
 import type {SimCreationOpts} from '../types.js';
 
@@ -58,9 +59,7 @@ export async function createDevice(
     // add modified versions, since modern Xcodes use this, then the bare
     // versions, to accomodate older Xcodes
     runtimeIds.push(
-      ...potentialRuntimeIds.map(
-        (id) => `${SIM_RUNTIME_NAME}${platform}-${id.replace(/\./g, '-')}`,
-      ),
+      ...potentialRuntimeIds.map((id) => `${SIM_RUNTIME_NAME}${platform}-${id.replace(/\./g, '-')}`),
       ...potentialRuntimeIds,
     );
   }

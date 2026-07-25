@@ -1,8 +1,10 @@
-import os from 'node:os';
-import fs from 'node:fs/promises';
 import {randomUUID} from 'node:crypto';
+import fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
+
 import {rimraf} from 'rimraf';
+
 import type {Simctl} from '../simctl.js';
 import type {CertOptions} from '../types.js';
 
@@ -18,11 +20,7 @@ import type {CertOptions} from '../types.js';
  * or there was an error while adding the certificate
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function addRootCertificate(
-  this: Simctl,
-  cert: string | Buffer,
-  opts: CertOptions = {},
-): Promise<void> {
+export async function addRootCertificate(this: Simctl, cert: string | Buffer, opts: CertOptions = {}): Promise<void> {
   const {raw = false} = opts;
   const execMethod = async (certPath: string) =>
     await this.exec('keychain', {
@@ -47,11 +45,7 @@ export async function addRootCertificate(
  * or there was an error while adding the certificate
  * @throws {Error} If the `udid` instance property is unset
  */
-export async function addCertificate(
-  this: Simctl,
-  cert: string | Buffer,
-  opts: CertOptions = {},
-): Promise<void> {
+export async function addCertificate(this: Simctl, cert: string | Buffer, opts: CertOptions = {}): Promise<void> {
   const {raw = false} = opts;
   const execMethod = async (certPath: string) =>
     await this.exec('keychain', {

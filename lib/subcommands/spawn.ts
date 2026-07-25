@@ -1,5 +1,6 @@
-import type {Simctl} from '../simctl.js';
 import type {TeenProcessExecResult, SubProcess} from 'teen_process';
+
+import type {Simctl} from '../simctl.js';
 
 /**
  * Spawn the particular process on Simulator.
