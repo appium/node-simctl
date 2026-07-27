@@ -1,3 +1,9 @@
+## [9.1.1](https://github.com/appium/node-simctl/compare/v9.1.0...v9.1.1) (2026-07-27)
+
+### Miscellaneous Chores
+
+* Drop chai ([#314](https://github.com/appium/node-simctl/issues/314)) ([95b77c3](https://github.com/appium/node-simctl/commit/95b77c3fcd5013b33bbbcc02050f95b84aa00496))
+
 ## [9.1.0](https://github.com/appium/node-simctl/compare/v9.0.0...v9.1.0) (2026-07-25)
 
 ### Features
