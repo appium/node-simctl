@@ -1,15 +1,13 @@
+import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {describe, it, beforeEach, afterEach, after} from 'node:test';
 import {fileURLToPath} from 'node:url';
 
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 
 import {Simctl} from '../../lib/simctl.js';
 
-use(chaiAsPromised);
 const MODULE_NAME = 'node-simctl';
 
 describe('simctl', function () {
@@ -46,21 +44,21 @@ describe('simctl', function () {
             execStub.returns(devicesPayload);
 
             const devices = await simctl.getDevices();
-            expect(Object.keys(devices).length).to.eql(2);
+            assert.strictEqual(Object.keys(devices).length, 2);
 
-            expect(devices['12.1'].length).to.eql(10);
-            expect(devices['5.1'].length).to.eql(6);
+            assert.strictEqual(devices['12.1'].length, 10);
+            assert.strictEqual(devices['5.1'].length, 6);
           });
           it('should ignore unavailable devices', async function () {
             execStub.returns(devicesWithUnavailablePayload);
 
             const devices = await simctl.getDevices();
-            expect(Object.keys(devices).length).to.eql(4);
+            assert.strictEqual(Object.keys(devices).length, 4);
 
-            expect(devices['12.1'].length).to.eql(10);
-            expect(devices['5.1'].length).to.eql(6);
-            expect(devices['12.2'].length).to.eql(0);
-            expect(devices['5.2'].length).to.eql(0);
+            assert.strictEqual(devices['12.1'].length, 10);
+            assert.strictEqual(devices['5.1'].length, 6);
+            assert.strictEqual(devices['12.2'].length, 0);
+            assert.strictEqual(devices['5.2'].length, 0);
           });
         });
         describe('platform defined', function () {
@@ -68,18 +66,18 @@ describe('simctl', function () {
             execStub.returns(devicesPayload);
 
             const devices = await simctl.getDevices(null, 'tvOS');
-            expect(Object.keys(devices).length).to.eql(1);
+            assert.strictEqual(Object.keys(devices).length, 1);
 
-            expect(devices['12.1'].length).to.eql(3);
+            assert.strictEqual(devices['12.1'].length, 3);
           });
           it('should ignore unavailable devices', async function () {
             execStub.returns(devicesWithUnavailablePayload);
 
             const devices = await simctl.getDevices(null, 'tvOS');
-            expect(Object.keys(devices).length).to.eql(2);
+            assert.strictEqual(Object.keys(devices).length, 2);
 
-            expect(devices['12.1'].length).to.eql(3);
-            expect(devices['12.2'].length).to.eql(0);
+            assert.strictEqual(devices['12.1'].length, 3);
+            assert.strictEqual(devices['12.2'].length, 0);
           });
         });
       });
@@ -90,13 +88,13 @@ describe('simctl', function () {
             execStub.returns(devicesPayload);
 
             const devices = await simctl.getDevices('12.1');
-            expect(Object.keys(devices).length).to.eql(10);
+            assert.strictEqual(Object.keys(devices).length, 10);
           });
           it('should ignore unavailable devices', async function () {
             execStub.returns(devicesWithUnavailablePayload);
 
             const devices = await simctl.getDevices('12.1');
-            expect(Object.keys(devices).length).to.eql(10);
+            assert.strictEqual(Object.keys(devices).length, 10);
           });
         });
         describe('platform defined', function () {
@@ -104,13 +102,13 @@ describe('simctl', function () {
             execStub.returns(devicesPayload);
 
             const devices = await simctl.getDevices('5.1', 'watchOS');
-            expect(Object.keys(devices).length).to.eql(6);
+            assert.strictEqual(Object.keys(devices).length, 6);
           });
           it('should ignore unavailable devices', async function () {
             execStub.returns(devicesWithUnavailablePayload);
 
             const devices = await simctl.getDevices('5.1', 'watchOS');
-            expect(Object.keys(devices).length).to.eql(6);
+            assert.strictEqual(Object.keys(devices).length, 6);
           });
         });
       });
@@ -152,14 +150,14 @@ describe('simctl', function () {
       const devices = await simctl.createDevice('name', 'iPhone 6 Plus', '12.1.1', {
         timeout: 20000,
       });
-      expect(execStub.getCall(2).args[0]).to.eql('create');
-      expect(execStub.getCall(2).args[1].args).to.eql([
+      assert.strictEqual(execStub.getCall(2).args[0], 'create');
+      assert.deepStrictEqual(execStub.getCall(2).args[1].args, [
         'name',
         'iPhone 6 Plus',
         'com.apple.CoreSimulator.SimRuntime.iOS-12-1',
       ]);
-      expect(execStub.getCall(0).args[0]).to.eql('list');
-      expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
+      assert.strictEqual(execStub.getCall(0).args[0], 'list');
+      assert.strictEqual(devices, 'EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
     it('should create iOS simulator using xcrun path from passed opts', async function () {
@@ -178,14 +176,14 @@ describe('simctl', function () {
       const devices = await simctl.createDevice('name', 'iPhone 6 Plus', '12.1.1', {
         timeout: 20000,
       });
-      expect(execStub.getCall(2).args[0]).to.eql('create');
-      expect(execStub.getCall(2).args[1].args).to.eql([
+      assert.strictEqual(execStub.getCall(2).args[0], 'create');
+      assert.deepStrictEqual(execStub.getCall(2).args[1].args, [
         'name',
         'iPhone 6 Plus',
         'com.apple.CoreSimulator.SimRuntime.iOS-12-1',
       ]);
-      expect(execStub.getCall(0).args[0]).to.eql('list');
-      expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
+      assert.strictEqual(execStub.getCall(0).args[0], 'list');
+      assert.strictEqual(devices, 'EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
     it('should create iOS simulator and use xcrun simctl "json" parsing', async function () {
@@ -225,13 +223,13 @@ describe('simctl', function () {
       const devices = await simctl.createDevice('name', 'iPhone 6 Plus', '12.1.1', {
         timeout: 20000,
       });
-      expect(execStub.getCall(1).args[0]).to.eql('create');
-      expect(execStub.getCall(1).args[1].args).to.eql([
+      assert.strictEqual(execStub.getCall(1).args[0], 'create');
+      assert.deepStrictEqual(execStub.getCall(1).args[1].args, [
         'name',
         'iPhone 6 Plus',
         'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1',
       ]);
-      expect(devices).to.eql('FA628127-1D5C-45C3-9918-A47BF7E2AE14');
+      assert.strictEqual(devices, 'FA628127-1D5C-45C3-9918-A47BF7E2AE14');
     });
 
     it('should create tvOS simulator', async function () {
@@ -249,13 +247,13 @@ describe('simctl', function () {
         timeout: 20000,
         platform: 'tvOS',
       });
-      expect(execStub.getCall(2).args[0]).to.eql('create');
-      expect(execStub.getCall(2).args[1].args).to.eql([
+      assert.strictEqual(execStub.getCall(2).args[0], 'create');
+      assert.deepStrictEqual(execStub.getCall(2).args[1].args, [
         'name',
         'Apple TV',
         'com.apple.CoreSimulator.SimRuntime.tvOS-12-1',
       ]);
-      expect(devices).to.eql('FA628127-1D5C-45C3-9918-A47BF7E2AE14');
+      assert.strictEqual(devices, 'FA628127-1D5C-45C3-9918-A47BF7E2AE14');
     });
 
     it('should create iOS simulator with old runtime format', async function () {
@@ -272,9 +270,9 @@ describe('simctl', function () {
         .returns(devicesPayload);
 
       const devices = await simctl.createDevice('name', 'iPhone 6 Plus', '12.1', {timeout: 20000});
-      expect(execStub.getCall(3).args[0]).to.eql('create');
-      expect(execStub.getCall(3).args[1].args).to.eql(['name', 'iPhone 6 Plus', '12.1']);
-      expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
+      assert.strictEqual(execStub.getCall(3).args[0], 'create');
+      assert.deepStrictEqual(execStub.getCall(3).args[1].args, ['name', 'iPhone 6 Plus', '12.1']);
+      assert.strictEqual(devices, 'EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
     it('should create iOS simulator with old runtime format and three-part platform version', async function () {
@@ -291,9 +289,9 @@ describe('simctl', function () {
         .returns(devicesPayload);
 
       const devices = await simctl.createDevice('name', 'iPhone 6 Plus', '12.1', {timeout: 20000});
-      expect(execStub.getCall(3).args[0]).to.eql('create');
-      expect(execStub.getCall(3).args[1].args).to.eql(['name', 'iPhone 6 Plus', '12.1']);
-      expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
+      assert.strictEqual(execStub.getCall(3).args[0], 'create');
+      assert.deepStrictEqual(execStub.getCall(3).args[1].args, ['name', 'iPhone 6 Plus', '12.1']);
+      assert.strictEqual(devices, 'EE76EA77-E975-4198-9859-69DFF74252D2');
     });
 
     it('should create iOS simulator with three-part platform version and three-part runtime', async function () {
@@ -312,13 +310,13 @@ describe('simctl', function () {
       const devices = await simctl.createDevice('name', 'iPhone 6 Plus', '12.1.1', {
         timeout: 20000,
       });
-      expect(execStub.getCall(3).args[0]).to.eql('create');
-      expect(execStub.getCall(3).args[1].args).to.eql([
+      assert.strictEqual(execStub.getCall(3).args[0], 'create');
+      assert.deepStrictEqual(execStub.getCall(3).args[1].args, [
         'name',
         'iPhone 6 Plus',
         'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1',
       ]);
-      expect(devices).to.eql('EE76EA77-E975-4198-9859-69DFF74252D2');
+      assert.strictEqual(devices, 'EE76EA77-E975-4198-9859-69DFF74252D2');
     });
   });
 });

@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
 import fs from 'node:fs/promises';
 import os from 'node:os';
@@ -5,13 +6,10 @@ import path from 'node:path';
 import {describe, it, beforeEach, afterEach, after, before} from 'node:test';
 
 import {retryInterval} from 'asyncbox';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import {rimraf} from 'rimraf';
 
 import {Simctl} from '../../lib/simctl.js';
 
-use(chaiAsPromised);
 const BOOT_TIMEOUT_MS = 200000;
 
 describe('simctl', function () {
@@ -57,7 +55,7 @@ describe('simctl', function () {
     const sdkDevices = devices[sdk];
     const firstDevice = sdkDevices[0];
     const expectedList = ['name', 'sdk', 'state', 'udid'];
-    expect(firstDevice).to.have.any.keys(...expectedList);
+    assert.ok(expectedList.some((key) => key in firstDevice));
   });
 
   describe('createDevice', function () {
@@ -70,8 +68,8 @@ describe('simctl', function () {
 
     it('should create a device', async function () {
       simctl.udid = await simctl.createDevice(randName, DEVICE_NAME, sdk);
-      expect(typeof simctl.udid).to.equal('string');
-      expect(simctl.udid.length).to.equal(36);
+      assert.strictEqual(typeof simctl.udid, 'string');
+      assert.strictEqual(simctl.udid.length, 36);
     });
 
     it('should create a device and be able to see it in devices list right away', async function () {
@@ -80,7 +78,7 @@ describe('simctl', function () {
       simctl.udid = await simctl.createDevice('node-simctl test', DEVICE_NAME, sdk);
       const devicesAfter = await simctl.getDevices();
       const numSimsAfter = devicesAfter[sdk].length;
-      expect(numSimsAfter).to.equal(numSimsBefore + 1);
+      assert.strictEqual(numSimsAfter, numSimsBefore + 1);
     });
   });
 
@@ -99,7 +97,7 @@ describe('simctl', function () {
     });
     it('should get devices', async function () {
       const sdkDevices = await simctl.getDevices(sdk);
-      expect(sdkDevices.map((item) => item.name)).to.include(name);
+      assert.ok(sdkDevices.map((item) => item.name).includes(name));
     });
 
     it('should erase devices', async function () {
@@ -109,14 +107,14 @@ describe('simctl', function () {
     it('should delete devices', async function () {
       await simctl.deleteDevice();
       const sdkDevices = await simctl.getDevices(sdk);
-      expect(sdkDevices.map((item) => item.udid)).to.not.include(simctl.udid);
+      assert.ok(!sdkDevices.map((item) => item.udid).includes(simctl.udid!));
 
       // so we do not delete again
       simctl.udid = null;
     });
 
     it('should not fail to shutdown a shutdown simulator', async function () {
-      await expect(simctl.shutdownDevice()).to.eventually.not.be.rejected;
+      await assert.doesNotReject(simctl.shutdownDevice());
     });
   });
 
@@ -127,8 +125,8 @@ describe('simctl', function () {
     } catch (e) {
       err = e as Error;
     }
-    expect(err).to.exist;
-    expect(err!.message).to.include(`Unable to parse version 'baz'`);
+    assert.ok(err);
+    assert.ok(err.message.includes(`Unable to parse version 'baz'`));
   });
 
   describe('on running Simulator', function () {
@@ -151,13 +149,13 @@ describe('simctl', function () {
 
     describe('startBootMonitor', function () {
       it('should be fulfilled if the simulator is already booted', async function () {
-        await expect(simctl.startBootMonitor()).to.eventually.be.fulfilled;
+        await assert.doesNotReject(simctl.startBootMonitor());
       });
       it('should fail to monitor booting of non-existing simulator', async function () {
         const udid = simctl.udid;
         try {
           simctl.udid = 'blabla';
-          await expect(simctl.startBootMonitor({timeout: 1000})).to.eventually.be.rejected;
+          await assert.rejects(simctl.startBootMonitor({timeout: 1000}));
         } finally {
           simctl.udid = udid;
         }
@@ -171,7 +169,7 @@ describe('simctl', function () {
 
         await retryInterval(10, 1000, async () => {
           await simctl.setPasteboard(pbContent, encoding);
-          expect(await simctl.getPasteboard(encoding)).to.eql(pbContent);
+          assert.strictEqual(await simctl.getPasteboard(encoding), pbContent);
         });
       });
     });
@@ -190,57 +188,55 @@ describe('simctl', function () {
         }
       });
       it('should add media files', async function () {
-        expect((await simctl.addMedia(picturePath!)).code).to.eql(0);
+        assert.strictEqual((await simctl.addMedia(picturePath!)).code, 0);
       });
     });
 
     describe('appInfo', function () {
       it('should extract applications information', async function () {
         const appInfo = await simctl.appInfo('com.apple.springboard');
-        expect(appInfo.ApplicationType).to.equal('Hidden');
+        assert.strictEqual(appInfo.ApplicationType, 'Hidden');
       });
       it('should throw an error if the app is not installed', async function () {
-        await expect(simctl.appInfo('com.apple.notinstalled')).to.be.eventually.rejected;
+        await assert.rejects(simctl.appInfo('com.apple.notinstalled'));
       });
     });
 
     describe('getEnv', function () {
       it('should get env variable value', async function () {
         const udid = await simctl.getEnv('SIMULATOR_UDID');
-        expect(udid!.length).to.be.above(0);
+        assert.ok(udid!.length > 0);
       });
       it('should return null if no var is found', async function () {
         const udid = await simctl.getEnv('SIMULATOR_UDD');
-        expect(udid).to.be.null;
+        assert.strictEqual(udid, null);
       });
     });
 
     describe('getDeviceTypes', function () {
       it('should get device types', async function () {
         const deviceTypes = await simctl.getDeviceTypes();
-        expect(deviceTypes).to.have.length;
-        expect(deviceTypes.length).to.be.above(0);
+        assert.ok(deviceTypes.length);
+        assert.ok(deviceTypes.length > 0);
         // at least one type, no matter the version of Xcode, should be an iPhone
-        expect(deviceTypes.filter((el) => el.includes('iPhone')).length).to.be.above(1);
+        assert.ok(deviceTypes.filter((el) => el.includes('iPhone')).length > 1);
       });
     });
 
     describe('list', function () {
       it('should get everything from xcrun simctl list', async function () {
         const fullList = await simctl.list();
-        expect(fullList).to.have.property('devicetypes');
-        expect(fullList).to.have.property('runtimes');
-        expect(fullList).to.have.property('devices');
-        expect(fullList).to.have.property('pairs');
-        expect(fullList.devicetypes.length).to.be.above(1);
+        assert.ok('devicetypes' in fullList);
+        assert.ok('runtimes' in fullList);
+        assert.ok('devices' in fullList);
+        assert.ok('pairs' in fullList);
+        assert.ok(fullList.devicetypes.length > 1);
         // at least one type, no matter the version of Xcode, should be an iPhone
-        expect(
-          fullList.devicetypes.filter((el: {identifier: string}) => el.identifier.includes('iPhone')).length,
-        ).to.be.above(0);
+        assert.ok(
+          fullList.devicetypes.filter((el: {identifier: string}) => el.identifier.includes('iPhone')).length > 0,
+        );
         // at least one runtime should be iOS
-        expect(
-          fullList.runtimes.filter((el: {identifier: string}) => el.identifier.includes('iOS')).length,
-        ).to.be.above(0);
+        assert.ok(fullList.runtimes.filter((el: {identifier: string}) => el.identifier.includes('iOS')).length > 0);
       });
     });
 
@@ -248,7 +244,7 @@ describe('simctl', function () {
       it('should get a base64 string', async function () {
         const image = await simctl.getScreenshot();
 
-        expect(Buffer.from(image, 'base64').toString('base64') === image).to.be.true;
+        assert.strictEqual(Buffer.from(image, 'base64').toString('base64'), image);
       });
     });
 
@@ -263,7 +259,7 @@ describe('simctl', function () {
           },
         };
 
-        await expect(simctl.pushNotification(payload)).to.be.fulfilled;
+        await assert.doesNotReject(simctl.pushNotification(payload));
       });
     });
   });
