@@ -49,7 +49,7 @@
     "e2e-test": "node --enable-source-maps --test --test-force-exit --test-concurrency=1 --test-timeout=300000 \"./build/test/e2e/**/*.spec.js\""
   },
   "dependencies": {
-    "@appium/logger": "^2.0.0-rc.1",
+    "@appium/logger": "^3.0.0-beta.0",
     "asyncbox": "^6.0.1",
     "rimraf": "^6.0.1",
     "semver": "^7.0.0",
