@@ -38,7 +38,7 @@ export async function clearLocation(this: Simctl): Promise<void> {
  */
 function formatArg(name: string, value: string | number): string {
   const flt = parseFloat(`${value}`);
-  if (isNaN(flt)) {
+  if (!Number.isFinite(flt)) {
     throw new TypeError(`${name} must be a valid number, got '${value}' instead`);
   }
   return flt.toFixed(7);
