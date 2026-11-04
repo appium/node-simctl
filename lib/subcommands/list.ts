@@ -137,8 +137,8 @@ export async function getDevices(
         continue;
       }
 
-      // the sdk can have dashes (`12-2`) or dots (`12.1`)
-      const sdk = (platform ? versionMatch[1] : versionMatch[2]).replace('-', '.');
+      // the sdk can have dashes (`12-2`, `12-1-1`) or dots (`12.1`, `12.1.1`)
+      const sdk = (platform ? versionMatch[1] : versionMatch[2]).replace(/-/g, '.');
       devices[sdk] = devices[sdk] || [];
       devices[sdk].push(
         ...(entries as any[])

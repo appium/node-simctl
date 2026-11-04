@@ -96,6 +96,27 @@ describe('simctl', function () {
             const devices = await simctl.getDevices('12.1');
             assert.strictEqual(Object.keys(devices).length, 10);
           });
+          it('should normalize three-part dash-separated SDK runtime keys', async function () {
+            execStub.returns({
+              stdout: JSON.stringify({
+                devices: {
+                  'com.apple.CoreSimulator.SimRuntime.iOS-17-5-1': [
+                    {
+                      state: 'Shutdown',
+                      isAvailable: true,
+                      name: 'iPhone 15',
+                      udid: '75E34140-18E8-4D1A-9F45-AAC735DF75DF',
+                    },
+                  ],
+                },
+              }),
+            });
+
+            const devices = await simctl.getDevices('17.5.1');
+            assert.strictEqual(devices.length, 1);
+            assert.strictEqual(devices[0].sdk, '17.5.1');
+            assert.strictEqual(devices[0].platform, 'iOS');
+          });
         });
         describe('platform defined', function () {
           it('should get all the devices in the JSON', async function () {
@@ -317,6 +338,15 @@ describe('simctl', function () {
         'com.apple.CoreSimulator.SimRuntime.iOS-12-1-1',
       ]);
       assert.strictEqual(devices, 'EE76EA77-E975-4198-9859-69DFF74252D2');
+    });
+  });
+
+  describe('#setLocation', function () {
+    it('should reject non-finite coordinates', async function () {
+      const simctl = stubSimctl({path: 'xcrun'});
+      simctl.udid = '75E34140-18E8-4D1A-9F45-AAC735DF75DF';
+      await assert.rejects(() => simctl.setLocation(Infinity, 0), TypeError);
+      await assert.rejects(() => simctl.setLocation(0, 'Infinity'), TypeError);
     });
   });
 });
