@@ -1,3 +1,9 @@
+## [9.1.2](https://github.com/appium/node-simctl/compare/v9.1.1...v9.1.2) (2026-11-04)
+
+### Bug Fixes
+
+* replace all hyphens in runtime SDK versions and reject non-finite coordinates ([#317](https://github.com/appium/node-simctl/issues/317)) ([3b9f192](https://github.com/appium/node-simctl/commit/3b9f192d8b0ca12c8e7b426c2521bc6f3877ed1f))
+
 ## [9.1.1](https://github.com/appium/node-simctl/compare/v9.1.0...v9.1.1) (2026-07-27)
 
 ### Miscellaneous Chores
