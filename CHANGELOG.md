@@ -1,3 +1,9 @@
+## [9.1.3](https://github.com/appium/node-simctl/compare/v9.1.2...v9.1.3) (2026-11-06)
+
+### Bug Fixes
+
+* Rethrow boot errors other than the already booted state ([#319](https://github.com/appium/node-simctl/issues/319)) ([80d6f37](https://github.com/appium/node-simctl/commit/80d6f37c68b9a46027da4cab406a5dce91f30111))
+
 ## [9.1.2](https://github.com/appium/node-simctl/compare/v9.1.1...v9.1.2) (2026-11-04)
 
 ### Bug Fixes

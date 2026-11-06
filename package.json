@@ -1,6 +1,6 @@
 {
   "name": "node-simctl",
-  "version": "9.1.2",
+  "version": "9.1.3",
   "description": "Wrapper around Apple's simctl binary",
   "keywords": [
     "apple",
