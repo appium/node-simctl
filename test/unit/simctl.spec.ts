@@ -349,6 +349,38 @@ describe('simctl', function () {
       await assert.rejects(() => simctl.setLocation(0, 'Infinity'), TypeError);
     });
   });
+
+  describe('#bootDevice', function () {
+    let simctl: Simctl;
+
+    beforeEach(function () {
+      simctl = stubSimctl({path: 'xcrun'});
+      simctl.udid = 'EE76EA77-E975-4198-9859-69DFF74252D2';
+    });
+    afterEach(function () {
+      if (execStub) {
+        execStub.restore();
+      }
+    });
+
+    it('should boot the device', async function () {
+      await simctl.bootDevice();
+      assert.strictEqual(execStub.getCall(0).args[0], 'boot');
+      assert.deepStrictEqual(execStub.getCall(0).args[1].args, ['EE76EA77-E975-4198-9859-69DFF74252D2']);
+    });
+    it('should not throw if the device is already booted', async function () {
+      execStub.rejects(new Error('Unable to boot device in current state: Booted'));
+      await assert.doesNotReject(simctl.bootDevice());
+    });
+    it('should rethrow other boot errors', async function () {
+      execStub.rejects(new Error('Invalid device: EE76EA77-E975-4198-9859-69DFF74252D2'));
+      await assert.rejects(simctl.bootDevice(), /Invalid device/);
+    });
+    it('should throw if udid is not set', async function () {
+      simctl.udid = null;
+      await assert.rejects(simctl.bootDevice(), /udid is required/);
+    });
+  });
 });
 
 function getModuleRootSync(): string {
